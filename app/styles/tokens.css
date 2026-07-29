@@ -21,6 +21,9 @@
   /* ---- Ink on light ---- */
   --ink: var(--rich-black);
   --ink-72: rgba(5, 8, 5, 0.72);
+  /* The lightest ink that still clears 4.5:1 on champagne (5.07:1). Anything
+     softer is decorative, not readable — 52% lands at 3.88:1. */
+  --ink-60: rgba(5, 8, 5, 0.6);
   --ink-52: rgba(5, 8, 5, 0.52);
   --ink-30: rgba(5, 8, 5, 0.3);
 
@@ -75,12 +78,42 @@
 
   --nav-h: 5.25rem;
 
-  /* ---- Motion ---- */
+  /* ---- Motion ----
+     One rhythm for the whole site. Durations were scattered across twenty-odd
+     one-off literals — 640, 700, 760, 780, 950, 1000, 1100, 1150, 1200 — which
+     is what makes a page feel assembled rather than composed: every piece
+     moving to its own private tempo. Five steps, and everything picks one.
+
+       micro   state flips the eye should not have to wait for: hover, focus,
+               press, colour. Below ~150ms reads as a snap, above ~300ms as lag.
+       quick   small elements changing shape or position.
+       mid     content entering — the rise-and-fade the reveal engine runs.
+       slow    masked type, where the mask has real distance to cover.
+       line    hairlines drawing across a full row. Long on purpose: a rule
+               that draws slowly reads as deliberate, one that snaps reads as
+               a glitch.
+
+     Easing follows the standard: ease-out for entering, ease-in for leaving,
+     and ease-line — a long, near-linear middle — for anything drawing along
+     its own length. */
   --ease-out: cubic-bezier(0.16, 0.84, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
   --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-line: cubic-bezier(0.62, 0.04, 0.2, 1);
-  --dur-reveal: 1050ms;
+
+  --dur-micro: 220ms;
   --dur-quick: 420ms;
+  --dur-mid: 640ms;
+  --dur-slow: 950ms;
+  --dur-line: 1200ms;
+
+  /* The reveal engine's own timing, kept as its own name because base.css and
+     every [data-reveal] element reference it. */
+  --dur-reveal: 1050ms;
+
+  /* Exits run at ~65% of their entrance — a panel that leaves as slowly as it
+     arrived feels unresponsive. */
+  --dur-exit: 420ms;
 }
 
 @media (max-width: 900px) {

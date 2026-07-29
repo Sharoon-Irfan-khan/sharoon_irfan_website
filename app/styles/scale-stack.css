@@ -27,10 +27,14 @@
   padding-bottom: clamp(1rem, 3vh, 2.5rem);
 }
 
-/* The grid gap spaces the head from the row; its own bottom margin would
-   double that. */
+/* The grid gap spaces the head from the row; the head's own margins would
+   double that. Applies to whatever is pinned above the strip — the section
+   head this was written for, or the problem statement that sits there now. */
 .sstack__stage .shead {
   margin-bottom: 0;
+}
+.sstack__stage .problem__quote {
+  margin: 0;
 }
 
 /* ---------- The viewport ---------- */
@@ -72,49 +76,56 @@
 
 /* ---------- The strip ---------- */
 
-/*
-  ONE moving element.
-
-  The frames used to travel independently: each was given the same slice of
-  scroll but a different distance to cover, so the first crossed four cells
-  while the last crossed one — a fourfold difference in speed within a single
-  gesture. They also passed over each other on the way, because a frame flying
-  in from beyond the right edge crosses every cell to its left, and paint order
-  put some of them underneath. That is what read as wrong: not the timing, the
-  fact that four things were moving at four speeds through each other.
-
-  So the row is a strip and the strip is what moves. Parked one full row-width
-  to the right, it slides to zero; the frames enter from the right one after
-  another simply because that is where they sit on the strip. Every frame moves
-  at the same speed as every other, none can overlap another, and the browser
-  composites a single layer instead of eight.
-
-  100% resolves against the strip's own width, which is the row width, so
-  `100% + gap` parks the leftmost frame just clear of the right-hand edge.
-*/
 .sstack__strip {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--gap);
-
-  /* Remapped so the row is complete at 0.86 and the last 14% of the track is
-     spent looking at it. */
-  --t-raw: clamp(0, var(--p, 0) / 0.86, 1);
-  /* Smoothstep — the strip gathers pace as it sets off and settles as it
-     lands, rather than starting and stopping dead. On a raw linear ramp a
-     scrubbed slide of this size reads as a machine. */
-  --t: calc(var(--t-raw) * var(--t-raw) * (3 - 2 * var(--t-raw)));
-
-  transform: translate3d(calc((100% + var(--gap)) * (1 - var(--t))), 0, 0);
-  will-change: transform;
 }
 
+/*
+  ONE AT A TIME.
+
+  Each frame gets its own slice of the track, offset from the frame before it,
+  and what moves is the photograph inside the frame rather than the frame
+  itself. The frame clips, so a picture travels only across its own cell: it
+  cannot reach a neighbour, cannot pass under one, and the four arrive in
+  order because their slices start in order.
+
+  This is the second attempt at one-at-a-time and the difference is worth
+  recording. The first gave all four the same slice of scroll but different
+  distances — the leftmost crossed four cells while the rightmost crossed one,
+  so they moved at four different speeds and flew over each other on the way
+  in. That is what looked wrong, and it was fixed by welding them into a single
+  strip, which cured the overlap by removing the stagger along with it.
+
+  Here the stagger is in the *timing* and the distance is identical — one cell
+  width, every frame. Same speed, same travel, four different starts.
+
+  0.17 is the offset between consecutive frames and 0.34 the slice each one's
+  entry occupies. The last frame starts at 3 * 0.17 and finishes at 0.85, so
+  the row completes with the final 15% of the track left to look at it. The
+  windows overlap by half, which keeps the row building as one gesture instead
+  of four separate events with pauses between them.
+
+  Both are written as literals rather than custom properties because the
+  divisor is a literal by necessity: dividing by a var() inside calc() is CSS
+  Values 4 and not something to rely on here.
+*/
 .sstack__item {
+  --t-raw: clamp(0, (var(--p, 0) - var(--i, 0) * 0.17) / 0.34, 1);
+  /* Smoothstep — each picture gathers pace as it sets off and settles as it
+     lands, rather than starting and stopping dead. On a raw linear ramp a
+     scrubbed slide reads as a machine. */
+  --t: calc(var(--t-raw) * var(--t-raw) * (3 - 2 * var(--t-raw)));
+
   position: relative;
   margin: 0;
   overflow: hidden;
   aspect-ratio: 3 / 4;
-  background: var(--black-lift);
+  /* No placeholder fill. An unarrived frame should be nothing at all — four
+     dark rectangles waiting their turn on a champagne ground announce the
+     mechanism and give away what is coming. */
+  background: transparent;
 }
 
 .sstack__img {
@@ -122,6 +133,9 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  /* Parked one full frame-width right of its own cell, clipped out of sight. */
+  transform: translate3d(calc(100% * (1 - var(--t))), 0, 0);
+  will-change: transform;
 }
 
 /* ============================================================
@@ -159,7 +173,7 @@
     position: static;
     min-height: 0;
   }
-  .sstack__strip {
+  .sstack__img {
     transform: none;
     will-change: auto;
   }

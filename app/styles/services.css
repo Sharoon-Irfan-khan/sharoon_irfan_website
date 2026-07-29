@@ -55,6 +55,24 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  /* Slow on purpose. A photograph that snaps to a new size on hover reads as a
+     UI control; at this length it reads as the picture leaning in. */
+  transition: transform var(--dur-line) var(--ease-out);
+}
+
+/* The row answers the cursor. Scale on the image inside a clipping frame, so
+   nothing around it reflows and the parallax transform on .svc__inner — a
+   different element — is left untouched. */
+.svc:hover .svc__img {
+  transform: scale(1.035);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .svc__img,
+  .svc:hover .svc__img {
+    transition: none;
+    transform: none;
+  }
 }
 
 /* ---------- Copy ---------- */

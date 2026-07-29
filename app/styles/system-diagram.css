@@ -33,13 +33,16 @@
 
 /* pathLength="1" normalises every path to one unit, so the draw is a plain
    0 → 1 interpolation and no geometry has to be measured in JS. */
+/* ink-30 at 0.7 opacity is an effective alpha of about 0.21 — on champagne
+   that is a line you have to look for. The stroke carries the whole argument
+   of the section, so it gets ink-52 and finishes at full opacity. */
 .sysd__link {
   --t: clamp(0, (var(--p, 0) - var(--d)) / 0.34, 1);
-  stroke: var(--ink-30);
+  stroke: var(--ink-52);
   stroke-width: 1;
   stroke-dasharray: 1;
   stroke-dashoffset: calc(1 - var(--t));
-  opacity: calc(0.25 + var(--t) * 0.45);
+  opacity: calc(0.3 + var(--t) * 0.7);
   vector-effect: non-scaling-stroke;
 }
 
@@ -103,8 +106,12 @@
 
 /* ---------- Revenue ---------- */
 
+/* Starts at 0.55 rather than 0.7. The last wire lands at 0.76, and holding the
+   word back until after that left the node sitting there as an unlabelled dot
+   for most of the section — the arrival should read while the wires are still
+   arriving, since that is the point being made. */
 .sysd__target {
-  --t: clamp(0, (var(--p, 0) - 0.7) / 0.25, 1);
+  --t: clamp(0, (var(--p, 0) - 0.55) / 0.25, 1);
   position: absolute;
   left: 50%;
   top: 78.3%; /* y=360 of 460 */
@@ -130,65 +137,77 @@
   transform: translateY(calc((1 - var(--t)) * 10px));
 }
 
+/* Only one composition is ever shown. Both are in the DOM because the viewBox
+   is an attribute, not a style — one SVG cannot be two geometries. */
+.sysd__wires--tall {
+  display: none;
+}
+
 /* ============================================================
    NARROW
-   The converging geometry needs width to read. Below 760px the
-   parts stack and a single spine draws down through them, which
-   says the same thing without distorting anything.
+   The wide fan needs width to read: five letterspaced labels
+   across a phone leaves about 65px each. So the fan turns on
+   its side — parts stacked down the left with their labels
+   intact, connectors bundling out into the gutter and gathering
+   at the revenue node below. Same statement, drawn to fit.
+
+   Everything here is positioned as a percentage of the stage,
+   and the narrow SVG uses preserveAspectRatio="none", so SVG
+   units and percentages are the same coordinate space: x=30 of
+   400 is 7.5%, y=60 of 620 is 9.68%. The dots land on the ends
+   of their own wires by construction, at any width.
    ============================================================ */
 
 @media (max-width: 760px) {
-  .sysd__stage {
-    aspect-ratio: auto;
-    padding-left: 1.75rem;
-  }
-
-  .sysd__wires {
+  .sysd__wires--wide {
     display: none;
   }
+  .sysd__wires--tall {
+    display: block;
+  }
 
-  /* The spine, drawn with the same --p the connectors used. */
-  .sysd__stage::before {
-    content: '';
-    position: absolute;
-    left: 3px;
-    top: 0.5rem;
-    bottom: 3.5rem;
-    width: 1px;
-    background: var(--ink-30);
-    opacity: 1;
-    transform: scaleY(clamp(0, var(--p, 0) / 0.75, 1));
-    transform-origin: top;
+  .sysd__stage {
+    /* Matches the narrow viewBox, so the drawing is never squeezed. */
+    aspect-ratio: 400 / 620;
   }
 
   .sysd__parts {
-    position: static;
+    position: absolute;
+    inset: 0;
     height: auto;
-    display: grid;
-    gap: 1.6rem;
   }
 
   .sysd__node {
-    position: static;
+    position: absolute;
+    left: 37.5%; /* x = 150 of 400 */
+    top: var(--y);
     justify-content: flex-start;
-    transform: translateY(calc((1 - var(--t)) * 16px));
+    transform: translate(0, calc(-50% + (1 - var(--t)) * 16px));
   }
 
   .sysd__part {
     flex-direction: row;
     align-items: center;
-    padding-left: 0;
-    margin-left: -1.75rem;
+    padding: 0.5rem 0;
+    /* Half the dot, so the dot's centre — not the row's left edge — sits on
+       the 7.5% rail where every wire terminates. */
+    margin-left: -3.5px;
     gap: 1.15rem;
   }
 
   .sysd__target {
-    position: static;
+    position: absolute;
+    left: 37.5%;
+    top: 90.32%; /* y = 560 of 620 */
     flex-direction: row;
     align-items: center;
     gap: 1.15rem;
-    margin-top: 2rem;
-    margin-left: -1.75rem;
-    transform: none;
+    margin-left: -5px; /* half the 10px ring, same reasoning as the dots */
+    transform: translateY(-50%);
+  }
+
+  .sysd__target-ring {
+    width: 10px;
+    height: 10px;
   }
 }

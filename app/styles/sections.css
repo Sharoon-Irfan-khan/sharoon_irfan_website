@@ -273,6 +273,39 @@
   }
 }
 
+/* The problem statement carries an eyebrow above it, which the thesis block
+   this class was written for did not. */
+.problem__quote {
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+  max-width: 24ch;
+}
+
+/* ---------- Symptoms ----------
+   The four short lines under the problem statement. Ruled and gridded rather
+   than bulleted: they are four observations of equal weight, not a sequence,
+   and at this length a bulleted column would be mostly whitespace. */
+
+.symptoms {
+  list-style: none;
+  margin: clamp(2.5rem, 5vw, 4rem) 0 0;
+  padding: 0;
+  display: grid;
+  border-top: 1px solid var(--rule-dark);
+}
+@media (min-width: 860px) {
+  .symptoms {
+    grid-template-columns: 1fr 1fr;
+    column-gap: clamp(2rem, 5vw, 5rem);
+  }
+}
+.symptoms__item {
+  padding: clamp(1rem, 2vw, 1.45rem) 0;
+  border-bottom: 1px solid var(--rule-dark-soft);
+  font-size: var(--step-lede);
+  line-height: 1.4;
+  color: var(--ink-72);
+}
+
 /* ---------- Before / after columns ---------- */
 
 .compare {
@@ -559,18 +592,35 @@
   color: var(--paper-46);
   margin-top: 1.25rem;
 }
+/* Ink by default. These were paper-70 — light text for the dark CTA band this
+   block was written for — and the contact section is linen now, so the three
+   links were rendering at roughly 1.2:1 against their own background. The
+   .on-dark override keeps the original behaviour where it still applies. */
 .cta__contacts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.25rem 2.5rem;
+  display: grid;
+  gap: 0.9rem;
   margin-top: clamp(2.5rem, 5vw, 4rem);
   padding-top: 1.75rem;
-  border-top: 1px solid var(--rule-light-soft);
+  border-top: 1px solid var(--rule-dark);
   font-family: var(--font-ui);
   font-size: var(--step-small);
-  color: var(--paper-70);
+  color: var(--ink-72);
   position: relative;
   z-index: 1;
+}
+.cta__contacts a {
+  color: var(--ink);
+  transition: color var(--dur-micro) var(--ease-out);
+}
+.cta__contacts a:hover {
+  color: var(--ink-72);
+}
+.on-dark .cta__contacts {
+  border-top-color: var(--rule-light-soft);
+  color: var(--paper-70);
+}
+.on-dark .cta__contacts a {
+  color: var(--paper);
 }
 
 /* ---------- Accordion (FAQ) ---------- */
@@ -639,15 +689,14 @@
 
 /* ---------- Contact layout ---------- */
 
+/* The section is a plain band holding one .shell; the two-column split inside
+   it is what divides copy from form.
+
+   It used to be the grid itself, back when the aside and the form were its
+   direct children. With a single .shell child that rule put the entire
+   section into column one and left column two — half the viewport — empty. */
 .contact {
-  display: grid;
-  gap: clamp(2.5rem, 5vw, 4.5rem);
-}
-@media (min-width: 960px) {
-  .contact {
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-    gap: clamp(3rem, 7vw, 7rem);
-  }
+  display: block;
 }
 .contact__aside {
   display: grid;
@@ -677,9 +726,35 @@
 
 /* ---------- Form ---------- */
 
+/* ---------- Form: a card ----------
+
+   The rest of the site is flat — hairlines and surface changes, no elevation
+   anywhere. The form is the one place that earns a lift: it is the only thing
+   on the page the reader is asked to *operate*, and sitting it on its own
+   raised surface separates "read this" from "fill this in".
+
+   The shadow is deliberately long and weak rather than short and dark. A tight
+   dark shadow would read as a UI kit dropped into an editorial page; a wide
+   one at 6% reads as the card being a few millimetres off the paper, which is
+   the whole intent. */
 .form {
   display: grid;
   gap: 1.5rem;
+  padding: clamp(1.75rem, 3.2vw, 2.75rem);
+  background: var(--ivory);
+  box-shadow:
+    inset 0 0 0 1px var(--rule-dark-soft),
+    0 1px 2px rgba(5, 8, 5, 0.04),
+    0 18px 44px -12px rgba(5, 8, 5, 0.1);
+  transition: box-shadow var(--dur-mid) var(--ease-out);
+}
+
+/* Lifts slightly while being filled in, so the card responds to being used. */
+.form:focus-within {
+  box-shadow:
+    inset 0 0 0 1px var(--rule-dark),
+    0 1px 2px rgba(5, 8, 5, 0.05),
+    0 26px 60px -14px rgba(5, 8, 5, 0.14);
 }
 .form__row {
   display: grid;
@@ -695,20 +770,49 @@
   display: grid;
   gap: 0.6rem;
 }
+/* Was ink-52 — legible, but a label is the thing that tells you what to type,
+   so it should not be the faintest text in its own group. */
 .field__label {
-  color: var(--ink-52);
+  color: var(--ink-72);
 }
+
+/* Each field sits on its own tinted plate rather than floating on a bare
+   underline. On a raised ivory card an underline-only input reads as a line of
+   text, not somewhere to type — the plate is what makes it look operable.
+   Still no border radius: the site has square corners everywhere. */
 .field__input,
 .field__textarea,
 .field__select {
   width: 100%;
-  padding: 0.9rem 0;
-  background: transparent;
+  padding: 0.85rem 1rem;
+  /* background-color, not the background shorthand: .field__select paints its
+     dropdown arrow as a background-image and the shorthand would wipe it. */
+  background-color: var(--champagne);
+  color: var(--ink);
   border: 0;
   border-bottom: 1px solid var(--rule-dark);
   font-size: var(--step-body);
   border-radius: 0;
-  transition: border-color 420ms var(--ease-out);
+  cursor: text;
+  transition:
+    background-color var(--dur-micro) var(--ease-out),
+    border-color var(--dur-micro) var(--ease-out);
+}
+.field__input:hover,
+.field__textarea:hover,
+.field__select:hover {
+  background-color: var(--linen);
+}
+
+/* Chrome paints autofilled inputs pale blue and overrides background outright.
+   The inset shadow is the only way to put our own surface back; the long delay
+   keeps the colour from being repainted over on some engines. */
+.field__input:-webkit-autofill,
+.field__input:-webkit-autofill:hover,
+.field__input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--ink);
+  -webkit-box-shadow: 0 0 0 100px var(--champagne) inset;
+  transition: background-color 100000s ease-in-out 0s;
 }
 .field__textarea {
   resize: vertical;
@@ -727,13 +831,27 @@
 .field__textarea:focus,
 .field__select:focus {
   outline: none;
-  border-color: var(--sand);
+  background-color: var(--ivory);
+  border-color: var(--rich-black);
 }
+/* ink-30 measured 2.02:1 against the field — well under the 4.5:1 floor — and
+   the placeholder here carries real instruction ("Where you are now, where you
+   want to get to"), so it has to be readable rather than decorative. ink-60 is
+   the lightest step that clears it, and stays distinct from entered text at
+   full ink. */
 .field__input::placeholder,
 .field__textarea::placeholder {
-  color: var(--ink-30);
+  color: var(--ink-60);
 }
 
+/* Arrives rather than appears. A confirmation that pops into place is easy to
+   miss — it is the one message on the page the reader is waiting for. */
+@keyframes status-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+}
 .form__status {
   font-family: var(--font-ui);
   font-size: var(--step-small);
@@ -741,6 +859,12 @@
   border-left: 2px solid var(--sand);
   background: var(--champagne);
   line-height: 1.5;
+  animation: status-in var(--dur-mid) var(--ease-out) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .form__status {
+    animation: none;
+  }
 }
 .form__status--error {
   border-color: var(--rich-black);

@@ -28,12 +28,18 @@
   position: relative;
 }
 
-.hero__kicker {
+/* The role, set under the name. Italic display rather than another
+   letterspaced label — it echoes the italic in the wordmark and keeps the
+   opening to two typographic voices instead of three. */
+.hero__role {
+  margin: clamp(0.75rem, 1.6vw, 1.35rem) 0 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: var(--step-display-s);
+  line-height: 1.1;
+  letter-spacing: 0.005em;
   color: var(--ink-52);
-  margin: 0 0 clamp(1rem, 2.5vw, 2rem);
-}
-.hero__kicker::before {
-  content: none;
 }
 
 /* ---------- The name ---------- */
@@ -42,20 +48,24 @@
   The whole gesture: the name set as large as one line will take, uppercase,
   in the display face.
 
-  The size is not a taste choice, it is arithmetic. "SHAROON IRFAN" is
-  thirteen characters and renders about 7.5x the font size wide, so the
-  largest that fits the shell is content-width / 7.5 — 181px at any viewport
-  wide enough to hit the 96rem max. The previous 13.5vw / 240px overflowed at
-  every screen size and was being chopped by the section's overflow: clip.
+  The size is not a taste choice, it is arithmetic. This face renders about
+  0.577x the font size per character, so a name of N characters is N * 0.577
+  ems wide and the largest that fits is content-width / (N * 0.577).
 
-  If this ever needs to be bigger, the name has to break onto two lines. At
-  seven characters "SHAROON" alone would take about 336px.
+  "SHAROON IRFAN KHAN" is eighteen characters — 10.4em. Content width is the
+  96rem shell less two gutters, so 1360px at the cap and (100vw - 10vw) below
+  it. That gives 130px at the top end and about 8.65vw beneath, and the values
+  below sit ~5% under both so the estimate has somewhere to be wrong. It was
+  11.6vw / 11rem while the name was thirteen characters; adding "KHAN" without
+  moving this would have run the name off both edges, since the section clips.
+
+  If this ever needs to be bigger, the name has to break onto two lines.
 */
 .hero__name {
   margin: 0;
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(1.6rem, 11.6vw, 11rem);
+  font-size: clamp(1.05rem, 8.2vw, 7.7rem);
   line-height: 0.86;
   letter-spacing: -0.02em;
   text-transform: uppercase;
@@ -182,23 +192,10 @@
     padding-top: clamp(1.5rem, 6vw, 3rem);
   }
   /* Full width down here, so the narrow-column limits above are lifted. */
-  .hero__claim {
-    max-width: 20ch;
-  }
   .hero__standfirst {
     max-width: 40ch;
     font-size: var(--step-body);
   }
-}
-
-.hero__claim {
-  margin: 0;
-  max-width: 14ch;
-  font-family: var(--font-display);
-  font-size: var(--step-display-s);
-  line-height: 1.18;
-  letter-spacing: -0.012em;
-  text-wrap: balance;
 }
 
 .hero__standfirst {
@@ -225,36 +222,21 @@
   letter-spacing: 0.14em;
   text-align: center;
   color: var(--ink);
+  cursor: pointer;
   box-shadow: inset 0 0 0 1px var(--rule-dark);
+  /* transform is here rather than in chrome.css's press-feedback block because
+     hero.css loads later and this shorthand would otherwise drop it. */
   transition:
     background var(--dur-quick) var(--ease-out),
     color var(--dur-quick) var(--ease-out),
-    box-shadow var(--dur-quick) var(--ease-out);
+    box-shadow var(--dur-quick) var(--ease-out),
+    transform var(--dur-micro) var(--ease-out);
 }
 .ghost:hover,
 .ghost:focus-visible {
   background: var(--rich-black);
   color: var(--ivory);
   box-shadow: inset 0 0 0 1px var(--rich-black);
-}
-
-.hero__links {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.4rem 1.1rem;
-}
-
-.hero__links a {
-  font-family: var(--font-ui);
-  font-size: var(--step-label);
-  text-transform: uppercase;
-  letter-spacing: var(--track-label);
-  color: var(--ink-52);
-  transition: color var(--dur-quick) var(--ease-out);
-}
-.hero__links a:hover {
-  color: var(--ink);
 }
 
 /* ---------- Auto-switching frames ---------- */

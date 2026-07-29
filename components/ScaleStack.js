@@ -6,15 +6,14 @@ import { byId, workSrc } from '@/lib/media';
 /**
  * SCALE STACK — a pinned row that builds itself.
  *
- * The section holds still while the strip slides in from the right and the
- * four photographs arrive one after another. Once the row is complete it
+ * The section holds still while the four photographs arrive one after another,
+ * each wiping in from the right of its own frame. Once the row is complete it
  * releases and the rest of the section scrolls normally.
  *
- * The strip is deliberately a single moving element rather than four
- * independently animated frames — see the note in scale-stack.css for why that
- * change was made. Everything it needs from scroll is the one `--p` value on
- * the track; the motion itself is entirely CSS, so nothing here re-renders
- * while the user scrolls.
+ * Each frame owns a staggered slice of the track — see the note in
+ * scale-stack.css. All the motion needs from scroll is the one `--p` value on
+ * the track plus each frame's index; the rest is CSS, so nothing here
+ * re-renders while the user scrolls.
  *
  * The pinning is why this component owns the scroll progress rather than
  * living inside something that does: the stage is sticky and exactly one
@@ -37,10 +36,12 @@ export default function ScaleStack({ items = DEFAULT, children }) {
 
         <div className="sstack">
           <div className="sstack__strip">
-            {items.map((id) => {
+            {items.map((id, i) => {
               const clip = byId(id);
               return (
-                <figure className="sstack__item" key={id}>
+                // --i is the frame's place in the queue. The CSS turns it into
+                // this frame's slice of the scroll track.
+                <figure className="sstack__item" key={id} style={{ '--i': i }}>
                   <img
                     className="sstack__img"
                     src={workSrc(clip.id)}

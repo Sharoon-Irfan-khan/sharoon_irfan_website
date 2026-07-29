@@ -9,8 +9,8 @@ export default function Nav() {
   const [open, setOpen] = useState(false);
   const [current, setCurrent] = useState('');
 
-  // The nav sits on a black hero until the hero has passed, then it becomes
-  // an ivory bar. One threshold, no flicker.
+  // The nav rides transparent over the champagne hero, then lays down an ivory
+  // bar once the hero has passed. One threshold, no flicker.
   useEffect(() => {
     const onScroll = () => setSolid(window.scrollY > window.innerHeight * 0.72);
     onScroll();
@@ -60,7 +60,9 @@ export default function Nav() {
 
   return (
     <>
-      <header className={`nav ${solid && !open ? 'is-solid' : ''}`}>
+      <header
+        className={`nav ${solid && !open ? 'is-solid' : ''} ${open ? 'is-over-menu' : ''}`}
+      >
         <div className="nav__inner">
           <Link href="/" className="wordmark" aria-label={`${site.name} — home`}>
             Sharoon <em>Irfan</em>

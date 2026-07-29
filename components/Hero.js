@@ -4,7 +4,6 @@ import Link from 'next/link';
 import Reveal from './Reveal';
 import SwitchFrame from './SwitchFrame';
 import { hero } from '@/lib/content';
-import { site } from '@/lib/site';
 
 /**
  * THE OPENING — light, name first, photographs tucked under the type.
@@ -62,14 +61,16 @@ export default function Hero() {
       data-tone="light"
     >
       <div className="shell hero__inner">
-        <Reveal as="p" className="label hero__kicker" delay={100}>
-          {hero.kicker}
-        </Reveal>
-
         {/* The name is the headline. Everything else on this screen supports
             it, which is what makes it a portfolio rather than a brochure. */}
         <Reveal as="h1" className="hero__name" delay={200}>
-          Sharoon Irfan
+          {hero.name}
+        </Reveal>
+
+        {/* The role sits under the name, not above it: you read who, then
+            what. It was a location kicker before, which answered neither. */}
+        <Reveal as="p" className="hero__role" delay={300}>
+          {hero.role}
         </Reveal>
 
         <div className="hero__stage">
@@ -86,24 +87,17 @@ export default function Hero() {
             </Reveal>
           ))}
 
+          {/* One sentence and one button. The claim line that sat above the
+              standfirst said the same thing twice, and the email/LinkedIn/
+              phone row duplicated the contact section three screens down. */}
           <div className="hero__copy">
-            <Reveal as="p" className="hero__claim" delay={620}>
-              {hero.headline.join(' ')}
-            </Reveal>
-            <Reveal as="p" className="hero__standfirst" delay={720}>
+            <Reveal as="p" className="hero__standfirst" delay={620}>
               {hero.standfirst}
             </Reveal>
-            <Reveal className="hero__actions" delay={820}>
+            <Reveal className="hero__actions" delay={720}>
               <Link className="ghost" href="#contact">
-                Book a strategy call
+                {hero.action}
               </Link>
-            </Reveal>
-            <Reveal className="hero__links" delay={900}>
-              <a href={`mailto:${site.email}`}>Email</a>
-              <a href={site.linkedin} target="_blank" rel="noreferrer">
-                LinkedIn
-              </a>
-              <a href={`tel:${site.phoneHref}`}>Phone</a>
             </Reveal>
           </div>
         </div>

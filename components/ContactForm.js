@@ -3,14 +3,17 @@
 import { useState } from 'react';
 import { site } from '@/lib/site';
 
+// Mirrors `services.items` in lib/content — if a service is added there, add
+// it here or the enquiry cannot name it.
 const SERVICES = [
   'Not sure yet — start with the call',
-  'Go-to-market strategy',
-  'Performance marketing (Google and Meta)',
-  'SEO and content',
-  'Website and conversion',
-  'CRM and attribution',
-  'Brand positioning',
+  'Go-to-Market Strategy',
+  'Performance Marketing',
+  'SEO & Content',
+  'Websites & Landing Pages',
+  'CRM & Attribution',
+  'Brand Positioning',
+  'Developer Experience',
   'The full funnel',
 ];
 

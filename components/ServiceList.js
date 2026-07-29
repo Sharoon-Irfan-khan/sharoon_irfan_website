@@ -59,18 +59,25 @@ function Service({ service, index }) {
           {service.summary}
         </Reveal>
 
-        <Reveal className="svc__deliverables" delay={190}>
-          <ul>
-            {service.deliverables.map((d) => (
-              <li key={d}>{d}</li>
-            ))}
-          </ul>
-        </Reveal>
+        {/* Optional, and currently unused. Each service is a name, a line and
+            a photograph; the deliverable list and outcome paragraph that used
+            to sit here turned seven services into seven pages of reading. */}
+        {service.deliverables?.length > 0 && (
+          <Reveal className="svc__deliverables" delay={190}>
+            <ul>
+              {service.deliverables.map((d) => (
+                <li key={d}>{d}</li>
+              ))}
+            </ul>
+          </Reveal>
+        )}
 
-        <Reveal className="svc__outcome" delay={240}>
-          <span className="label">Outcome</span>
-          <p>{service.outcome}</p>
-        </Reveal>
+        {service.outcome && (
+          <Reveal className="svc__outcome" delay={240}>
+            <span className="label">Outcome</span>
+            <p>{service.outcome}</p>
+          </Reveal>
+        )}
       </div>
     </article>
   );

@@ -1,5 +1,5 @@
-import Link from 'next/link';
-import { nav, site } from '@/lib/site';
+import Reveal from './Reveal';
+import { site } from '@/lib/site';
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -8,27 +8,16 @@ export default function Footer() {
     <footer className="footer on-dark">
       <div className="shell">
         <div className="footer__grid">
-          <div>
+          <Reveal>
             <p className="footer__mark">
               Sharoon <em>Irfan</em>
             </p>
             <p className="muted" style={{ marginTop: '1.25rem', maxWidth: '32ch' }}>
               {site.role}. {site.location}.
             </p>
-          </div>
+          </Reveal>
 
-          <div className="footer__col">
-            <h3>Pages</h3>
-            <ul>
-              {nav.map((item) => (
-                <li key={item.href}>
-                  <Link href={item.href}>{item.label}</Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="footer__col">
+          <Reveal className="footer__col" delay={120}>
             <h3>Reach me</h3>
             <ul>
               <li>
@@ -43,15 +32,15 @@ export default function Footer() {
                 </a>
               </li>
             </ul>
-          </div>
+          </Reveal>
         </div>
 
-        <div className="footer__base">
+        <Reveal className="footer__base" delay={220}>
           <span>
             © {year} {site.name}
           </span>
           <span>{site.domain}</span>
-        </div>
+        </Reveal>
       </div>
     </footer>
   );
