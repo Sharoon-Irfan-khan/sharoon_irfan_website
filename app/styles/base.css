@@ -1,0 +1,260 @@
+/* ============================================================
+   BASE — reset, typography primitives, reveal engine
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: auto; /* Lenis owns smooth scrolling */
+}
+
+body {
+  background: var(--ivory);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--step-body);
+  line-height: 1.68;
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  /* `clip`, not `hidden`. Both stop sideways overflow, but `hidden` makes the
+     body a scroll container, and a scroll container between a sticky element
+     and the viewport stops it sticking. That is what left the hero's video a
+     black screen. `clip` does the same clipping without the scroll box. */
+  overflow-x: clip;
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+::selection {
+  background: var(--sand);
+  color: var(--rich-black);
+}
+
+:focus-visible {
+  outline: 1.5px solid var(--sand);
+  outline-offset: 4px;
+  border-radius: 1px;
+}
+
+/* ---------- Type primitives ---------- */
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-optical-sizing: auto;
+  line-height: 0.98;
+  letter-spacing: -0.018em;
+  text-wrap: balance;
+}
+
+.display--xl {
+  font-size: var(--step-display-xl);
+  line-height: 0.92;
+  letter-spacing: -0.026em;
+}
+.display--l {
+  font-size: var(--step-display-l);
+  line-height: 0.98;
+  letter-spacing: -0.022em;
+}
+.display--m {
+  font-size: var(--step-display-m);
+  line-height: 1.06;
+}
+.display--s {
+  font-size: var(--step-display-s);
+  line-height: 1.14;
+  letter-spacing: -0.012em;
+}
+
+/* The moodboard sets its own labels in didone italic — so do we. */
+.display em,
+.display i {
+  font-style: italic;
+  letter-spacing: 0;
+}
+
+.label {
+  font-family: var(--font-ui);
+  font-size: var(--step-label);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: var(--track-label);
+  line-height: 1;
+}
+
+.lede {
+  font-size: var(--step-lede);
+  line-height: 1.56;
+  letter-spacing: -0.005em;
+  text-wrap: pretty;
+}
+
+.prose {
+  max-width: var(--measure);
+  text-wrap: pretty;
+}
+.prose p + p {
+  margin-top: 1.15em;
+}
+
+.muted {
+  color: var(--ink-52);
+}
+.on-dark .muted {
+  color: var(--paper-46);
+}
+
+/* ---------- Layout primitives ---------- */
+
+.shell {
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  padding-left: calc(var(--gutter) + var(--rail));
+}
+
+.band {
+  padding-block: var(--band);
+}
+.band--tight {
+  padding-block: var(--band-tight);
+}
+.band--flush-top {
+  padding-top: 0;
+}
+
+.surface-ivory {
+  background: var(--ivory);
+  color: var(--ink);
+}
+.surface-champagne {
+  background: var(--champagne);
+  color: var(--ink);
+}
+.surface-black {
+  background: var(--rich-black);
+  color: var(--paper);
+}
+
+.rule {
+  height: 1px;
+  background: var(--rule-dark);
+  border: 0;
+}
+.on-dark .rule {
+  background: var(--rule-light);
+}
+
+/* ---------- Reveal engine ----------
+   One motion vocabulary for the whole site: a short rise + fade
+   on a slow ease-out. Scattered effects read as noise; this reads
+   as a page settling into place.                                */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, var(--reveal-y, 26px), 0);
+  transition:
+    opacity var(--dur-reveal) var(--ease-out),
+    transform var(--dur-reveal) var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+[data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Headline lines mask upward out of an invisible baseline. */
+.lines {
+  display: block;
+}
+.lines__line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+.lines__inner {
+  display: block;
+  transform: translate3d(0, 105%, 0);
+  transition: transform 1150ms var(--ease-line);
+  transition-delay: var(--line-delay, 0ms);
+}
+.lines.is-in .lines__inner {
+  transform: none;
+}
+
+/* Hairline that draws itself across the width of its container. */
+.draw-rule {
+  height: 1px;
+  background: var(--rule-dark);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1400ms var(--ease-line);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.on-dark .draw-rule {
+  background: var(--rule-light);
+}
+.draw-rule.is-in {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+  .lines__inner {
+    transform: none;
+  }
+  .draw-rule {
+    transform: scaleX(1);
+  }
+}

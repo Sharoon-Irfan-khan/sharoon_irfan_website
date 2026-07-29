@@ -1,0 +1,195 @@
+/* ============================================================
+   SYSTEM DIAGRAM
+   Every animated value reads --p, the scroll progress written
+   onto .sysd__stage by useScrollProgress. Nothing here animates
+   on a timer, so scrolling back runs it backwards.
+   ============================================================ */
+
+.sysd__eyebrow {
+  color: var(--sand);
+}
+
+.sysd__title {
+  max-width: 20ch;
+  margin-top: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.sysd__stage {
+  position: relative;
+  aspect-ratio: 1200 / 460;
+  width: 100%;
+  margin-top: clamp(3rem, 7vw, 5.5rem);
+}
+
+/* ---------- Connectors ---------- */
+
+.sysd__wires {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* pathLength="1" normalises every path to one unit, so the draw is a plain
+   0 → 1 interpolation and no geometry has to be measured in JS. */
+.sysd__link {
+  --t: clamp(0, (var(--p, 0) - var(--d)) / 0.34, 1);
+  stroke: var(--sand);
+  stroke-width: 1;
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--t));
+  opacity: calc(0.25 + var(--t) * 0.45);
+  vector-effect: non-scaling-stroke;
+}
+
+/* ---------- The five parts ---------- */
+
+.sysd__parts {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 30.4%; /* meets the connectors at y=140 of 460 */
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Bottom-aligned in the band, so the label sits directly above the point its
+   connector leaves from. Top-aligning strands the type 87px clear of its own
+   line and the two stop reading as one object. */
+.sysd__node {
+  --t: clamp(0, (var(--p, 0) - var(--d)) / 0.18, 1);
+  position: absolute;
+  bottom: 0.75rem;
+  left: var(--x);
+  display: flex;
+  justify-content: center;
+  opacity: var(--t);
+  transform: translate(-50%, calc((1 - var(--t)) * 16px));
+}
+
+/* column-reverse puts the dot at the bottom, so it reads as the terminal the
+   connector attaches to rather than as a bullet above the word. */
+.sysd__part {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.5rem 0.75rem;
+  font-family: var(--font-ui);
+  font-size: var(--step-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--paper-46);
+  text-align: center;
+  white-space: nowrap;
+  transition: color var(--dur-quick) var(--ease-out);
+}
+.sysd__part:hover,
+.sysd__part:focus-visible {
+  color: var(--champagne);
+}
+
+.sysd__dot {
+  width: 7px;
+  height: 7px;
+  background: var(--sand);
+  transform: rotate(45deg);
+  transition: transform var(--dur-quick) var(--ease-out);
+}
+.sysd__part:hover .sysd__dot {
+  transform: rotate(45deg) scale(1.5);
+}
+
+/* ---------- Revenue ---------- */
+
+.sysd__target {
+  --t: clamp(0, (var(--p, 0) - 0.7) / 0.25, 1);
+  position: absolute;
+  left: 50%;
+  top: 78.3%; /* y=360 of 460 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  transform: translateX(-50%);
+}
+
+.sysd__target-ring {
+  width: clamp(10px, 1.1vw, 14px);
+  height: clamp(10px, 1.1vw, 14px);
+  border-radius: 50%;
+  background: var(--sand);
+  transform: scale(calc(0.4 + var(--t) * 0.6));
+  box-shadow: 0 0 0 calc(var(--t) * 10px) var(--sand-10),
+    0 0 calc(var(--t) * 34px) rgba(194, 177, 168, 0.5);
+}
+
+.sysd__target-label {
+  color: var(--champagne);
+  opacity: var(--t);
+  transform: translateY(calc((1 - var(--t)) * 10px));
+}
+
+/* ============================================================
+   NARROW
+   The converging geometry needs width to read. Below 760px the
+   parts stack and a single spine draws down through them, which
+   says the same thing without distorting anything.
+   ============================================================ */
+
+@media (max-width: 760px) {
+  .sysd__stage {
+    aspect-ratio: auto;
+    padding-left: 1.75rem;
+  }
+
+  .sysd__wires {
+    display: none;
+  }
+
+  /* The spine, drawn with the same --p the connectors used. */
+  .sysd__stage::before {
+    content: '';
+    position: absolute;
+    left: 3px;
+    top: 0.5rem;
+    bottom: 3.5rem;
+    width: 1px;
+    background: var(--sand);
+    opacity: 0.5;
+    transform: scaleY(clamp(0, var(--p, 0) / 0.75, 1));
+    transform-origin: top;
+  }
+
+  .sysd__parts {
+    position: static;
+    height: auto;
+    display: grid;
+    gap: 1.6rem;
+  }
+
+  .sysd__node {
+    position: static;
+    justify-content: flex-start;
+    transform: translateY(calc((1 - var(--t)) * 16px));
+  }
+
+  .sysd__part {
+    flex-direction: row;
+    align-items: center;
+    padding-left: 0;
+    margin-left: -1.75rem;
+    gap: 1.15rem;
+  }
+
+  .sysd__target {
+    position: static;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.15rem;
+    margin-top: 2rem;
+    margin-left: -1.75rem;
+    transform: none;
+  }
+}

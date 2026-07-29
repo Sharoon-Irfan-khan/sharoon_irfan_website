@@ -1,0 +1,220 @@
+/* ============================================================
+   THE FIGURE — pinned instrument
+   The number counts, an axis draws under it, and the outcomes
+   read in one at a time. Everything reads --p from .proof__track.
+   ============================================================ */
+
+.proof {
+  position: relative;
+  /* The page above this is a dark video hero. Without an edge the two run
+     together into one long murky band and the section never begins. */
+  border-top: 1px solid var(--rule-light);
+}
+
+.proof__track {
+  position: relative;
+  min-height: 340svh;
+}
+
+.proof__stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: clip;
+  display: grid;
+  align-content: center;
+}
+
+.proof__grid {
+  display: grid;
+  gap: clamp(2.5rem, 6vw, 5rem);
+  align-items: center;
+}
+
+@media (min-width: 1000px) {
+  /* Figure left, outcomes right. The right column is what stops the number
+     sitting alone in half a screen of empty black. */
+  .proof__grid {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  }
+}
+
+/* ---------- The number ---------- */
+
+.proof__eyebrow {
+  color: var(--sand);
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.proof__value {
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 11vw, 10rem);
+  line-height: 0.84;
+  letter-spacing: -0.045em;
+  /* Tabular figures, so the number does not jostle sideways as it counts —
+     proportional digits make a counting figure twitch on every tick. */
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+/* The currency is data, not display: set small and raised, the way a figure is
+   annotated rather than announced. */
+.proof__unit {
+  font-family: var(--font-ui);
+  font-size: 0.15em;
+  letter-spacing: 0.16em;
+  color: var(--sand);
+  vertical-align: 0.55em;
+  margin-right: 0.5em;
+}
+
+.proof__suffix {
+  color: var(--sand);
+}
+
+/* ---------- The axis ---------- */
+
+.proof__axis {
+  position: relative;
+  display: block;
+  height: 1.35rem;
+  margin-top: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.proof__axis-line {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: var(--sand);
+  transform: scaleX(clamp(0, (var(--p, 0) - 0.04) / 0.56, 1));
+  transform-origin: left;
+}
+
+/* Ticks under the axis, revealed by the same sweep. A repeating gradient
+   rather than elements: twenty spans of nothing would be twenty spans of
+   nothing in the accessibility tree too. */
+.proof__axis-ticks {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 0.55rem;
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--sand-60) 0 1px,
+    transparent 1px 5%
+  );
+  opacity: 0.55;
+  transform: scaleX(clamp(0, (var(--p, 0) - 0.04) / 0.56, 1));
+  transform-origin: left;
+}
+
+.proof__label {
+  display: block;
+  margin-top: clamp(1rem, 2vw, 1.5rem);
+  color: var(--sand);
+}
+
+.proof__note {
+  margin-top: clamp(1rem, 2vw, 1.5rem);
+  max-width: 44ch;
+  color: var(--paper-46);
+  font-size: var(--step-small);
+}
+
+/* ---------- The outcomes ---------- */
+
+.proof__items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0;
+}
+
+/*
+  Each outcome owns a window late in the track, after the count is under way.
+  They arrive in order, so the reader finishes the number and then reads what
+  it bought, rather than being handed both at once.
+*/
+.proof__item {
+  --start: calc(0.3 + var(--i) * 0.14);
+  --t-raw: clamp(0, (var(--p, 0) - var(--start)) / 0.16, 1);
+  /* Smoothstep, same easing as the rest of the site's scrubbed motion. */
+  --t: calc(var(--t-raw) * var(--t-raw) * (3 - 2 * var(--t-raw)));
+
+  position: relative;
+  padding: clamp(1.1rem, 2.2vw, 1.6rem) 0;
+  border-bottom: 1px solid var(--rule-light-soft);
+  opacity: var(--t);
+  transform: translateY(calc((1 - var(--t)) * 14px));
+}
+
+.proof__item:first-child {
+  border-top: 1px solid var(--rule-light-soft);
+}
+
+/* A sand rule that draws along with the item, so the list assembles rather
+   than blinking on. */
+.proof__item::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 1px;
+  background: var(--sand);
+  transform: scaleX(var(--t));
+  transform-origin: left;
+  opacity: 0.5;
+}
+
+.proof__item-name {
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 1.7vw, 1.5rem);
+  line-height: 1.16;
+  letter-spacing: -0.012em;
+}
+
+.proof__item-detail {
+  margin-top: 0.5rem;
+  color: var(--paper-46);
+  font-size: var(--step-small);
+  max-width: 46ch;
+}
+
+/* ============================================================
+   NARROW
+   ============================================================ */
+
+@media (max-width: 999px) {
+  .proof__track {
+    min-height: 280svh;
+  }
+  .proof__stage {
+    align-content: start;
+    padding-top: calc(var(--nav-h) + 2rem);
+  }
+  .proof__items {
+    margin-top: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* No pinning and no scrub: a normal section, everything present. */
+  .proof__track {
+    min-height: 0;
+  }
+  .proof__stage {
+    position: static;
+    height: auto;
+    padding-block: var(--band);
+  }
+  .proof__item {
+    opacity: 1;
+    transform: none;
+  }
+  .proof__axis-line,
+  .proof__axis-ticks,
+  .proof__item::after {
+    transform: scaleX(1);
+  }
+}

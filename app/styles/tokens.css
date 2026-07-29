@@ -1,0 +1,88 @@
+/* ============================================================
+   TOKENS
+   Palette is the brand's four colours. Everything else is
+   derived from them so the site can never drift off-brand.
+   ============================================================ */
+
+:root {
+  /* ---- Brand palette ---- */
+  --rich-black: #050805;
+  --sand: #c2b1a8;
+  --champagne: #ede9e3;
+  --ivory: #f8f7f3;
+
+  /* ---- Derived surfaces ---- */
+  --black-lift: #0b0f0b; /* cards sitting on rich black */
+  --black-lift-2: #121712;
+
+  /* ---- Ink on light ---- */
+  --ink: var(--rich-black);
+  --ink-72: rgba(5, 8, 5, 0.72);
+  --ink-52: rgba(5, 8, 5, 0.52);
+  --ink-30: rgba(5, 8, 5, 0.3);
+
+  /* ---- Ink on dark ---- */
+  --paper: var(--ivory);
+  --paper-70: rgba(248, 247, 243, 0.7);
+  --paper-46: rgba(248, 247, 243, 0.46);
+
+  /* ---- Sand at working opacities ---- */
+  --sand-60: rgba(194, 177, 168, 0.6);
+  --sand-34: rgba(194, 177, 168, 0.34);
+  --sand-18: rgba(194, 177, 168, 0.18);
+  --sand-10: rgba(194, 177, 168, 0.1);
+
+  /* ---- Hairlines. The whole design hangs off these. ---- */
+  --rule-dark: rgba(5, 8, 5, 0.14);
+  --rule-dark-soft: rgba(5, 8, 5, 0.07);
+  --rule-light: rgba(194, 177, 168, 0.22);
+  --rule-light-soft: rgba(194, 177, 168, 0.11);
+
+  /* ---- Typography ----
+     The brand fonts are The Seasons, Glacial Indifference and Poppins.
+     The Seasons is a licensed font and Glacial Indifference is not on Google
+     Fonts, so each family leads with the real font and falls through to the
+     closest free stand-in. Drop the licensed files into /public/fonts and they
+     take over on their own — see app/styles/brand-fonts.css. */
+  --font-display: 'The Seasons', var(--f-display), 'Didot', Georgia, serif;
+  --font-body: 'Glacial Indifference', var(--f-body), system-ui, sans-serif;
+  --font-ui: var(--f-ui), system-ui, sans-serif;
+
+  --step-display-xl: clamp(3rem, 8.4vw, 8.75rem);
+  --step-display-l: clamp(2.35rem, 5.1vw, 4.75rem);
+  --step-display-m: clamp(1.85rem, 3.1vw, 2.9rem);
+  --step-display-s: clamp(1.45rem, 2.1vw, 1.95rem);
+
+  --step-lede: clamp(1.1rem, 1.45vw, 1.4rem);
+  --step-body: clamp(0.98rem, 1.05vw, 1.075rem);
+  --step-small: 0.875rem;
+  --step-label: 0.6875rem;
+
+  --track-label: 0.24em;
+  --track-nav: 0.16em;
+
+  /* ---- Layout ---- */
+  --gutter: clamp(1.25rem, 5vw, 5.5rem);
+  --rail: clamp(0px, 3.6vw, 4.25rem); /* left spine reserve */
+  --measure: 62ch;
+  --max: 96rem;
+
+  --band: clamp(5.5rem, 11vw, 11rem); /* vertical section rhythm */
+  --band-tight: clamp(3.5rem, 6vw, 6rem);
+
+  --nav-h: 5.25rem;
+
+  /* ---- Motion ---- */
+  --ease-out: cubic-bezier(0.16, 0.84, 0.3, 1);
+  --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-line: cubic-bezier(0.62, 0.04, 0.2, 1);
+  --dur-reveal: 1050ms;
+  --dur-quick: 420ms;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --nav-h: 4.25rem;
+    --rail: 0px;
+  }
+}

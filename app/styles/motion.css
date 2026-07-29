@@ -1,0 +1,188 @@
+/* ============================================================
+   MOTION — PHASE 2
+   Additions to existing components. Everything here rides the
+   reveal engine already in base.css: the elements are already
+   [data-reveal] and already receive .is-in with a staggered
+   --reveal-delay, so none of this needs new JavaScript.
+   ============================================================ */
+
+/* ---------- Ledger: rules that draw ---------- */
+
+/* The resting hairline is handed to a pseudo-element so it can draw itself in
+   from the left, in the same vocabulary as .draw-rule. The row's own
+   border-bottom goes transparent rather than away, so the box model — and
+   therefore the layout — is untouched. */
+.ledger__row {
+  border-bottom-color: transparent;
+}
+.on-dark .ledger__row {
+  border-bottom-color: transparent;
+}
+
+.ledger__row::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 1px;
+  background: var(--rule-dark-soft);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1200ms var(--ease-line);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.on-dark .ledger__row::before {
+  background: var(--rule-light-soft);
+}
+.ledger__row.is-in::before {
+  transform: scaleX(1);
+}
+
+/* ---------- Steps: an accent that draws across the row ---------- */
+
+/* Each cell draws a short sand rule along its top edge. Staggered across a
+   four-column row it reads as one line travelling through the sequence, which
+   is the point — the method runs in order. */
+.step {
+  position: relative;
+}
+.step::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--sand);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1000ms var(--ease-line);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.step.is-in::before {
+  transform: scaleX(1);
+}
+
+/* ---------- Words ---------- */
+
+.words__w {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  /* Descenders sit below the baseline; without this the mask crops them. */
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+.words__inner {
+  display: inline-block;
+  transform: translate3d(0, 105%, 0);
+  transition: transform 950ms var(--ease-line);
+  transition-delay: var(--word-delay, 0ms);
+}
+.words.is-in .words__inner {
+  transform: none;
+}
+
+/* ---------- Form: focus that draws ---------- */
+
+.field__input,
+.field__select,
+.field__textarea {
+  transition:
+    border-color var(--dur-quick) var(--ease-out),
+    box-shadow var(--dur-quick) var(--ease-out);
+}
+
+/* A sand rule growing along the bottom edge on focus, rather than a ring
+   dropped around the box. Consistent with how every other hairline on the
+   site behaves. */
+.field {
+  position: relative;
+}
+.field::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--sand);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 520ms var(--ease-line);
+  pointer-events: none;
+}
+.field:focus-within::after {
+  transform: scaleX(1);
+}
+
+/* ---------- Route transition ---------- */
+
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+}
+
+.curtain__veil {
+  position: absolute;
+  inset: 0;
+  background: var(--rich-black);
+  opacity: 0;
+  animation: curtain-veil 620ms var(--ease-out) forwards;
+}
+@keyframes curtain-veil {
+  0% {
+    opacity: 0.42;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* The same sand hairline the Intro uses, so arriving on a new page rhymes
+   with arriving on the site. */
+.curtain__bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 1px;
+  width: 100%;
+  background: var(--sand);
+  transform-origin: left;
+  animation: curtain-bar 820ms var(--ease-line) forwards;
+}
+@keyframes curtain-bar {
+  0% {
+    transform: scaleX(0);
+    opacity: 1;
+  }
+  62% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
+
+/* ---------- Anchors ---------- */
+
+/* The system diagram links into /services, so the target must clear the
+   fixed nav rather than hide behind it. */
+.svc {
+  scroll-margin-top: calc(var(--nav-h) + 2rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ledger__row::before,
+  .step::before {
+    transform: scaleX(1);
+  }
+  .words__inner {
+    transform: none;
+  }
+}

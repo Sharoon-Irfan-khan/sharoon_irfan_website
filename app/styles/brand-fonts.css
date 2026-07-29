@@ -1,0 +1,66 @@
+/* ============================================================
+   BRAND FONTS — The Seasons · Glacial Indifference
+
+   Neither font is available from Google Fonts: The Seasons is licensed, and
+   Glacial Indifference is free but self-hosted. Both are declared here pointing
+   at /public/fonts. Until those files exist the browser skips these faces and
+   uses the free stand-ins declared after them in tokens.css:
+
+     The Seasons          → Cormorant Garamond
+     Glacial Indifference → Jost
+     Poppins              → Poppins (exact — it is on Google Fonts)
+
+   To switch to the real fonts, drop the .woff2 files into public/fonts using
+   exactly the filenames below. Nothing else needs to change.
+   ============================================================ */
+
+@font-face {
+  font-family: 'The Seasons';
+  src: url('/fonts/TheSeasons-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'The Seasons';
+  src: url('/fonts/TheSeasons-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'The Seasons';
+  src: url('/fonts/TheSeasons-Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'The Seasons';
+  src: url('/fonts/TheSeasons-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Glacial Indifference';
+  src: url('/fonts/GlacialIndifference-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Glacial Indifference';
+  src: url('/fonts/GlacialIndifference-Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Glacial Indifference';
+  src: url('/fonts/GlacialIndifference-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}

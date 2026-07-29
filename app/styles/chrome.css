@@ -1,0 +1,508 @@
+/* ============================================================
+   CHROME — intro, nav, spine, buttons, footer, grain
+   ============================================================ */
+
+/* ---------- Grain ----------
+   A single fixed film of noise over everything. It stops the flat
+   ivory from reading as a blank browser window.                  */
+
+.grain {
+  position: fixed;
+  inset: -50%;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.32;
+  mix-blend-mode: multiply;
+  background-image: var(--grain-src);
+  background-size: 180px 180px;
+}
+
+/* ---------- Intro curtain ---------- */
+
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--rich-black);
+  display: grid;
+  place-items: center;
+  transition: transform 900ms var(--ease-line) 220ms;
+}
+.intro.is-done {
+  transform: translate3d(0, -101%, 0);
+}
+.intro__mark {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3.2vw, 2.5rem);
+  color: var(--ivory);
+  letter-spacing: -0.01em;
+  opacity: 0;
+  transform: translateY(14px);
+  animation: intro-mark 1100ms var(--ease-out) forwards;
+}
+.intro__mark em {
+  font-style: italic;
+  color: var(--sand);
+}
+.intro__bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1px;
+  width: 100%;
+  background: var(--sand);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: intro-bar 1050ms var(--ease-line) forwards;
+}
+
+@keyframes intro-mark {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes intro-bar {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* ---------- Nav ---------- */
+
+.nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 50;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  color: var(--paper);
+  transition:
+    background-color 500ms var(--ease-out),
+    color 500ms var(--ease-out),
+    box-shadow 500ms var(--ease-out);
+}
+
+/* Fully opaque. A translucent bar lets headlines scroll through the wordmark,
+   which reads as a rendering fault rather than a layer. */
+.nav.is-solid {
+  background: var(--ivory);
+  color: var(--ink);
+  box-shadow: inset 0 -1px 0 var(--rule-dark);
+}
+
+.nav__inner {
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  padding-left: calc(var(--gutter) + var(--rail));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-size: 1.28rem;
+  letter-spacing: -0.005em;
+  line-height: 1;
+  white-space: nowrap;
+}
+.wordmark em {
+  font-style: italic;
+}
+.wordmark__dot {
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  margin-left: 0.45em;
+  vertical-align: 0.32em;
+  background: var(--sand);
+  transform: rotate(45deg);
+}
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.5rem, 2.6vw, 2.75rem);
+}
+
+.nav__link {
+  position: relative;
+  font-family: var(--font-ui);
+  font-size: var(--step-label);
+  text-transform: uppercase;
+  letter-spacing: var(--track-nav);
+  padding-block: 0.5rem;
+  opacity: 0.72;
+  transition: opacity var(--dur-quick) var(--ease-out);
+}
+.nav__link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 520ms var(--ease-line);
+}
+.nav__link:hover,
+.nav__link.is-active {
+  opacity: 1;
+}
+.nav__link:hover::after,
+.nav__link.is-active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+.nav__link.is-active::after {
+  background: var(--sand);
+}
+
+.nav__cta {
+  display: none;
+}
+@media (min-width: 1080px) {
+  .nav__cta {
+    display: inline-flex;
+  }
+}
+
+/* Mobile menu trigger */
+.burger {
+  display: grid;
+  gap: 5px;
+  padding: 0.6rem 0;
+  width: 26px;
+}
+.burger span {
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  transition: transform 420ms var(--ease-inout), opacity 220ms linear;
+}
+.burger.is-open span:nth-child(1) {
+  transform: translateY(3px) rotate(45deg);
+}
+.burger.is-open span:nth-child(2) {
+  opacity: 0;
+}
+.burger.is-open span:nth-child(3) {
+  transform: translateY(-3px) rotate(-45deg);
+}
+@media (min-width: 901px) {
+  .burger {
+    display: none;
+  }
+  .nav__links--mobile {
+    display: none;
+  }
+}
+@media (max-width: 900px) {
+  .nav__links--desk {
+    display: none;
+  }
+}
+
+/* Full-screen mobile menu */
+.menu {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  background: var(--rich-black);
+  color: var(--paper);
+  padding: calc(var(--nav-h) + 2rem) var(--gutter) var(--gutter);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 780ms var(--ease-line);
+  pointer-events: none;
+}
+.menu.is-open {
+  clip-path: inset(0 0 0 0);
+  pointer-events: auto;
+}
+.menu__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid var(--rule-light-soft);
+}
+.menu__item {
+  border-bottom: 1px solid var(--rule-light-soft);
+  overflow: hidden;
+}
+.menu__link {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.05rem 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 10vw, 3rem);
+  line-height: 1;
+  transform: translateY(110%);
+  transition: transform 760ms var(--ease-line);
+  transition-delay: var(--i-delay, 0ms);
+}
+.menu.is-open .menu__link {
+  transform: none;
+}
+.menu__index {
+  font-family: var(--font-ui);
+  font-size: var(--step-label);
+  color: var(--sand);
+  letter-spacing: var(--track-label);
+}
+.menu__foot {
+  display: grid;
+  gap: 0.4rem;
+  padding-top: 2rem;
+}
+.menu__foot a {
+  font-family: var(--font-ui);
+  font-size: var(--step-small);
+  color: var(--paper-70);
+}
+
+/* ---------- The spine ----------
+   SIGNATURE. A single hairline runs the full height of the page,
+   filling as you scroll, with the current chapter named beside it.
+   The brief's core claim is that the parts of a marketing system
+   should be one connected line. This is that line.               */
+
+.spine {
+  position: fixed;
+  left: calc(var(--gutter) * 0.55);
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  z-index: 40;
+  pointer-events: none;
+}
+@media (max-width: 900px) {
+  .spine {
+    display: none;
+  }
+}
+
+.spine__track {
+  position: absolute;
+  inset: 0;
+  background: var(--rule-light-soft);
+  transition: background 500ms var(--ease-out);
+}
+.spine--on-light .spine__track {
+  background: var(--rule-dark-soft);
+}
+
+.spine__fill {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 100%;
+  background: var(--sand);
+  transform-origin: top;
+  transform: scaleY(var(--p, 0));
+  will-change: transform;
+}
+
+.spine__node {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 5px;
+  height: 5px;
+  margin-left: -2.5px;
+  margin-top: -2.5px;
+  background: var(--sand);
+  transform: translateY(calc(var(--p, 0) * 100vh)) rotate(45deg);
+  will-change: transform;
+}
+
+.spine__chapter {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform-origin: left center;
+  transform: translate(0.85rem, -50%) rotate(90deg);
+  font-family: var(--font-ui);
+  font-size: var(--step-label);
+  text-transform: uppercase;
+  letter-spacing: var(--track-label);
+  white-space: nowrap;
+  color: var(--paper-46);
+  transition: color 500ms var(--ease-out), opacity 500ms var(--ease-out);
+}
+.spine--on-light .spine__chapter {
+  color: var(--ink-30);
+}
+.spine__chapter span {
+  display: inline-block;
+  transition: opacity 320ms var(--ease-out), transform 320ms var(--ease-out);
+}
+.spine__chapter.is-swapping span {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  --btn-fg: var(--rich-black);
+  --btn-bg: var(--sand);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1.02rem 1.65rem;
+  font-family: var(--font-ui);
+  font-size: var(--step-label);
+  text-transform: uppercase;
+  letter-spacing: var(--track-label);
+  color: var(--btn-fg);
+  background: var(--btn-bg);
+  overflow: hidden;
+  isolation: isolate;
+  transition: color 480ms var(--ease-out);
+}
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--rich-black);
+  transform: translate3d(0, 101%, 0);
+  transition: transform 560ms var(--ease-line);
+}
+.btn:hover {
+  color: var(--ivory);
+}
+.btn:hover::before {
+  transform: none;
+}
+.btn__arrow {
+  transition: transform 560ms var(--ease-line);
+}
+.btn:hover .btn__arrow {
+  transform: translateX(4px);
+}
+
+/* Ghost button — hairline box, fills from the bottom. */
+.btn--ghost {
+  --btn-bg: transparent;
+  --btn-fg: currentColor;
+  box-shadow: inset 0 0 0 1px var(--rule-dark);
+}
+.on-dark .btn--ghost {
+  box-shadow: inset 0 0 0 1px var(--rule-light);
+}
+.btn--ghost::before {
+  background: var(--rich-black);
+}
+.on-dark .btn--ghost::before {
+  background: var(--sand);
+}
+.on-dark .btn--ghost:hover {
+  color: var(--rich-black);
+}
+
+.btn--sm {
+  padding: 0.72rem 1.15rem;
+}
+
+/* Text link with a rule that draws in from the left. */
+.tlink {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 2px;
+}
+.tlink::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.42;
+  transform-origin: right;
+  transition: transform 520ms var(--ease-line), opacity 320ms linear;
+}
+.tlink:hover::after {
+  opacity: 1;
+  transform: scaleX(0);
+  transform-origin: right;
+}
+
+/* ---------- Footer ---------- */
+
+.footer {
+  background: var(--rich-black);
+  color: var(--paper);
+  padding-block: clamp(3.5rem, 6vw, 5.5rem) 2rem;
+}
+.footer__grid {
+  display: grid;
+  gap: clamp(2.5rem, 5vw, 4rem);
+  grid-template-columns: 1fr;
+  padding-bottom: clamp(3rem, 6vw, 4.5rem);
+}
+@media (min-width: 780px) {
+  .footer__grid {
+    grid-template-columns: 1.4fr 1fr 1fr;
+  }
+}
+.footer__mark {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.footer__mark em {
+  font-style: italic;
+  color: var(--sand);
+}
+.footer__col h3 {
+  font-family: var(--font-ui);
+  font-size: var(--step-label);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: var(--track-label);
+  color: var(--sand);
+  margin-bottom: 1.25rem;
+}
+.footer__col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.7rem;
+}
+.footer__col a,
+.footer__col li {
+  color: var(--paper-70);
+  font-size: var(--step-small);
+  transition: color var(--dur-quick) var(--ease-out);
+}
+.footer__col a:hover {
+  color: var(--ivory);
+}
+.footer__base {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  justify-content: space-between;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--rule-light-soft);
+  font-family: var(--font-ui);
+  font-size: var(--step-label);
+  letter-spacing: 0.08em;
+  color: var(--paper-46);
+}

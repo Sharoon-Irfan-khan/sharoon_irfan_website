@@ -1,0 +1,304 @@
+/* ============================================================
+   MEDIA — Dubai film, bands and plates
+   ============================================================ */
+
+/* ---------- Shared film layer ---------- */
+
+.film {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+/* Oversized so parallax never exposes an edge. */
+.film__inner {
+  position: absolute;
+  inset: -14% 0;
+  will-change: transform;
+}
+
+.film__media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* A very slow push in and across. This is what the video was really providing —
+   a sense that the frame is alive — and a 2560px photograph can carry it
+   without any of the softness an upscale brings. */
+.film__media--drift {
+  animation: drift-frame 34s var(--ease-inout) infinite alternate;
+  transform-origin: 58% 45%;
+  will-change: transform;
+}
+
+@keyframes drift-frame {
+  from {
+    transform: scale(1.02) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.13) translate3d(-1.6%, -1%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .film__media--drift {
+    animation: none;
+    transform: scale(1.02);
+  }
+}
+
+/* Bands mostly carry no text, so the veil only has to seat the footage against
+   the black sections above and below it. */
+.film__veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(5, 8, 5, 0.4) 0%,
+      rgba(5, 8, 5, 0.16) 34%,
+      rgba(5, 8, 5, 0.34) 68%,
+      rgba(5, 8, 5, 0.66) 100%
+    ),
+    radial-gradient(120% 90% at 78% 12%, rgba(194, 177, 168, 0.1), transparent 62%);
+}
+
+/* The hero carries the headline. Two scrims do the work: a vertical one that
+   darkens the floor where type sits, and a horizontal one that seats the text
+   column without touching the right side of the frame — so the city keeps its
+   colour exactly where nothing is written over it. */
+.film__veil--hero {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(5, 8, 5, 0.58) 0%,
+      rgba(5, 8, 5, 0.34) 38%,
+      rgba(5, 8, 5, 0.08) 68%,
+      transparent 86%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(5, 8, 5, 0.5) 0%,
+      rgba(5, 8, 5, 0.16) 24%,
+      rgba(5, 8, 5, 0.3) 50%,
+      rgba(5, 8, 5, 0.72) 80%,
+      rgba(5, 8, 5, 0.92) 100%
+    ),
+    radial-gradient(110% 80% at 82% 16%, rgba(194, 177, 168, 0.12), transparent 60%);
+}
+
+/* ---------- Ambient light layer ----------
+   Screen blending drops the source's black background, leaving only the moving
+   light. `isolation` keeps the blend inside its own section rather than letting
+   it reach the whole page. */
+
+.has-ambient {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.has-ambient > .shell,
+.has-ambient > .cta__inner,
+.has-ambient > .hero__rail {
+  position: relative;
+  z-index: 1;
+}
+
+/* Over the hero the layer sits on top of the film, so it needs its own stacking
+   step — otherwise it renders under the footage it is meant to light. */
+.hero--film .ambient {
+  z-index: 0;
+}
+
+.ambient {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: var(--ambient-opacity, 0.5);
+}
+.ambient video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  /* Blur is what turns a recognisable subject into drifting light. Without it
+     the butterflies read as butterflies, which is not what this layer is for. */
+  filter: blur(var(--ambient-blur, 0px));
+  transform: scale(1.08); /* hides the soft edge the blur leaves */
+}
+
+/* On small screens the layer is mostly wasted bandwidth for an effect nobody
+   can read at that size. */
+@media (max-width: 700px) {
+  .ambient {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ambient {
+    display: none;
+  }
+}
+
+/* ---------- Full-bleed band ---------- */
+
+.band-media {
+  position: relative;
+  overflow: hidden;
+  background: var(--rich-black);
+  display: flex;
+  align-items: flex-end;
+  isolation: isolate;
+}
+.band-media--mid {
+  min-height: clamp(24rem, 62vh, 40rem);
+}
+.band-media--tall {
+  min-height: clamp(30rem, 88vh, 56rem);
+}
+.band-media--center {
+  align-items: center;
+}
+
+.band-media__frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  /* Wipes open from the centre as the band enters view. */
+  clip-path: inset(12% 6% round 0);
+  transform: scale(1.06);
+  transition:
+    clip-path 1500ms var(--ease-line),
+    transform 1800ms var(--ease-line);
+}
+.band-media.is-in .band-media__frame {
+  clip-path: inset(0 0 round 0);
+  transform: none;
+}
+
+/* Its own scrim rather than a heavier veil over the whole band — the picture
+   stays bright everywhere the text is not. */
+.band-media__body {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding-block: clamp(2.5rem, 6vw, 5rem);
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(5, 8, 5, 0.34) 30%,
+    rgba(5, 8, 5, 0.72) 100%
+  );
+}
+.band-media--center .band-media__body {
+  background: none;
+}
+.band-media__label {
+  color: var(--sand);
+  margin-bottom: 1.25rem;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 900ms var(--ease-out) 500ms, transform 900ms var(--ease-out) 500ms;
+}
+.band-media__title {
+  max-width: 20ch;
+  color: var(--ivory);
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 1100ms var(--ease-out) 620ms, transform 1100ms var(--ease-out) 620ms;
+}
+.band-media.is-in .band-media__label,
+.band-media.is-in .band-media__title {
+  opacity: 1;
+  transform: none;
+}
+
+/* Location credit, set quietly in the corner like a plate on a print. */
+.band-media__caption {
+  position: absolute;
+  right: var(--gutter);
+  bottom: clamp(1rem, 2vw, 1.75rem);
+  z-index: 1;
+  font-family: var(--font-ui);
+  font-size: var(--step-label);
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: var(--track-label);
+  color: var(--paper-46);
+  opacity: 0;
+  transition: opacity 900ms var(--ease-out) 900ms;
+}
+.band-media.is-in .band-media__caption {
+  opacity: 1;
+}
+
+/* ---------- Framed plate ---------- */
+
+.plate {
+  margin: 0;
+  display: grid;
+  gap: 0.9rem;
+}
+.plate__frame {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background: var(--black-lift);
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 1400ms var(--ease-line);
+}
+.plate.is-in .plate__frame {
+  clip-path: inset(0 0 0 0);
+}
+.plate__caption {
+  color: var(--ink-52);
+}
+.on-dark .plate__caption {
+  color: var(--paper-46);
+}
+
+/* ---------- Hero with film behind it ---------- */
+
+.hero--film .hero__light {
+  display: none;
+}
+.hero--film .hero__body,
+.hero--film .hero__rail {
+  position: relative;
+  z-index: 1;
+}
+.hero--film .hero__rail {
+  border-top-color: var(--sand-34);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+/* Inner-page hero: still image rather than video, so the page arrives fast. */
+.phero--film .hero__light {
+  display: none;
+}
+.phero--film > .shell {
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .band-media__frame,
+  .plate__frame {
+    clip-path: none !important;
+    transform: none !important;
+  }
+  .band-media__label,
+  .band-media__title,
+  .band-media__caption {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

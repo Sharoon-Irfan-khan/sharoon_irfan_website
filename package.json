@@ -1,0 +1,19 @@
+{
+  "name": "sharoon-irfan",
+  "version": "1.0.0",
+  "private": true,
+  "description": "sharoon.ae — founder-led marketing systems, Dubai",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "lenis": "^1.1.18",
+    "next": "16.0.10",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "resend": "^4.4.1"
+  }
+}
