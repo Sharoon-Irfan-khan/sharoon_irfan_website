@@ -71,25 +71,6 @@
    darkens the floor where type sits, and a horizontal one that seats the text
    column without touching the right side of the frame — so the city keeps its
    colour exactly where nothing is written over it. */
-.film__veil--hero {
-  background:
-    linear-gradient(
-      90deg,
-      rgba(5, 8, 5, 0.58) 0%,
-      rgba(5, 8, 5, 0.34) 38%,
-      rgba(5, 8, 5, 0.08) 68%,
-      transparent 86%
-    ),
-    linear-gradient(
-      180deg,
-      rgba(5, 8, 5, 0.5) 0%,
-      rgba(5, 8, 5, 0.16) 24%,
-      rgba(5, 8, 5, 0.3) 50%,
-      rgba(5, 8, 5, 0.72) 80%,
-      rgba(5, 8, 5, 0.92) 100%
-    ),
-    radial-gradient(110% 80% at 82% 16%, rgba(194, 177, 168, 0.12), transparent 60%);
-}
 
 /* ---------- Ambient light layer ----------
    Screen blending drops the source's black background, leaving only the moving
@@ -146,100 +127,6 @@
     display: none;
   }
 }
-
-/* ---------- Full-bleed band ---------- */
-
-.band-media {
-  position: relative;
-  overflow: hidden;
-  background: var(--rich-black);
-  display: flex;
-  align-items: flex-end;
-  isolation: isolate;
-}
-.band-media--mid {
-  min-height: clamp(24rem, 62vh, 40rem);
-}
-.band-media--tall {
-  min-height: clamp(30rem, 88vh, 56rem);
-}
-.band-media--center {
-  align-items: center;
-}
-
-.band-media__frame {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  /* Wipes open from the centre as the band enters view. */
-  clip-path: inset(12% 6% round 0);
-  transform: scale(1.06);
-  transition:
-    clip-path 1500ms var(--ease-line),
-    transform 1800ms var(--ease-line);
-}
-.band-media.is-in .band-media__frame {
-  clip-path: inset(0 0 round 0);
-  transform: none;
-}
-
-/* Its own scrim rather than a heavier veil over the whole band — the picture
-   stays bright everywhere the text is not. */
-.band-media__body {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  padding-block: clamp(2.5rem, 6vw, 5rem);
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(5, 8, 5, 0.34) 30%,
-    rgba(5, 8, 5, 0.72) 100%
-  );
-}
-.band-media--center .band-media__body {
-  background: none;
-}
-.band-media__label {
-  color: var(--sand);
-  margin-bottom: 1.25rem;
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 900ms var(--ease-out) 500ms, transform 900ms var(--ease-out) 500ms;
-}
-.band-media__title {
-  max-width: 20ch;
-  color: var(--ivory);
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 1100ms var(--ease-out) 620ms, transform 1100ms var(--ease-out) 620ms;
-}
-.band-media.is-in .band-media__label,
-.band-media.is-in .band-media__title {
-  opacity: 1;
-  transform: none;
-}
-
-/* Location credit, set quietly in the corner like a plate on a print. */
-.band-media__caption {
-  position: absolute;
-  right: var(--gutter);
-  bottom: clamp(1rem, 2vw, 1.75rem);
-  z-index: 1;
-  font-family: var(--font-ui);
-  font-size: var(--step-label);
-  font-weight: 300;
-  text-transform: uppercase;
-  letter-spacing: var(--track-label);
-  color: var(--paper-46);
-  opacity: 0;
-  transition: opacity 900ms var(--ease-out) 900ms;
-}
-.band-media.is-in .band-media__caption {
-  opacity: 1;
-}
-
-/* ---------- Framed plate ---------- */
 
 .plate {
   margin: 0;

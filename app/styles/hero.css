@@ -1,0 +1,294 @@
+/* ============================================================
+   HERO — light, name first, photographs under the type
+   The reference's composition in the brand's own palette.
+   Imported after sections.css so it replaces the old dark hero.
+   ============================================================ */
+
+.hero {
+  position: relative;
+  /* Not 100svh. The composition is a fixed arrangement of type and pictures,
+     so it should be as tall as it needs to be — forcing it to the viewport
+     stretches the gaps on a short screen and crops the frames on a tall one. */
+  min-height: auto;
+  display: block;
+  padding-top: calc(var(--nav-h) + clamp(2rem, 6vh, 4.5rem));
+  padding-bottom: clamp(3rem, 8vw, 7rem);
+  background: var(--champagne);
+  color: var(--ink);
+  overflow: clip;
+  text-align: center;
+}
+
+/* Centred composition, so the left spine reserve goes and the gutter is even. */
+.hero .shell {
+  padding-left: var(--gutter);
+}
+
+.hero__inner {
+  position: relative;
+}
+
+.hero__kicker {
+  color: var(--ink-52);
+  margin: 0 0 clamp(1rem, 2.5vw, 2rem);
+}
+.hero__kicker::before {
+  content: none;
+}
+
+/* ---------- The name ---------- */
+
+/*
+  The whole gesture: the name set as large as one line will take, uppercase,
+  in the display face.
+
+  The size is not a taste choice, it is arithmetic. "SHAROON IRFAN" is
+  thirteen characters and renders about 7.5x the font size wide, so the
+  largest that fits the shell is content-width / 7.5 — 181px at any viewport
+  wide enough to hit the 96rem max. The previous 13.5vw / 240px overflowed at
+  every screen size and was being chopped by the section's overflow: clip.
+
+  If this ever needs to be bigger, the name has to break onto two lines. At
+  seven characters "SHAROON" alone would take about 336px.
+*/
+.hero__name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.6rem, 11.6vw, 11rem);
+  line-height: 0.86;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  text-wrap: nowrap;
+  color: var(--ink);
+}
+
+/* ---------- The stage ---------- */
+
+/*
+  Three columns. The photographs sit left and right, the copy runs down the
+  middle, and the whole block is pulled up so the frames overlap the bottom of
+  the name — which is what makes the two read as one composition rather than a
+  headline with pictures beneath it.
+*/
+.hero__stage {
+  position: relative;
+  display: grid;
+  gap: clamp(0.75rem, 1.8vw, 2rem);
+  align-items: start;
+  margin-top: clamp(-1.5rem, -3.5vw, -5rem);
+}
+
+@media (min-width: 900px) {
+  /* The photographs are the composition, so they take the width. The middle
+     column is squeezed to roughly 235px, which is why the copy inside it is
+     set narrower and one step down — at this width a 34ch paragraph would
+     wrap every three words and read as broken rather than tight. */
+  .hero__stage {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.62fr) minmax(0, 1.4fr);
+  }
+}
+
+.hframe {
+  position: relative;
+  overflow: hidden;
+  background: var(--black-lift);
+  aspect-ratio: 3 / 4;
+}
+
+/*
+  The frames arrive from the right, one after another, in the same direction
+  and on the same curve as the row further down the page — so the two read as
+  one idea rather than two effects.
+
+  They are not made into a strip like that row is, because the composition here
+  is the point: the frames sit in different columns at different heights and
+  overlap the name. Putting them on a shared track would flatten that into a
+  line. Each keeps its own place and simply enters from the right.
+
+  The distance is short on purpose. These frames travel across the copy column
+  on their way in, and a long slide would drag a photograph over the headline.
+  A third of a frame's width is enough to read as a slide and short enough that
+  the overlap is never noticed. The stagger below is what makes it one by one.
+*/
+.hframe[data-reveal] {
+  transform: translate3d(34%, 0, 0);
+}
+.hframe[data-reveal].is-in {
+  transform: none;
+}
+
+.hframe img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Column one holds two frames, offset from each other the way the reference
+   layers its pair. The third sits alone on the right, dropped lower. */
+.hframe--a {
+  grid-column: 1;
+  grid-row: 1;
+}
+.hframe--c {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: start;
+  margin: clamp(2rem, 5vw, 4.5rem) 0 0 clamp(2rem, 6vw, 5.5rem);
+  aspect-ratio: 4 / 5;
+}
+.hframe--b {
+  grid-column: 3;
+  grid-row: 1;
+  margin-top: clamp(1rem, 3vw, 3rem);
+}
+
+@media (max-width: 899px) {
+  /* Two side by side, third dropped: three frames and a column of copy do not
+     fit across a phone. */
+  .hero__stage {
+    grid-template-columns: 1fr 1fr;
+    margin-top: clamp(-0.5rem, -2vw, -2rem);
+  }
+  .hframe--a {
+    grid-column: 1;
+  }
+  .hframe--b {
+    grid-column: 2;
+    margin-top: clamp(1.5rem, 6vw, 3rem);
+  }
+  .hframe--c {
+    display: none;
+  }
+}
+
+/* ---------- The copy ---------- */
+
+.hero__copy {
+  grid-column: 2;
+  grid-row: 1;
+  display: grid;
+  justify-items: center;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  align-content: center;
+  padding-top: clamp(2rem, 6vw, 5rem);
+}
+
+@media (max-width: 899px) {
+  .hero__copy {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    padding-top: clamp(1.5rem, 6vw, 3rem);
+  }
+  /* Full width down here, so the narrow-column limits above are lifted. */
+  .hero__claim {
+    max-width: 20ch;
+  }
+  .hero__standfirst {
+    max-width: 40ch;
+    font-size: var(--step-body);
+  }
+}
+
+.hero__claim {
+  margin: 0;
+  max-width: 14ch;
+  font-family: var(--font-display);
+  font-size: var(--step-display-s);
+  line-height: 1.18;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+
+.hero__standfirst {
+  margin: 0;
+  max-width: 26ch;
+  color: var(--ink-52);
+  font-size: var(--step-small);
+  line-height: 1.62;
+  text-wrap: pretty;
+}
+
+/* ---------- Ghost button ---------- */
+
+/* The reference's button: a hairline box, uppercase, widely letterspaced.
+   Quieter than a filled block, which suits a page this light. */
+.ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 1rem 1.5rem;
+  font-family: var(--font-ui);
+  font-size: var(--step-label);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  text-align: center;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--rule-dark);
+  transition:
+    background var(--dur-quick) var(--ease-out),
+    color var(--dur-quick) var(--ease-out),
+    box-shadow var(--dur-quick) var(--ease-out);
+}
+.ghost:hover,
+.ghost:focus-visible {
+  background: var(--rich-black);
+  color: var(--ivory);
+  box-shadow: inset 0 0 0 1px var(--rich-black);
+}
+
+.hero__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem 1.1rem;
+}
+
+.hero__links a {
+  font-family: var(--font-ui);
+  font-size: var(--step-label);
+  text-transform: uppercase;
+  letter-spacing: var(--track-label);
+  color: var(--ink-52);
+  transition: color var(--dur-quick) var(--ease-out);
+}
+.hero__links a:hover {
+  color: var(--ink);
+}
+
+/* ---------- Auto-switching frames ---------- */
+
+.sframe {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.sframe__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* The supplied homepage photographs are 2:1 and these frames are 3:4, so
+     roughly a third of each frame's width survives the crop. Holding the
+     centre is what keeps the subject in shot. */
+  object-position: 50% 45%;
+  opacity: 0;
+  /* Matches FADE in SwitchFrame.js. Change one, change both. */
+  transition: opacity 1400ms var(--ease-out);
+}
+
+/* The first picture is the base and never fades out; the rest stack over it,
+   so the frame is never empty mid-dissolve. */
+.sframe__img:first-child,
+.sframe__img.is-on {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sframe__img:not(:first-child) {
+    display: none;
+  }
+}

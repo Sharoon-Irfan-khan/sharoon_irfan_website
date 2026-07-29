@@ -169,6 +169,13 @@ select {
   background: var(--champagne);
   color: var(--ink);
 }
+.surface-linen {
+  background: var(--linen);
+  color: var(--ink);
+}
+
+/* Kept for the compare column, which is still a dark panel inside a light
+   section — the one place on the page black still earns its place. */
 .surface-black {
   background: var(--rich-black);
   color: var(--paper);

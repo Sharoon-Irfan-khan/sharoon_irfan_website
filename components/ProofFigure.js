@@ -43,9 +43,9 @@ export default function ProofFigure({
 
   return (
     <section
-      className="proof surface-black on-dark"
+      className="proof surface-linen"
       data-chapter={chapter}
-      data-tone="dark"
+      data-tone="light"
     >
       <div
         className="proof__track"

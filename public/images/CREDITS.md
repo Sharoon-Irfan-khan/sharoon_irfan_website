@@ -1,79 +1,66 @@
-# Photography credits
+# Photography
 
-All photographs are from [Unsplash](https://unsplash.com) under the
-[Unsplash License](https://unsplash.com/license), which permits commercial use
-without attribution. Attribution is not required, but it is good practice and
-the photographers deserve it — so the sources are recorded here.
+All images live in `public/images/work` and are listed in `lib/media.js` with
+their alt text and caption. Filenames describe what is in the picture, so a
+replacement is a drop-in: keep the filename, update the alt text.
 
-Each file is a 2560×1440 original, not an upscale.
+Supplied by the client, 29 July 2026. They arrived via WhatsApp already
+compressed to ~1600px on the long edge, so they are re-encoded to 1400px and
+used at **card scale only** — never full bleed, where the source resolution
+would show.
 
-| File | Unsplash photo ID |
+## Where each one is used
+
+| File | Section |
 | --- | --- |
-| `sand.jpg` | `photo-1565201571293-33f5180b8e7d` |
-| `skyline.jpg` | `photo-1512453979798-5ea266f8880c` |
-| `downtown.jpg` | `photo-1462007895615-c8c073bebcd8` |
-| `marina.jpg` | `photo-1526495124232-a04e1849168c` |
-| `dusk.jpg` | `photo-1607414851776-f2fcc379fb48` |
-| `desert.jpg` | `photo-1511860810434-a92f84c6f01e` |
-| `tower.jpg` | `photo-1543579596-2c11997c7706` |
-| `figure.jpg` | `photo-1726108954011-aa0aa69c79c4` |
+| `brand-moodboard.jpg` | Services — Go-to-Market Strategy |
+| `phone-desk.jpg` | Services — Performance Marketing |
+| `magazine-stack.jpg` | Services — SEO and Content Ecosystems |
+| `design-desk.jpg` | Services — Websites and Conversion |
+| `journal-desk.jpg` | Services — CRM and Attribution |
+| `swatches.jpg` | Services — Brand Positioning |
+| `moodboard-floor.jpg` | The method |
+| `fashion-spread.jpg` | Who it is for |
+| `dark-desk.jpg` | The problem *(registered, not yet placed)* |
 
-## The work set
+The remaining nine — `kinfolk-stack`, `white-desk`, `editorial-spread`,
+`magazine-sofa`, `magazine-open`, `sculpture`, `coffee-magazine`,
+`magazine-hands`, `reading-bed` — are registered in `lib/media.js` but not
+placed. They are editorial and lifestyle rather than marketing work, and there
+is no section they belong to without becoming decoration. Kept so they can be
+used deliberately later.
 
-Four images about the job rather than the place, used by the collage on the
-home page. Mixed sources, both licences permit commercial use.
+Two supplied files were exact duplicates and were dropped.
 
-| File | Source | Credit |
-| --- | --- | --- |
-| `strategy.jpg` | Pexels | Walls.io |
-| `handshake.jpg` | Pexels | MART PRODUCTION |
-| `desk.jpg` | Unsplash | Lauren Mancke (`aOC7TSLb1o8`) |
-| `analytics.jpg` | Unsplash | Stephen Phillips / Hostreviews.co.uk (`shr_Xn8S8QU`) |
+## What is missing
 
-These four are flagged `work: true` in `lib/media.js`, which keeps them out of
-`heroClips` — a laptop flat-lay must never win the home hero rotation.
+**A photograph of Sharoon.** The About section deliberately runs on type alone
+rather than a stock picture of a stranger: a founder-led claim illustrated by
+somebody else undoes the claim. That one photograph is worth more than any
+other image on this list.
 
-Supplied as 6000×4000 originals up to 4.8MB. Re-encoded to 2560px wide,
-JPEG quality 82, mozjpeg — 12.6MB down to 1.2MB across the four.
+**Anything showing the actual work.** Dashboards, campaign creative, a real
+report, a client meeting. The supplied set is desks and printed matter, which
+supports the copy but does not evidence it.
 
-Any photo can be viewed at `https://unsplash.com/photos/<id>` — for example
-<https://unsplash.com/photos/photo-1512453979798-5ea266f8880c>.
+## What was removed
+
+The previous Dubai landscape set — eight stock skyline and desert photographs
+— and every video cut from them. A skyline says where the work happens, not
+what it is.
+
+`hero-sand.mp4` went with them, and separately: it was cut from unlicensed
+footage credited to ANDRAS.RA.
+
+## Remaining video
+
+`public/video` holds only the two ambient overlays, `ambient-butterflies.mp4`
+and `ambient-galaxy.mp4`. Both are abstract light shot on black and composited
+with `mix-blend-mode: screen`, so they read as atmosphere over a dark section
+rather than as footage of a place. Built by `tools/make-ambient.sh`.
 
 ## Replacing an image
 
-Keep the filename and drop the new file in. Nothing in the code refers to a
-photo ID; it all runs off these seven filenames, which are listed in
-`lib/media.js` along with their alt text and on-screen caption. Update the alt
-text there when you swap an image — it describes what is in the picture.
-
-Export at 2560px wide, JPEG quality 80, progressive.
-
-## Where each image is used
-
-| Page | Hero | Elsewhere |
-| --- | --- | --- |
-| Home | `hero-sand.mp4` (video) | `downtown`, `figure`, `desert` |
-| About | `tower` | `skyline` |
-| Services | `marina` | `dusk` |
-| Results | `sand` | `downtown` |
-| Contact | `skyline` | — |
-
-Only `downtown` appears twice, and on different pages. If you add a photograph,
-spread it so no page repeats an image within itself.
-
-## The video
-
-`public/video` holds three clips, none of them stills:
-
-- **`hero-sand.mp4`** — the home hero. Cut from `Travel Edit.mp4` (the opening
-  sand-at-sunset shot), 1920×844, seamlessly looped. Built by
-  `tools/make-hero-video.sh`. **Not licensed** — the source is credited to
-  ANDRAS.RA, so this must be replaced or cleared before launch.
-- **`ambient-butterflies.mp4`** and **`ambient-galaxy.mp4`** — screen-blended
-  light overlays, heavily blurred in use, so their 720p resolution is invisible.
-  Built by `tools/make-ambient.sh`.
-
-Earlier versions used clips cut from a 640×360 file. That footage was both low
-resolution and unlicensed, so it was replaced with the photography above.
-`tools/make-media.sh` still contains the pipeline for cutting and grading new
-footage if licensed high-resolution Dubai video becomes available.
+Keep the filename and drop the new file in. Export at 1600px or wider, JPEG
+quality 82. Update the `alt` text in `lib/media.js` — it describes what is in
+the picture, so it goes stale the moment the picture changes.

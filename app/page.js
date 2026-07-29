@@ -1,83 +1,76 @@
+import Hero from '@/components/Hero';
 import Reveal from '@/components/Reveal';
-import Counter from '@/components/Counter';
-import HeroDark from '@/components/HeroDark';
-import SystemDiagram from '@/components/SystemDiagram';
-import Collage from '@/components/Collage';
+import Lines from '@/components/Lines';
 import Words from '@/components/Words';
-import VideoPanel from '@/components/VideoPanel';
-import { Ambient, MediaPlate } from '@/components/Media';
-import VideoBand from '@/components/VideoBand';
+import SystemDiagram from '@/components/SystemDiagram';
+import ServiceList from '@/components/ServiceList';
+import ScaleStack from '@/components/ScaleStack';
+import ProofFigure from '@/components/ProofFigure';
+import ContactForm from '@/components/ContactForm';
+import Accordion from '@/components/Accordion';
+import { Plate } from '@/components/Media';
+import { Action, Ledger, SectionHead, Sectors, Steps } from '@/components/Sections';
 import {
-  Action,
-  CtaBand,
-  DrawRule,
-  Ledger,
-  SectionHead,
-  Sectors,
-} from '@/components/Sections';
-import { home } from '@/lib/content';
+  about,
+  audience,
+  contact,
+  method,
+  problem,
+  results,
+  services,
+  system,
+  thesis,
+} from '@/lib/content';
+import { site } from '@/lib/site';
 
-export default function HomePage() {
+/**
+ * ONE PAGE.
+ *
+ * Home, about, services, results and contact were five thin routes for a solo
+ * practice. They are one document now, in the order a reader needs: the claim,
+ * why it matters, the system, the services, the proof, the person, the ask.
+ *
+ * Section ids are the nav's scroll targets — see `sections` in lib/content.
+ */
+export default function Page() {
   return (
     <>
-      {/* ---------- Hero ----------
-           Swap for <HeroFilmHero /> to go back to the left-aligned film stage. */}
-      <HeroDark />
+      <Hero />
 
       {/* ---------- Thesis ---------- */}
-      <section
-        className="band surface-ivory"
-        data-chapter={home.thesis.chapter}
-        data-tone="light"
-      >
+      <section className="band surface-ivory" data-chapter={thesis.chapter} data-tone="light">
         <div className="shell">
-          {/* The one sentence the whole site argues from, so it gets the
-              word-level reveal rather than the line-level one. */}
           <Words
             as="p"
             className="display display--l thesis__quote"
-            text={home.thesis.quote}
+            text={thesis.quote}
             stagger={52}
           />
           <div className="thesis__grid">
-            <Reveal as="p" className="muted prose" delay={220}>
-              {home.intro[0]}
-            </Reveal>
-            <Reveal as="p" className="lede prose" delay={140}>
-              {home.thesis.body}
-            </Reveal>
+            {thesis.body.map((para, i) => (
+              <Reveal as="p" className={i ? 'lede prose' : 'muted prose'} key={i} delay={i * 120}>
+                {para}
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ---------- The system ----------
-           The thesis has just said the parts don't connect. This is where the
-           reader watches them connect. Also carries the five parts that used
-           to live in the hero rail. */}
-      <SystemDiagram />
-
       {/* ---------- The problem ---------- */}
       <section
         className="band surface-champagne"
-        data-chapter={home.problem.chapter}
+        data-chapter={problem.chapter}
         data-tone="light"
-        data-panel-scope
       >
         <div className="shell">
-          {/* Vertical film left, the argument right. The panel is sticky, so
-              the first clip hands over to the second as the reader works down
-              the comparison rather than after they have left it. */}
-          <div className="panel-grid">
-            <VideoPanel />
-            <div>
-          <SectionHead
-            eyebrow={home.problem.eyebrow}
-            title={home.problem.title}
-            wide
-          />
+          {/* The section holds while the four frames slide in from the right
+              and build the row, then releases and carries on. */}
+          <ScaleStack>
+            <SectionHead eyebrow={problem.eyebrow} title={problem.title} wide />
+          </ScaleStack>
 
           <div className="compare">
-            {home.problem.columns.map((col) => (
+            {problem.columns.map((col) => (
               <div
                 className={`compare__col compare__col--${col.tone} ${
                   col.tone === 'after' ? 'on-dark' : ''
@@ -99,152 +92,301 @@ export default function HomePage() {
           </div>
 
           <Reveal as="p" className="lede compare__close">
-            {home.problem.close}
+            {problem.close}
           </Reveal>
+        </div>
+      </section>
+
+      {/* ---------- The system ----------
+           The thesis has just said the parts don't connect. This is where the
+           reader watches them connect. */}
+      <div id="system">
+        <SystemDiagram eyebrow={system.eyebrow} title={system.title} />
+      </div>
+
+      {/* ---------- What you get ---------- */}
+      <section className="band surface-ivory" data-chapter="What you get" data-tone="light">
+        <div className="shell">
+          <SectionHead eyebrow={system.eyebrow} title={system.title} />
+          <Ledger items={system.items} numbered />
+        </div>
+      </section>
+
+      {/* ---------- Services ---------- */}
+      <section
+        className="band surface-champagne"
+        id="services"
+        data-chapter={services.chapter}
+        data-tone="light"
+      >
+        <div className="shell">
+          <SectionHead eyebrow={services.eyebrow} title={services.title} wide>
+            <Reveal as="p" className="lede prose" delay={160} style={{ marginTop: '1.5rem' }}>
+              {services.intro}
+            </Reveal>
+          </SectionHead>
+        </div>
+
+        <ServiceList items={services.items} />
+
+        <div className="shell">
+          <Reveal as="p" className="lede compare__close">
+            {services.close}
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ---------- Results ---------- */}
+      <div id="results">
+        <ProofFigure
+          chapter={results.chapter}
+          eyebrow={results.eyebrow}
+          figure={results.figure}
+          items={results.items}
+        />
+      </div>
+
+      {/* ---------- The method ---------- */}
+      <section
+        className="band surface-ivory"
+        data-chapter={method.chapter}
+        data-tone="light"
+      >
+        <div className="shell">
+          <SectionHead eyebrow={method.eyebrow} title={method.title} />
+          <Steps steps={method.steps} columns={4} numbered />
+
+          <div className="split split--wide" style={{ marginTop: 'clamp(3.5rem, 7vw, 6rem)' }}>
+            <Plate clip={method.image} caption="The method" />
+            <div>
+              <Reveal as="p" className="label shead__eyebrow">
+                {method.repeat.eyebrow}
+              </Reveal>
+              <Reveal
+                as="p"
+                className="display display--m"
+                delay={90}
+                style={{ marginTop: '1.5rem', maxWidth: '20ch' }}
+              >
+                {method.repeat.quote}
+              </Reveal>
+              <Reveal
+                as="p"
+                className="lede prose"
+                delay={180}
+                style={{ marginTop: '1.75rem', color: 'var(--ink-72)' }}
+              >
+                {method.repeat.body}
+              </Reveal>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ---------- Interlude ---------- */}
-      <VideoBand
-        clip="band-city"
-        height="tall"
-        chapter="The market"
-        label="Dubai · United Arab Emirates"
-        title="A market that rewards brands built to be measured."
-        caption="Downtown Dubai"
-      />
-
-      {/* ---------- What you get ---------- */}
+      {/* ---------- About ---------- */}
       <section
-        className="band surface-ivory"
-        data-chapter={home.offer.chapter}
-        data-tone="light"
-      >
-        <div className="shell">
-          <SectionHead eyebrow={home.offer.eyebrow} title={home.offer.title} />
-          <Ledger items={home.offer.items} numbered />
-          <Reveal delay={160} style={{ marginTop: 'clamp(2.5rem, 5vw, 4rem)' }}>
-            <Action href="/services" variant="btn--ghost">
-              Every service in detail
-            </Action>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ---------- The proof ---------- */}
-      <section
-        className="band surface-black on-dark has-ambient"
-        data-chapter={home.proof.chapter}
-        data-tone="dark"
-      >
-        {/* Fine warm dust behind the revenue figure — depth, not decoration. */}
-        <Ambient clip="galaxy" opacity={0.26} blur={4} />
-        <div className="shell">
-          <Reveal as="p" className="label" style={{ color: 'var(--sand)' }}>
-            {home.proof.eyebrow}
-          </Reveal>
-
-          <div className="figure" style={{ marginTop: 'clamp(2.5rem, 5vw, 4rem)' }}>
-            <Reveal delay={80}>
-              <p className="figure__value">
-                <span className="figure__unit">{home.proof.figure.unit}</span>
-                <Counter
-                  value={home.proof.figure.value}
-                  suffix={home.proof.figure.suffix}
-                />
-              </p>
-              <span className="label figure__label">{home.proof.figureLabel}</span>
-              <DrawRule delay={520} />
-            </Reveal>
-            <Reveal className="figure__note" delay={220}>
-              {home.proof.figureNote}
-            </Reveal>
-          </div>
-
-          <div
-            className="steps steps--2"
-            style={{ marginTop: 'clamp(3rem, 6vw, 5rem)' }}
-          >
-            {home.proof.points.map((point, i) => (
-              <Reveal className="step" key={point} delay={i * 100}>
-                <p className="step__name" style={{ fontSize: '1.25rem' }}>
-                  {point}
-                </p>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ---------- Founder-led ---------- */}
-      <section
-        className="band surface-ivory"
-        data-chapter={home.founderLed.chapter}
+        className="band surface-linen"
+        id="about"
+        data-chapter={about.chapter}
         data-tone="light"
       >
         <div className="shell">
           <Reveal as="p" className="label shead__eyebrow">
-            {home.founderLed.eyebrow}
+            {about.eyebrow}
           </Reveal>
-          <div
-            className="split split--wide"
-            style={{ marginTop: 'clamp(1.75rem, 3.5vw, 2.75rem)', alignItems: 'center' }}
+          <Reveal
+            as="h2"
+            className="display display--l"
+            delay={80}
+            style={{ marginTop: 'clamp(1.5rem, 3vw, 2.5rem)', maxWidth: '18ch' }}
           >
-            <div>
-              <Reveal as="h2" className="display display--m" style={{ maxWidth: '18ch' }}>
-                {home.founderLed.title}
+            {about.title}
+          </Reveal>
+
+          <div className="thesis__grid" style={{ marginTop: 'clamp(2.5rem, 5vw, 4rem)' }}>
+            {about.body.map((para, i) => (
+              <Reveal as="p" className="lede prose" key={i} delay={i * 120}>
+                {para}
               </Reveal>
-              <Reveal
-                className="lede prose"
-                delay={120}
-                style={{ marginTop: 'clamp(1.5rem, 3vw, 2.25rem)', color: 'var(--ink-72)' }}
-              >
-                {home.founderLed.body}
-              </Reveal>
-              <Reveal delay={200} style={{ marginTop: 'clamp(2rem, 4vw, 3rem)' }}>
-                <Action href="/about" variant="btn--ghost">
-                  How I work
-                </Action>
-              </Reveal>
+            ))}
+          </div>
+
+          <div style={{ marginTop: 'clamp(4rem, 8vw, 7rem)' }}>
+            <Reveal as="p" className="label shead__eyebrow">
+              {about.howItWorks.eyebrow}
+            </Reveal>
+            <div className="thesis__grid" style={{ marginTop: 'clamp(1.75rem, 3vw, 2.5rem)' }}>
+              {about.howItWorks.body.map((para, i) => (
+                <Reveal as="p" className="prose" key={i} delay={i * 120}>
+                  {para}
+                </Reveal>
+              ))}
             </div>
-            <MediaPlate clip="figure" caption="Dubai Marina" />
+          </div>
+
+          <div style={{ marginTop: 'clamp(4rem, 8vw, 7rem)' }}>
+            <div className="split split--aside">
+              <Reveal as="p" className="label shead__eyebrow">
+                {about.founderLed.eyebrow}
+              </Reveal>
+              <div className="stack">
+                <Reveal as="h3" className="display display--m" style={{ maxWidth: '20ch' }}>
+                  {about.founderLed.title}
+                </Reveal>
+                <Reveal as="p" className="lede prose" delay={120}>
+                  {about.founderLed.body}
+                </Reveal>
+                <ul className="compare__list" style={{ margin: 0, padding: 0, listStyle: 'none' }}>
+                  {about.founderLed.items.map((item, i) => (
+                    <Reveal as="li" className="compare__item" key={item} delay={i * 90}>
+                      {item}
+                    </Reveal>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ marginTop: 'clamp(4rem, 8vw, 7rem)' }}>
+            <Reveal as="p" className="label shead__eyebrow">
+              {about.drive.eyebrow}
+            </Reveal>
+            <Reveal
+              as="p"
+              className="display display--m"
+              delay={90}
+              style={{ marginTop: '1.75rem', maxWidth: '24ch' }}
+            >
+              {about.drive.quote}
+            </Reveal>
+            <Reveal as="p" className="lede prose" delay={180} style={{ marginTop: '1.75rem' }}>
+              {about.drive.body}
+            </Reveal>
           </div>
         </div>
       </section>
 
-      {/* ---------- Interlude ----------
-           Was a single full-bleed desert plate. Now a collage, so the same
-           slot carries four photographs at four depths rather than one held
-           long enough to be recognised. */}
-      <Collage />
-
-      {/* ---------- Who this is for ---------- */}
+      {/* ---------- Who it's for ---------- */}
       <section
         className="band surface-champagne"
-        data-chapter={home.audience.chapter}
+        data-chapter={audience.chapter}
         data-tone="light"
       >
         <div className="shell">
-          <div className="split split--aside">
-            <Reveal as="p" className="label shead__eyebrow">
-              {home.audience.eyebrow}
-            </Reveal>
-            <div className="stack">
-              <Reveal as="h2" className="display display--m" style={{ maxWidth: '24ch' }}>
-                {home.audience.title}
+          <div className="split split--wide" style={{ alignItems: 'center' }}>
+            <div>
+              <Reveal as="p" className="label shead__eyebrow">
+                {audience.eyebrow}
               </Reveal>
-              <Sectors items={home.audience.sectors} />
-              <Reveal as="p" className="muted" delay={140}>
-                {home.audience.note}
+              <Reveal
+                as="h2"
+                className="display display--m"
+                delay={90}
+                style={{ marginTop: '1.5rem', maxWidth: '20ch' }}
+              >
+                {audience.title}
+              </Reveal>
+              <Sectors items={audience.sectors} />
+              <Reveal as="p" className="muted" delay={200} style={{ marginTop: '1.5rem' }}>
+                {audience.note}
               </Reveal>
             </div>
+            <Plate clip={audience.image} caption="Premium services" />
           </div>
         </div>
       </section>
 
-      <CtaBand />
+      {/* ---------- Contact ---------- */}
+      <section
+        className="band surface-linen contact"
+        id="contact"
+        data-chapter={contact.chapter}
+        data-tone="light"
+      >
+
+        <div className="shell">
+          <Reveal as="p" className="label shead__eyebrow">
+            {contact.eyebrow}
+          </Reveal>
+          <Lines
+            lines={contact.headline}
+            as="h2"
+            className="display display--l"
+            delay={80}
+          />
+          <Reveal
+            as="p"
+            className="lede prose"
+            delay={320}
+            style={{ marginTop: 'clamp(1.75rem, 3vw, 2.5rem)', color: 'var(--ink-72)' }}
+          >
+            {contact.standfirst}
+          </Reveal>
+
+          <div className="split split--wide" style={{ marginTop: 'clamp(3.5rem, 7vw, 6rem)' }}>
+            <div>
+              <Lines
+                lines={contact.callTitle}
+                as="h3"
+                className="display display--m"
+                delay={80}
+              />
+              <Reveal as="p" className="prose" delay={200} style={{ marginTop: '1.75rem' }}>
+                {contact.callBody}
+              </Reveal>
+
+              <div style={{ marginTop: 'clamp(2.5rem, 5vw, 3.5rem)' }}>
+                <Reveal as="p" className="label shead__eyebrow">
+                  {contact.forEyebrow}
+                </Reveal>
+                <ul className="compare__list" style={{ margin: '1.25rem 0 0', padding: 0, listStyle: 'none' }}>
+                  {contact.forItems.map((item, i) => (
+                    <Reveal as="li" className="compare__item" key={item} delay={i * 80}>
+                      {item}
+                    </Reveal>
+                  ))}
+                </ul>
+              </div>
+
+              <div style={{ marginTop: 'clamp(2.5rem, 5vw, 3.5rem)' }}>
+                <Reveal as="p" className="label shead__eyebrow">
+                  {contact.nextEyebrow}
+                </Reveal>
+                <ul className="compare__list" style={{ margin: '1.25rem 0 0', padding: 0, listStyle: 'none' }}>
+                  {contact.nextItems.map((item, i) => (
+                    <Reveal as="li" className="compare__item" key={item} delay={i * 80}>
+                      {item}
+                    </Reveal>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <ContactForm />
+          </div>
+
+          <div style={{ marginTop: 'clamp(4rem, 8vw, 7rem)' }}>
+            <Reveal as="p" className="label shead__eyebrow">
+              {contact.faqEyebrow}
+            </Reveal>
+            <div style={{ marginTop: '1.75rem' }}>
+              <Accordion items={contact.faq.map((f) => ({ q: f.q, a: f.a }))} />
+            </div>
+          </div>
+
+          <div className="cta__contacts" style={{ marginTop: 'clamp(3rem, 6vw, 5rem)' }}>
+            <a className="tlink" href={`mailto:${site.email}`}>
+              {site.email}
+            </a>
+            <a className="tlink" href={`tel:${site.phoneHref}`}>
+              {site.phone}
+            </a>
+            <a className="tlink" href={site.linkedin} target="_blank" rel="noreferrer">
+              {site.linkedinLabel}
+            </a>
+          </div>
+        </div>
+      </section>
     </>
   );
 }

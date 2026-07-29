@@ -6,7 +6,7 @@
    ============================================================ */
 
 .sysd__eyebrow {
-  color: var(--sand);
+  color: var(--ink-52);
 }
 
 .sysd__title {
@@ -35,7 +35,7 @@
    0 → 1 interpolation and no geometry has to be measured in JS. */
 .sysd__link {
   --t: clamp(0, (var(--p, 0) - var(--d)) / 0.34, 1);
-  stroke: var(--sand);
+  stroke: var(--ink-30);
   stroke-width: 1;
   stroke-dasharray: 1;
   stroke-dashoffset: calc(1 - var(--t));
@@ -80,20 +80,20 @@
   font-size: var(--step-label);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--paper-46);
+  color: var(--ink-52);
   text-align: center;
   white-space: nowrap;
   transition: color var(--dur-quick) var(--ease-out);
 }
 .sysd__part:hover,
 .sysd__part:focus-visible {
-  color: var(--champagne);
+  color: var(--ink);
 }
 
 .sysd__dot {
   width: 7px;
   height: 7px;
-  background: var(--sand);
+  background: var(--ink);
   transform: rotate(45deg);
   transition: transform var(--dur-quick) var(--ease-out);
 }
@@ -119,14 +119,13 @@
   width: clamp(10px, 1.1vw, 14px);
   height: clamp(10px, 1.1vw, 14px);
   border-radius: 50%;
-  background: var(--sand);
+  background: var(--ink);
   transform: scale(calc(0.4 + var(--t) * 0.6));
-  box-shadow: 0 0 0 calc(var(--t) * 10px) var(--sand-10),
-    0 0 calc(var(--t) * 34px) rgba(194, 177, 168, 0.5);
+  box-shadow: 0 0 0 calc(var(--t) * 12px) var(--sand-34);
 }
 
 .sysd__target-label {
-  color: var(--champagne);
+  color: var(--ink);
   opacity: var(--t);
   transform: translateY(calc((1 - var(--t)) * 10px));
 }
@@ -156,8 +155,8 @@
     top: 0.5rem;
     bottom: 3.5rem;
     width: 1px;
-    background: var(--sand);
-    opacity: 0.5;
+    background: var(--ink-30);
+    opacity: 1;
     transform: scaleY(clamp(0, var(--p, 0) / 0.75, 1));
     transform-origin: top;
   }

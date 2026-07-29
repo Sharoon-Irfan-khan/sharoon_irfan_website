@@ -1,0 +1,166 @@
+/* ============================================================
+   SCALE STACK — a pinned row that builds itself
+   The section holds while the strip slides in from the right and
+   the four frames arrive one after another, then releases.
+   Reads --p from .sstack__track.
+   ============================================================ */
+
+.sstack__track {
+  position: relative;
+  /* Scroll length for the assembly, plus a tail so the finished row is
+     actually seen before the section moves on. Without that tail the last
+     frame lands at the exact moment the stage releases. */
+  min-height: 240svh;
+}
+
+/* The nav is fixed and the stage is pinned to the top of the viewport, so the
+   nav's height has to be reserved here — otherwise centred content sits under
+   it and the heading is the part that disappears. */
+.sstack__stage {
+  position: sticky;
+  top: 0;
+  min-height: 100svh;
+  display: grid;
+  align-content: center;
+  gap: clamp(2rem, 4vw, 3.25rem);
+  padding-top: var(--nav-h);
+  padding-bottom: clamp(1rem, 3vh, 2.5rem);
+}
+
+/* The grid gap spaces the head from the row; its own bottom margin would
+   double that. */
+.sstack__stage .shead {
+  margin-bottom: 0;
+}
+
+/* ---------- The viewport ---------- */
+
+/*
+  The row breaks out of the shell. Four 3:4 frames inside a 96rem column come
+  out small with a screen of empty space around them, so the row runs wider
+  than its container instead.
+
+  Two constraints decide the width:
+
+  - `100vw - 4rem` keeps a margin at both edges. 100vw includes the scrollbar,
+    which is why the subtraction is more than the visible gap needs.
+  - The last term is a height guard. A 3:4 frame is three-quarters as wide as
+    it is tall, so four of them plus gaps make a row roughly three frame-heights
+    across — `(usable height) * 3` is therefore the widest the row can get
+    before the frames grow taller than the pinned stage can show. What is
+    subtracted is the nav, the heading and the stage's own padding. Without it
+    a short laptop crops the bottom of every frame.
+
+  Centring cannot use `margin-inline: auto`: the box is wider than its
+  container, and in that over-constrained case the browser drops the right
+  margin and pushes the whole row off the right-hand edge. `margin-left: 50%`
+  plus a translate centres on the container's midpoint regardless of overflow.
+  The extra `--rail` correction is because .shell reserves a left spine, so its
+  content box sits half a rail to the right of the viewport's centre.
+
+  `overflow: clip` rather than `hidden` — hidden would make this a scroll
+  container, and a scroll container between a sticky element and the viewport
+  stops the stage sticking at all.
+*/
+.sstack {
+  --gap: clamp(0.6rem, 1.2vw, 1.15rem);
+  width: min(100vw - 7rem, 96rem, (100svh - var(--nav-h) - 15rem) * 3);
+  margin-left: 50%;
+  transform: translateX(calc(-50% - var(--rail, 0px) / 2));
+  overflow: clip;
+}
+
+/* ---------- The strip ---------- */
+
+/*
+  ONE moving element.
+
+  The frames used to travel independently: each was given the same slice of
+  scroll but a different distance to cover, so the first crossed four cells
+  while the last crossed one — a fourfold difference in speed within a single
+  gesture. They also passed over each other on the way, because a frame flying
+  in from beyond the right edge crosses every cell to its left, and paint order
+  put some of them underneath. That is what read as wrong: not the timing, the
+  fact that four things were moving at four speeds through each other.
+
+  So the row is a strip and the strip is what moves. Parked one full row-width
+  to the right, it slides to zero; the frames enter from the right one after
+  another simply because that is where they sit on the strip. Every frame moves
+  at the same speed as every other, none can overlap another, and the browser
+  composites a single layer instead of eight.
+
+  100% resolves against the strip's own width, which is the row width, so
+  `100% + gap` parks the leftmost frame just clear of the right-hand edge.
+*/
+.sstack__strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--gap);
+
+  /* Remapped so the row is complete at 0.86 and the last 14% of the track is
+     spent looking at it. */
+  --t-raw: clamp(0, var(--p, 0) / 0.86, 1);
+  /* Smoothstep — the strip gathers pace as it sets off and settles as it
+     lands, rather than starting and stopping dead. On a raw linear ramp a
+     scrubbed slide of this size reads as a machine. */
+  --t: calc(var(--t-raw) * var(--t-raw) * (3 - 2 * var(--t-raw)));
+
+  transform: translate3d(calc((100% + var(--gap)) * (1 - var(--t))), 0, 0);
+  will-change: transform;
+}
+
+.sstack__item {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  background: var(--black-lift);
+}
+
+.sstack__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ============================================================
+   NARROW
+   ============================================================ */
+
+@media (max-width: 899px) {
+  /* Four across a phone would be about 80px each. Two rows of two, and a
+     shorter track because there is less to travel.
+
+     The height guard is recomputed for this layout: two columns of 3:4 make a
+     row 1.5 frame-heights wide, and two rows are stacked, so the usable height
+     is halved before the ratio is applied. */
+  .sstack {
+    width: min(100vw - 2.5rem, (100svh - var(--nav-h) - 12rem) * 0.75);
+  }
+  .sstack__strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .sstack__track {
+    min-height: 190svh;
+  }
+  .sstack__stage {
+    align-content: start;
+    padding-top: calc(var(--nav-h) + 1.5rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* No pinning, no travel: a plain row that scrolls like anything else. */
+  .sstack__track {
+    min-height: 0;
+  }
+  .sstack__stage {
+    position: static;
+    min-height: 0;
+  }
+  .sstack__strip {
+    transform: none;
+    will-change: auto;
+  }
+}

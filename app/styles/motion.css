@@ -117,66 +117,6 @@
   transform: scaleX(1);
 }
 
-/* ---------- Route transition ---------- */
-
-.curtain {
-  position: fixed;
-  inset: 0;
-  z-index: 90;
-  pointer-events: none;
-}
-
-.curtain__veil {
-  position: absolute;
-  inset: 0;
-  background: var(--rich-black);
-  opacity: 0;
-  animation: curtain-veil 620ms var(--ease-out) forwards;
-}
-@keyframes curtain-veil {
-  0% {
-    opacity: 0.42;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-/* The same sand hairline the Intro uses, so arriving on a new page rhymes
-   with arriving on the site. */
-.curtain__bar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 1px;
-  width: 100%;
-  background: var(--sand);
-  transform-origin: left;
-  animation: curtain-bar 820ms var(--ease-line) forwards;
-}
-@keyframes curtain-bar {
-  0% {
-    transform: scaleX(0);
-    opacity: 1;
-  }
-  62% {
-    transform: scaleX(1);
-    opacity: 1;
-  }
-  100% {
-    transform: scaleX(1);
-    opacity: 0;
-  }
-}
-
-/* ---------- Anchors ---------- */
-
-/* The system diagram links into /services, so the target must clear the
-   fixed nav rather than hide behind it. */
-.svc {
-  scroll-margin-top: calc(var(--nav-h) + 2rem);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .ledger__row::before,
   .step::before {

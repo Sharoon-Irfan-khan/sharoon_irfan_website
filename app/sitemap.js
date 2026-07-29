@@ -1,11 +1,14 @@
-import { nav, site } from '@/lib/site';
+import { site } from '@/lib/site';
 
+// One page, so one URL. The nav entries are in-page anchors, and listing
+// anchors in a sitemap tells a crawler about five documents that do not exist.
 export default function sitemap() {
-  const now = new Date();
-  return nav.map((item) => ({
-    url: `${site.url}${item.href === '/' ? '' : item.href}`,
-    lastModified: now,
-    changeFrequency: 'monthly',
-    priority: item.href === '/' ? 1 : 0.8,
-  }));
+  return [
+    {
+      url: site.url,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 1,
+    },
+  ];
 }

@@ -6,9 +6,9 @@
 
 .proof {
   position: relative;
-  /* The page above this is a dark video hero. Without an edge the two run
-     together into one long murky band and the section never begins. */
-  border-top: 1px solid var(--rule-light);
+  /* An edge, so this reads as its own section rather than merging with the
+     warm band above it. */
+  border-top: 1px solid var(--rule-dark-soft);
 }
 
 .proof__track {
@@ -42,7 +42,7 @@
 /* ---------- The number ---------- */
 
 .proof__eyebrow {
-  color: var(--sand);
+  color: var(--ink-52);
   margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
 }
 
@@ -63,13 +63,13 @@
   font-family: var(--font-ui);
   font-size: 0.15em;
   letter-spacing: 0.16em;
-  color: var(--sand);
+  color: var(--ink-52);
   vertical-align: 0.55em;
   margin-right: 0.5em;
 }
 
 .proof__suffix {
-  color: var(--sand);
+  color: var(--ink-52);
 }
 
 /* ---------- The axis ---------- */
@@ -85,7 +85,7 @@
   position: absolute;
   inset: 0 0 auto;
   height: 1px;
-  background: var(--sand);
+  background: var(--ink-30);
   transform: scaleX(clamp(0, (var(--p, 0) - 0.04) / 0.56, 1));
   transform-origin: left;
 }
@@ -99,7 +99,7 @@
   height: 0.55rem;
   background-image: repeating-linear-gradient(
     90deg,
-    var(--sand-60) 0 1px,
+    var(--ink-30) 0 1px,
     transparent 1px 5%
   );
   opacity: 0.55;
@@ -110,13 +110,13 @@
 .proof__label {
   display: block;
   margin-top: clamp(1rem, 2vw, 1.5rem);
-  color: var(--sand);
+  color: var(--ink-52);
 }
 
 .proof__note {
   margin-top: clamp(1rem, 2vw, 1.5rem);
   max-width: 44ch;
-  color: var(--paper-46);
+  color: var(--ink-52);
   font-size: var(--step-small);
 }
 
@@ -143,13 +143,13 @@
 
   position: relative;
   padding: clamp(1.1rem, 2.2vw, 1.6rem) 0;
-  border-bottom: 1px solid var(--rule-light-soft);
+  border-bottom: 1px solid var(--rule-dark-soft);
   opacity: var(--t);
   transform: translateY(calc((1 - var(--t)) * 14px));
 }
 
 .proof__item:first-child {
-  border-top: 1px solid var(--rule-light-soft);
+  border-top: 1px solid var(--rule-dark-soft);
 }
 
 /* A sand rule that draws along with the item, so the list assembles rather
@@ -161,7 +161,7 @@
   bottom: -1px;
   width: 100%;
   height: 1px;
-  background: var(--sand);
+  background: var(--ink-30);
   transform: scaleX(var(--t));
   transform-origin: left;
   opacity: 0.5;
@@ -176,7 +176,7 @@
 
 .proof__item-detail {
   margin-top: 0.5rem;
-  color: var(--paper-46);
+  color: var(--ink-52);
   font-size: var(--step-small);
   max-width: 46ch;
 }

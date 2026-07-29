@@ -42,7 +42,7 @@
 
 .hero__body {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   padding-bottom: clamp(2rem, 4vw, 3.5rem);
 }
 
@@ -88,7 +88,7 @@
    This is the argument of the whole site, stated in the first screen. */
 .hero__rail {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   border-top: 1px solid var(--rule-light-soft);
 }
 .hero__rail-inner {
@@ -503,90 +503,6 @@
 }
 .on-dark .step__detail {
   color: var(--paper-46);
-}
-
-/* ---------- Service blocks (Services page) ---------- */
-
-.svc {
-  display: grid;
-  gap: clamp(1.5rem, 3vw, 3.5rem);
-  padding-block: clamp(2.75rem, 5vw, 4.5rem);
-  border-top: 1px solid var(--rule-dark);
-}
-@media (min-width: 960px) {
-  .svc {
-    grid-template-columns: 3.5rem minmax(0, 1fr) minmax(0, 1.15fr);
-  }
-}
-.svc__index {
-  font-family: var(--font-ui);
-  font-size: var(--step-label);
-  letter-spacing: 0.1em;
-  color: var(--sand);
-  padding-top: 0.7em;
-}
-.svc__name {
-  max-width: 20ch;
-  text-wrap: balance;
-  hyphens: none;
-}
-.svc__qualifier {
-  display: block;
-  font-family: var(--font-ui);
-  font-size: var(--step-label);
-  letter-spacing: var(--track-label);
-  text-transform: uppercase;
-  color: var(--ink-52);
-  margin-top: 0.9rem;
-}
-.svc__summary {
-  max-width: 46ch;
-  color: var(--ink-72);
-  margin-top: clamp(1.25rem, 2.5vw, 1.75rem);
-}
-.svc__deliverables {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-}
-.svc__deliverable {
-  position: relative;
-  padding: 0.72rem 0 0.72rem 1.6rem;
-  border-top: 1px solid var(--rule-dark-soft);
-  font-size: var(--step-small);
-  color: var(--ink-72);
-}
-.svc__deliverable::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 1.35em;
-  width: 4px;
-  height: 4px;
-  background: var(--sand);
-  transform: rotate(45deg);
-}
-.svc__outcome {
-  display: grid;
-  gap: 0.6rem;
-  margin-top: clamp(1.5rem, 3vw, 2rem);
-  padding: clamp(1.15rem, 2vw, 1.5rem);
-  background: var(--rich-black);
-  color: var(--paper);
-}
-.svc__outcome dt {
-  font-family: var(--font-ui);
-  font-size: var(--step-label);
-  text-transform: uppercase;
-  letter-spacing: var(--track-label);
-  color: var(--sand);
-}
-.svc__outcome dd {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: 1.2rem;
-  line-height: 1.32;
 }
 
 /* ---------- Sector tags ---------- */

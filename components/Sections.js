@@ -1,12 +1,8 @@
 import Link from 'next/link';
-import Lines from './Lines';
 import Reveal, { DrawRule } from './Reveal';
-import { Ambient, HeroFilmVideo, HeroStill } from './Media';
-import { cta as ctaCopy } from '@/lib/content';
-import { site } from '@/lib/site';
 
 /** Arrow-bearing primary action. */
-export function Action({ href = '/contact', children, variant = '', ...rest }) {
+export function Action({ href = '#contact', children, variant = '', ...rest }) {
   return (
     <Link href={href} className={`btn ${variant}`} {...rest}>
       {children}
@@ -14,43 +10,6 @@ export function Action({ href = '/contact', children, variant = '', ...rest }) {
         →
       </span>
     </Link>
-  );
-}
-
-/** Inner-page hero. Same black stage as home, one register quieter.
-    Takes `video` for a looping clip or `film` for a still. */
-export function PageHero({ eyebrow, headline, standfirst, intro, chapter, film, video }) {
-  return (
-    <section
-      className={`phero on-dark ${film || video ? 'phero--film' : ''}`}
-      data-chapter={chapter || eyebrow}
-      data-tone="dark"
-    >
-      {/* `video` wins over `film`, and either can be dropped for the plain
-          light wash. Keeping both means a page can fall back to a still
-          without any other change. */}
-      {video ? (
-        <HeroFilmVideo clip={video} />
-      ) : film ? (
-        <HeroStill clip={film} />
-      ) : (
-        <div className="hero__light" aria-hidden="true" />
-      )}
-      <div className="shell" style={{ position: 'relative', zIndex: 1 }}>
-        <p className="label phero__eyebrow">{eyebrow}</p>
-        <Lines lines={headline} as="h1" className="display display--l" delay={120} />
-        {standfirst && (
-          <Reveal className="lede phero__standfirst" delay={520}>
-            {standfirst}
-          </Reveal>
-        )}
-        {intro && (
-          <Reveal className="phero__intro" delay={640}>
-            {intro}
-          </Reveal>
-        )}
-      </div>
-    </section>
   );
 }
 
@@ -126,58 +85,6 @@ export function Sectors({ items }) {
         </Reveal>
       ))}
     </ul>
-  );
-}
-
-/** Closing call to action. Same on every page, so the ask never moves. */
-export function CtaBand({ chapter = 'Next step' }) {
-  return (
-    <section
-      className="cta band on-dark has-ambient"
-      data-chapter={chapter}
-      data-tone="dark"
-    >
-      {/* Drifting light on the closing ask — the one place on the page where a
-          little warmth earns its keep. Blurred hard so it reads as moving light
-          rather than as a recognisable subject. */}
-      <Ambient clip="butterflies" opacity={0.55} blur={12} />
-      <div className="hero__light" aria-hidden="true" />
-      <div className="shell">
-        <div className="cta__inner">
-          <div>
-            <Reveal as="p" className="label" style={{ color: 'var(--sand)' }}>
-              {ctaCopy.eyebrow}
-            </Reveal>
-            <Reveal
-              as="h2"
-              className="display display--m cta__title"
-              delay={90}
-              style={{ marginTop: '1.5rem' }}
-            >
-              {ctaCopy.title}
-            </Reveal>
-            <Reveal className="cta__body" delay={180}>
-              {ctaCopy.body}
-            </Reveal>
-          </div>
-          <Reveal delay={260}>
-            <Action href="/contact">{ctaCopy.action}</Action>
-          </Reveal>
-        </div>
-
-        <div className="cta__contacts">
-          <a className="tlink" href={`mailto:${site.email}`}>
-            {site.email}
-          </a>
-          <a className="tlink" href={`tel:${site.phoneHref}`}>
-            {site.phone}
-          </a>
-          <a className="tlink" href={site.linkedin} target="_blank" rel="noreferrer">
-            LinkedIn
-          </a>
-        </div>
-      </div>
-    </section>
   );
 }
 

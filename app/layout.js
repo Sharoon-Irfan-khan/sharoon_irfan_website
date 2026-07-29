@@ -6,7 +6,6 @@ import Footer from '@/components/Footer';
 import Spine from '@/components/Spine';
 import Grain from '@/components/Grain';
 import Intro from '@/components/Intro';
-import PageCurtain from '@/components/PageCurtain';
 import SmoothScroll from '@/components/SmoothScroll';
 import { site } from '@/lib/site';
 
@@ -105,7 +104,6 @@ export default function RootLayout({ children }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <Intro />
-        <PageCurtain />
         <SmoothScroll />
         <Grain />
         <Spine />

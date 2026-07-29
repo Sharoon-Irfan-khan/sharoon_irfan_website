@@ -12,6 +12,9 @@
   --ivory: #f8f7f3;
 
   /* ---- Derived surfaces ---- */
+  /* A third band, sitting between champagne and sand. Three warm tones give
+     the page a rhythm without ever reaching black. */
+  --linen: #e3dbd3;
   --black-lift: #0b0f0b; /* cards sitting on rich black */
   --black-lift-2: #121712;
 

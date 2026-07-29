@@ -1,14 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { nav, site } from '@/lib/site';
 
 export default function Nav() {
-  const pathname = usePathname();
   const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState(false);
+  const [current, setCurrent] = useState('');
 
   // The nav sits on a black hero until the hero has passed, then it becomes
   // an ivory bar. One threshold, no flicker.
@@ -19,7 +18,30 @@ export default function Nav() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  useEffect(() => setOpen(false), [pathname]);
+  // Scroll spy. On one page the nav can no longer key its active state to the
+  // route, so it watches the sections the links point at instead. rootMargin
+  // pulls the trigger line to roughly a third down the viewport, which is
+  // where a reader considers themselves to be.
+  useEffect(() => {
+    const ids = nav.map((n) => n.href.replace('#', ''));
+    const targets = ids
+      .map((id) => document.getElementById(id))
+      .filter(Boolean);
+    if (!targets.length) return;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        const hit = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+        if (hit) setCurrent('#' + hit.target.id);
+      },
+      { rootMargin: '-30% 0px -60% 0px', threshold: 0 }
+    );
+
+    targets.forEach((t) => io.observe(t));
+    return () => io.disconnect();
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
@@ -34,8 +56,7 @@ export default function Nav() {
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  const isActive = (href) =>
-    href === '/' ? pathname === '/' : pathname.startsWith(href);
+  const isActive = (href) => href === current;
 
   return (
     <>

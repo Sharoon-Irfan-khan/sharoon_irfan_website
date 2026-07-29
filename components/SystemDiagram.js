@@ -43,9 +43,9 @@ export default function SystemDiagram({
 
   return (
     <section
-      className="band surface-black on-dark sysd"
+      className="band surface-ivory sysd"
       data-chapter="The system"
-      data-tone="dark"
+      data-tone="light"
     >
       <div className="shell">
         <p className="label sysd__eyebrow">{eyebrow}</p>

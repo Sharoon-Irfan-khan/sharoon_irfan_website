@@ -4,9 +4,9 @@
 @import './styles/chrome.css';
 @import './styles/sections.css';
 @import './styles/media.css';
-@import './styles/hero-dark.css';
 @import './styles/system-diagram.css';
-@import './styles/collage.css';
 @import './styles/proof.css';
-@import './styles/video-panel.css';
+@import './styles/hero.css';
+@import './styles/services.css';
+@import './styles/scale-stack.css';
 @import './styles/motion.css';
