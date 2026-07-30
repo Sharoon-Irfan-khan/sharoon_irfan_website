@@ -1,38 +1,39 @@
 /* ============================================================
    SERVICES
-   Six rows, image and copy alternating side to side so the eye
-   crosses the page rather than running down a single column.
+   Seven cards, four to a row. Was seven full-width rows with the
+   image and copy alternating; see the note in ServiceList.js.
    ============================================================ */
 
 .svcs {
   display: grid;
-  gap: clamp(4rem, 9vw, 8rem);
+  grid-template-columns: 1fr;
+  /* Row gap larger than column gap: cards in a row are one set and should
+     read across, while the rows beneath need enough air not to be mistaken
+     for a continuation of the card above. */
+  gap: clamp(2.5rem, 4vw, 3.5rem) clamp(1.25rem, 2vw, 2rem);
   margin-top: clamp(3rem, 6vw, 5rem);
+}
+
+/* Two before four. Four columns on a tablet would put each service in about
+   160px, which is narrower than its own name. */
+@media (min-width: 620px) {
+  .svcs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1100px) {
+  .svcs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 .svc {
   display: grid;
-  gap: clamp(1.75rem, 4vw, 3.5rem);
-  align-items: center;
-  width: 100%;
-  max-width: var(--max);
-  margin-inline: auto;
-  padding-inline: var(--gutter);
-  padding-left: calc(var(--gutter) + var(--rail));
+  gap: clamp(0.85rem, 1.3vw, 1.1rem);
+  align-content: start;
   /* Anchored from the nav and from the system diagram, so the target has to
      clear the fixed bar rather than hide behind it. */
   scroll-margin-top: calc(var(--nav-h) + 2rem);
-}
-
-@media (min-width: 900px) {
-  .svc {
-    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
-  }
-  /* Odd rows put the picture on the right. Source order stays image-then-copy
-     so the reading order never changes — only the columns swap. */
-  .svc--right .svc__media {
-    order: 2;
-  }
 }
 
 /* ---------- Media ---------- */
@@ -79,7 +80,7 @@
 
 .svc__body {
   display: grid;
-  gap: clamp(0.9rem, 1.8vw, 1.4rem);
+  gap: clamp(0.4rem, 0.7vw, 0.6rem);
   align-content: start;
 }
 
@@ -87,8 +88,18 @@
   color: var(--sand);
 }
 
+/*
+  The name carried `display--m` — clamp(1.85rem, 3.1vw, 2.9rem) — which was
+  right across a half-page row and is roughly double what a quarter-width
+  column can hold: "Websites & Landing Pages" alone would have run to four
+  lines. Sized to the card instead, and the measure comes off, because at this
+  width the column is the measure.
+*/
 .svc__name {
-  max-width: 16ch;
+  font-size: clamp(1.2rem, 1.45vw, 1.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  max-width: none;
 }
 
 .svc__qualifier {
@@ -97,8 +108,12 @@
   color: var(--ink-52);
 }
 
+/* Was `lede`, one step up from body. In a four-across card the summary is a
+   caption under a photograph, not a standfirst. */
 .svc__summary {
-  max-width: 46ch;
+  font-size: var(--step-body);
+  line-height: 1.5;
+  max-width: none;
   color: var(--ink-72);
 }
 

@@ -58,6 +58,19 @@ export default function Nav() {
 
   const isActive = (href) => href === current;
 
+  // Closing on click is the whole point of a menu item — without it the sheet
+  // stays up over the section the reader just asked for.
+  //
+  // The body unlock happens here rather than being left to the effect above.
+  // The anchor scroll runs during this click; the effect does not run until
+  // after the next paint, so the scroll would land against a still-locked body
+  // and be dropped. The effect then sets the same value again, which is
+  // harmless.
+  const closeMenu = () => {
+    document.body.style.overflow = '';
+    setOpen(false);
+  };
+
   return (
     <>
       <header
@@ -66,7 +79,6 @@ export default function Nav() {
         <div className="nav__inner">
           <Link href="/" className="wordmark" aria-label={`${site.name} — home`}>
             Sharoon <em>Irfan</em>
-            <span className="wordmark__dot" aria-hidden="true" />
           </Link>
 
           <nav className="nav__links nav__links--desk" aria-label="Primary">
@@ -115,6 +127,7 @@ export default function Nav() {
                 className="menu__link"
                 style={{ '--i-delay': `${120 + i * 70}ms` }}
                 tabIndex={open ? 0 : -1}
+                onClick={closeMenu}
               >
                 {item.label}
                 <span className="menu__index" aria-hidden="true">
@@ -125,14 +138,23 @@ export default function Nav() {
           ))}
         </ul>
 
+        {/* These close it too. The mail and phone links hand off to another
+            app, but LinkedIn opens a new tab — come back and the menu would
+            still be sitting there. */}
         <div className="menu__foot">
-          <a href={`mailto:${site.email}`} tabIndex={open ? 0 : -1}>
+          <a href={`mailto:${site.email}`} tabIndex={open ? 0 : -1} onClick={closeMenu}>
             {site.email}
           </a>
-          <a href={`tel:${site.phoneHref}`} tabIndex={open ? 0 : -1}>
+          <a href={`tel:${site.phoneHref}`} tabIndex={open ? 0 : -1} onClick={closeMenu}>
             {site.phone}
           </a>
-          <a href={site.linkedin} target="_blank" rel="noreferrer" tabIndex={open ? 0 : -1}>
+          <a
+            href={site.linkedin}
+            target="_blank"
+            rel="noreferrer"
+            tabIndex={open ? 0 : -1}
+            onClick={closeMenu}
+          >
             {site.linkedinLabel}
           </a>
         </div>

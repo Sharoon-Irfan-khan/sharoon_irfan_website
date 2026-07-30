@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { byId, workSrc } from '@/lib/media';
 
@@ -63,14 +64,21 @@ export default function SwitchFrame({ items = [], offset = 0, className = '' }) 
       {items.map((id, n) => {
         const clip = byId(id);
         return (
-          <img
+          // `fill`, because .sframe__img is already absolute and covering —
+          // the frame's aspect ratio is what decides the box, not the file.
+          // The first picture is the hero's largest paint, so it is fetched
+          // with priority rather than merely eagerly; the rest are lazy and
+          // will not be looked at for four and a half seconds anyway.
+          <Image
             key={id}
             className={`sframe__img ${n === i ? 'is-on' : ''}`}
             src={workSrc(clip.id)}
             alt={n === 0 ? clip.alt : ''}
             aria-hidden={n === 0 ? undefined : true}
-            loading={n === 0 ? 'eager' : 'lazy'}
-            decoding="async"
+            fill
+            sizes="(max-width: 899px) 45vw, 36vw"
+            priority={n === 0}
+            loading={n === 0 ? undefined : 'lazy'}
           />
         );
       })}

@@ -32,6 +32,13 @@
    letterspaced label — it echoes the italic in the wordmark and keeps the
    opening to two typographic voices instead of three. */
 .hero__role {
+  /* The stage below is positioned, so without a stacking context of its own
+     this line paints *under* the photographs and the frames clip whichever
+     letters reach into their columns — it was eating the "R" of "Revenue".
+     The clearance below keeps them apart; this keeps them apart at any width
+     the clearance does not anticipate. */
+  position: relative;
+  z-index: 1;
   margin: clamp(0.75rem, 1.6vw, 1.35rem) 0 0;
   font-family: var(--font-display);
   font-style: italic;
@@ -52,12 +59,25 @@
   0.577x the font size per character, so a name of N characters is N * 0.577
   ems wide and the largest that fits is content-width / (N * 0.577).
 
-  "SHAROON IRFAN KHAN" is eighteen characters — 10.4em. Content width is the
-  96rem shell less two gutters, so 1360px at the cap and (100vw - 10vw) below
-  it. That gives 130px at the top end and about 8.65vw beneath, and the values
-  below sit ~5% under both so the estimate has somewhere to be wrong. It was
-  11.6vw / 11rem while the name was thirteen characters; adding "KHAN" without
-  moving this would have run the name off both edges, since the section clips.
+  "SHAROON IRFAN" measures 7.73em set — the per-character estimate above puts
+  it at 7.5em, so measure rather than trust it. Content width is the 96rem
+  shell less two gutters, so 1360px at the cap and (100vw - 10vw) below it.
+  The largest that fits is therefore 10.99rem at the top end and 11.64vw
+  beneath, and the values below sit ~5% under both so the estimate has
+  somewhere to be wrong — at 11.64vw the name clipped on a 320px screen,
+  which is what that margin is for.
+
+  These were 8.2vw / 7.7rem while the name still carried "KHAN" — five
+  characters longer, which is the only reason it was set that small.
+
+  The second term in the min() is the narrow end, and it is not the same sum.
+  `vw` counts the scrollbar; the column does not. And below 400px the gutter
+  stops scaling and floors at 1.25rem, so the column is 100vw - 2.5rem - the
+  scrollbar rather than 90vw. On a 320px screen that is 262px of column, and a
+  plain 11vw put 269px of name into it — clipped, and silently, because the
+  section clips rather than scrolls. Dividing the real column by the measured
+  7.733em is exact at every width; 11vw stays as the cap so the wide end is
+  unchanged.
 
   If this ever needs to be bigger, the name has to break onto two lines.
 */
@@ -65,7 +85,7 @@
   margin: 0;
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(1.05rem, 8.2vw, 7.7rem);
+  font-size: clamp(1.5rem, min(11vw, calc((100vw - 4.25rem) / 7.733)), 10.5rem);
   line-height: 0.86;
   letter-spacing: -0.02em;
   text-transform: uppercase;
@@ -86,7 +106,17 @@
   display: grid;
   gap: clamp(0.75rem, 1.8vw, 2rem);
   align-items: start;
-  margin-top: clamp(-1.5rem, -3.5vw, -5rem);
+  /* Was clamp(-1.5rem, -3.5vw, -5rem), which never did what it reads as:
+     clamp() is (min, preferred, max) and -1.5rem is the *largest* of the
+     three, so it pinned to -24px at every width and the pull-up never
+     scaled. Worse, those 24px lifted the frames onto the role line and the
+     left photograph covered the "R" of "Revenue".
+
+     The role is one centred line wider than the channel between the two
+     photographs, so any upward pull puts letters behind them. Positive
+     clearance instead — small enough that the frames still read as part of
+     the same block, large enough to clear the descenders in "Marketing". */
+  margin-top: clamp(0.35rem, 0.8vw, 0.9rem);
 }
 
 @media (min-width: 900px) {
@@ -159,7 +189,10 @@
      fit across a phone. */
   .hero__stage {
     grid-template-columns: 1fr 1fr;
-    margin-top: clamp(-0.5rem, -2vw, -2rem);
+    /* Same inverted clamp as above — it pinned to -8px, and down here the
+       frames run the full content width, so those 8px put the whole role
+       line behind them rather than just its first letter. */
+    margin-top: clamp(0.35rem, 1.2vw, 0.75rem);
   }
   .hframe--a {
     grid-column: 1;

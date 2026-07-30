@@ -15,6 +15,9 @@ export default function Footer() {
             <p className="muted" style={{ marginTop: '1.25rem', maxWidth: '32ch' }}>
               {site.role}. {site.location}.
             </p>
+            {site.credentials && (
+              <p className="muted footer__credentials">{site.credentials}</p>
+            )}
           </Reveal>
 
           <Reveal className="footer__col" delay={120}>

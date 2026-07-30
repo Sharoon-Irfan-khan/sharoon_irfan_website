@@ -28,39 +28,43 @@
 }
 
 /* The grid gap spaces the head from the row; the head's own margins would
-   double that. Applies to whatever is pinned above the strip — the section
-   head this was written for, or the problem statement that sits there now. */
+   double that. Nothing is passed as children now — the problem statement used
+   to ride up here and was moved out so it sits with its own symptom list —
+   but the component still takes them, so the rule stays for whatever comes
+   next. */
 .sstack__stage .shead {
   margin-bottom: 0;
-}
-.sstack__stage .problem__quote {
-  margin: 0;
 }
 
 /* ---------- The viewport ---------- */
 
 /*
-  The row breaks out of the shell. Four 3:4 frames inside a 96rem column come
-  out small with a screen of empty space around them, so the row runs wider
-  than its container instead.
+  The row aligns with the type above it: same left edge as the eyebrow and the
+  problem statement, so the section reads as one column.
 
-  Two constraints decide the width:
+  It used to break out of the shell and centre on the viewport —
+  `margin-left: 50%` plus a translate, with a `--rail` correction because
+  .shell reserves a left spine. That is the right technique for a row wider
+  than its container, but the height guard below means it frequently is not
+  wider. On a laptop-height window the guard shrank the row to 1049px inside a
+  1312px column and the centring then inset it 104px from the text on the left
+  and 159px on the right — visibly out of alignment with the two lines it sits
+  under, and the row was gaining under 100px from the breakout in return.
 
-  - `100vw - 4rem` keeps a margin at both edges. 100vw includes the scrollbar,
-    which is why the subtraction is more than the visible gap needs.
-  - The last term is a height guard. A 3:4 frame is three-quarters as wide as
-    it is tall, so four of them plus gaps make a row roughly three frame-heights
-    across — `(usable height) * 3` is therefore the widest the row can get
-    before the frames grow taller than the pinned stage can show. What is
-    subtracted is the nav, the heading and the stage's own padding. Without it
-    a short laptop crops the bottom of every frame.
+  So: `100%`, left-aligned, and the row can never disagree with the type.
 
-  Centring cannot use `margin-inline: auto`: the box is wider than its
-  container, and in that over-constrained case the browser drops the right
-  margin and pushes the whole row off the right-hand edge. `margin-left: 50%`
-  plus a translate centres on the container's midpoint regardless of overflow.
-  The extra `--rail` correction is because .shell reserves a left spine, so its
-  content box sits half a rail to the right of the viewport's centre.
+  The remaining term is a height guard. A 3:4 frame is three-quarters as wide
+  as it is tall, so four of them plus gaps make a row roughly three
+  frame-heights across — `(usable height) * 3` is therefore the widest the row
+  can get before the frames grow taller than the pinned stage can show. Without
+  it a short laptop crops the bottom of every frame.
+
+  It subtracts 4rem, not the 15rem it carried before. That 15rem was covering a
+  heading and a grid gap that used to sit in this stage; the statement has since
+  moved out to join its symptom list, so the only thing left to allow for is the
+  stage's own bottom padding. At 15rem the guard was reserving room for
+  something that is no longer here and holding the row ~260px narrower than the
+  column, which is why it never reached the right-hand edge of the type.
 
   `overflow: clip` rather than `hidden` — hidden would make this a scroll
   container, and a scroll container between a sticky element and the viewport
@@ -68,9 +72,7 @@
 */
 .sstack {
   --gap: clamp(0.6rem, 1.2vw, 1.15rem);
-  width: min(100vw - 7rem, 96rem, (100svh - var(--nav-h) - 15rem) * 3);
-  margin-left: 50%;
-  transform: translateX(calc(-50% - var(--rail, 0px) / 2));
+  width: min(100%, (100svh - var(--nav-h) - 4rem) * 3);
   overflow: clip;
 }
 
@@ -143,24 +145,47 @@
    ============================================================ */
 
 @media (max-width: 899px) {
-  /* Four across a phone would be about 80px each. Two rows of two, and a
-     shorter track because there is less to travel.
+  /*
+    NO PINNING ON A PHONE.
 
-     The height guard is recomputed for this layout: two columns of 3:4 make a
-     row 1.5 frame-heights wide, and two rows are stacked, so the usable height
-     is halved before the ratio is applied. */
+    Four across a phone would be about 80px each, so it is two rows of two —
+    and that is where the pinned version stopped being worth its cost. The
+    track ran 190svh: nearly two full screens of scrolling to bring in four
+    small photographs one at a time. Everything the reader had not yet
+    unlocked was empty champagne, so most of that scroll was spent looking at
+    an unfinished grid and the blank stage underneath it.
+
+    So the strip behaves like any other block down here: full column width,
+    all four visible, scrolls past once. The travel comes off with it —
+    without a track there is no --p to drive the transform, and a frame parked
+    one width to the right of its own cell with nothing to bring it back would
+    simply never appear. Same reasoning, and the same three declarations, as
+    the reduced-motion block below.
+
+    The height guard goes too. It existed to stop the frames growing taller
+    than a pinned stage could show; nothing is pinned here, so the row is free
+    to fill the column, which also makes the photographs meaningfully larger
+    on the smallest screens.
+  */
   .sstack {
-    width: min(100vw - 2.5rem, (100svh - var(--nav-h) - 12rem) * 0.75);
+    width: 100%;
   }
   .sstack__strip {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .sstack__track {
-    min-height: 190svh;
+    min-height: 0;
   }
   .sstack__stage {
+    position: static;
+    min-height: 0;
     align-content: start;
-    padding-top: calc(var(--nav-h) + 1.5rem);
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .sstack__img {
+    transform: none;
+    will-change: auto;
   }
 }
 

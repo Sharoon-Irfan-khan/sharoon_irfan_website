@@ -275,9 +275,121 @@
 
 /* The problem statement carries an eyebrow above it, which the thesis block
    this class was written for did not. */
+/*
+  The lines are authored in content.js — one sentence each — so the measure is
+  set by the longer of the two rather than by a max-width. The `24ch` that used
+  to sit here cut the statement to roughly two-thirds of the column and left
+  the rest of the row empty.
+
+  The size is what makes the pair sit level: the type comes down until the
+  longer sentence fits the column on one line, and the shorter one then follows
+  at the same size. "Most brands don't have a marketing problem." measures
+  17.69em set; the column is about 0.8625 of the viewport once the gutters and
+  the spine rail come off, so the largest that fits is 0.8625/17.69 = 4.88vw.
+  4.6vw sits ~5% under. The cap matches the column's own: .shell stops growing
+  at 96rem, leaving ~1292px of content, and 4.35rem * 17.69 = 1231.
+
+  Because the size is proportional to the column, the two lines hold as two
+  lines wherever the vw term is live — down to about 770px, where the clamp
+  floor takes over and they wrap. Correct: no readable size puts a
+  42-character line across a phone.
+*/
 .problem__quote {
   margin-top: clamp(1.5rem, 3vw, 2.5rem);
-  max-width: 24ch;
+  max-width: none;
+  font-size: clamp(2.35rem, 4.6vw, 4.35rem);
+}
+
+/*
+  THREE LINES ON A PHONE.
+
+  Two lines cannot survive down here — the first sentence is 17.69em and the
+  column is about 0.86 of the screen, so holding it on one line would mean
+  setting the statement at around 19px, which is body copy, not the claim the
+  section is built on.
+
+  So three: the second sentence keeps its own line and the first breaks over
+  two. That needs 12.789em (the second sentence) to fit the column, which is
+  6.71vw at the narrowest end and looser at every width above it — 6.4vw sits
+  ~5% under the tightest of them. Left at the clamp floor above, the size was
+  37.6px, both sentences wrapped, and the result was four lines.
+
+  The breakpoint is 899px to match the hero and the scale stack. It also has to
+  sit above 817px, which is where 4.6vw drops under the floor and the two-line
+  setting would start wrapping into four on its own.
+*/
+@media (max-width: 899px) {
+  .problem__quote {
+    font-size: 6.4vw;
+  }
+}
+
+/* ---------- About: founder-led ----------
+   The page's one dark panel, set on a photograph. See the note in page.js. */
+
+.about {
+  position: relative;
+  /* The scrim and the picture are painted at z-index -1, so the section needs
+     its own stacking context or they escape it and sit under the section
+     above. */
+  isolation: isolate;
+  overflow: clip;
+  /* Under the photograph, and what shows through the scrim. Also the fallback
+     if the image has not decoded yet, which is why it is the near-black rather
+     than the linen this section used to be — text is set for dark now. */
+  background: var(--rich-black);
+  color: var(--paper);
+  /* Deeper than the standard band. A panel carrying a full-bleed photograph
+     needs room around the type or the picture reads as a texture behind a
+     paragraph rather than as the ground the section stands on. */
+  padding-block: clamp(7rem, 14vw, 13rem);
+}
+
+.about__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.about__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/*
+  Weighted to the left, where the words are: heaviest under the type and
+  lifting towards the right so the laptop and the cards stay visible. An even
+  wash at the strength the left edge needs would have flattened the whole
+  photograph to a grey field.
+*/
+.about__bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    rgba(5, 8, 5, 0.93) 0%,
+    rgba(5, 8, 5, 0.86) 42%,
+    rgba(5, 8, 5, 0.58) 78%,
+    rgba(5, 8, 5, 0.42) 100%
+  );
+}
+
+.about__inner {
+  position: relative;
+}
+
+.about__title {
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+  max-width: 22ch;
+}
+
+.about__body {
+  margin-top: clamp(1.75rem, 3vw, 2.5rem);
+  max-width: 46ch;
+  color: var(--paper-70);
 }
 
 /* ---------- Symptoms ----------
@@ -697,11 +809,32 @@
    section into column one and left column two — half the viewport — empty. */
 .contact {
   display: block;
+  /* Declared once and used by both columns. The form is a raised card, so its
+     first label sits one padding below the top of its column; the aside beside
+     it had none, and its opening line started that far above the field it
+     reads across to — 44px apart at desktop width. Two columns that begin at
+     the same edge but not on the same line read as a mistake, because it is
+     one. Sharing the value is what stops them drifting apart again. */
+  --panel-pad: clamp(1.75rem, 3.2vw, 2.75rem);
 }
 .contact__aside {
   display: grid;
   gap: clamp(2rem, 4vw, 3rem);
   align-content: start;
+}
+/* The aside is a grid, so its gap already spaces the links from the copy.
+   .cta__contacts carries a margin of its own for the dark CTA band it was
+   written for, and here the two added up — 48px of gap on top of 64px of
+   margin. The gap wins; the margin goes. */
+.contact__aside .cta__contacts {
+  margin-top: 0;
+}
+/* Only while the split is actually two columns. Stacked, the padding would be
+   a gap above the copy with nothing to line up against. */
+@media (min-width: 900px) {
+  .contact__aside {
+    padding-top: var(--panel-pad);
+  }
 }
 .contact__list {
   list-style: none;
@@ -740,7 +873,7 @@
 .form {
   display: grid;
   gap: 1.5rem;
-  padding: clamp(1.75rem, 3.2vw, 2.75rem);
+  padding: var(--panel-pad, clamp(1.75rem, 3.2vw, 2.75rem));
   background: var(--ivory);
   box-shadow:
     inset 0 0 0 1px var(--rule-dark-soft),

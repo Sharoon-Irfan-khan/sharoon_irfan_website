@@ -66,6 +66,12 @@
 
 /* ---------- Words ---------- */
 
+/* One authored line. A block, so the next line starts where the writing says
+   it does; the words inside it still wrap on their own if the measure is
+   narrower than the line. */
+.words__line {
+  display: block;
+}
 .words__w {
   display: inline-block;
   overflow: hidden;

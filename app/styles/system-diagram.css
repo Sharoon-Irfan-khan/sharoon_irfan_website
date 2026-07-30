@@ -9,9 +9,21 @@
   color: var(--ink-52);
 }
 
+/*
+  The measure was 20ch, which is what forced this into three lines. The lines
+  are authored now, so the cap comes off and the longer of the two decides the
+  width — at display--m that is about 38 characters, well inside the column.
+
+  It still wraps on a phone, where no measure holds a 38-character line at this
+  size. That is correct: the authored break is where it breaks *first*, not the
+  only place it may ever break.
+*/
 .sysd__title {
-  max-width: 20ch;
+  max-width: none;
   margin-top: clamp(1.5rem, 3vw, 2.25rem);
+}
+.sysd__title-line {
+  display: block;
 }
 
 .sysd__stage {

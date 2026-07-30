@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import Image from 'next/image';
 import { byId, workSrc } from '@/lib/media';
 import { useInView } from './Reveal';
 import useParallax from './useParallax';
@@ -26,12 +26,13 @@ export function Plate({ clip: clipId, caption, ratio }) {
         style={ratio ? { aspectRatio: ratio } : undefined}
       >
         <div className="film__inner" ref={inner}>
-          <img
+          <Image
             className="film__media"
             src={workSrc(clip.id)}
             alt={clip.alt}
+            fill
+            sizes="(max-width: 899px) 90vw, 45vw"
             loading="lazy"
-            decoding="async"
           />
         </div>
       </div>

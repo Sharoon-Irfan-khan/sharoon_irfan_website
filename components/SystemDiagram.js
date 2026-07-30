@@ -83,7 +83,17 @@ export default function SystemDiagram({
     >
       <div className="shell">
         <p className="label sysd__eyebrow">{eyebrow}</p>
-        <h2 className="display display--m sysd__title">{title}</h2>
+        {/* A string still works; an array breaks where the writing breaks
+            rather than wherever the measure happens to run out. */}
+        <h2 className="display display--m sysd__title">
+          {Array.isArray(title)
+            ? title.map((line, i) => (
+                <span className="sysd__title-line" key={i}>
+                  {line}
+                </span>
+              ))
+            : title}
+        </h2>
 
         <div className="sysd__stage" ref={ref}>
           <svg
