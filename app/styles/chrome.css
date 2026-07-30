@@ -523,6 +523,31 @@
   max-width: 32ch;
   font-size: var(--step-small);
 }
+
+/* Certification badges. Held back to ~34px and 70% opacity, lifting to full on
+   hover: these are somebody else's marks on his page, and at full strength two
+   corporate logos out-shout the name above them. Both programmes permit
+   scaling; neither permits recolouring, which is why nothing here touches the
+   artwork itself. */
+.footer__badges {
+  list-style: none;
+  margin: 1.4rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem;
+}
+.footer__badges img {
+  display: block;
+  width: auto;
+  height: clamp(28px, 4.5vw, 34px);
+  opacity: 0.7;
+  transition: opacity var(--dur-quick) var(--ease-out);
+}
+.footer__badges a:hover img {
+  opacity: 1;
+}
 .footer__col h3 {
   font-family: var(--font-ui);
   font-size: var(--step-label);

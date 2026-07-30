@@ -26,6 +26,29 @@
   display: block;
 }
 
+/*
+  TWO LINES ON A PHONE TOO.
+
+  The authored break holds the sentence at two lines, but only while each of
+  them fits the column. The second — "so every dirham traces back to a sale."
+  — is 38 characters, and `display--m` bottoms out at 1.85rem, so down here it
+  wrapped and the heading came out at three lines again.
+
+  38 characters measure about 15.7em in this face, and the column is roughly
+  0.845 of the screen once the gutters and the spine rail come off. The widest
+  that fits is therefore 0.845/15.7 = 5.38vw, and 5.1vw sits ~5% under it.
+
+  That is a real drop — about 19px on a 375px screen against the 29.6px the
+  clamp floor was giving. It is the price of holding the sentence to two lines
+  at this length: the line cannot be shortened without moving the break off the
+  dash, which is the one place the sentence actually hinges.
+*/
+@media (max-width: 899px) {
+  .sysd__title {
+    font-size: 5.1vw;
+  }
+}
+
 .sysd__stage {
   position: relative;
   aspect-ratio: 1200 / 460;

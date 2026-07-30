@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import useScrollProgress from './useScrollProgress';
+import { useInView } from './Reveal';
 import { byId, workSrc } from '@/lib/media';
 
 /**
@@ -51,6 +52,43 @@ const DEFAULT = [
   'kinfolk-stack',
 ];
 
+/*
+  One frame.
+
+  It watches for itself entering the viewport, which is only used on a phone.
+  There is no scroll track down there — the row is a plain grid — so the
+  desktop mechanism, which reads one `--p` off the track and turns it into each
+  frame's slice, has nothing to read and the four photographs simply appeared.
+
+  This is deliberately not the shared `Reveal` component. That marks its element
+  with `data-reveal`, which the global rules style at every width, and it would
+  have added a rise on desktop on top of the slide the frames already do. The
+  bare hook adds `is-in` and nothing else, so the mobile block in the CSS is the
+  only thing that reacts to it.
+*/
+function Frame({ id, index }) {
+  const clip = byId(id);
+  const seen = useInView({ threshold: 0.2 });
+
+  return (
+    // --i is the frame's place in the queue. On desktop the CSS turns it into
+    // this frame's slice of the scroll track; on a phone, into its place in
+    // the stagger.
+    <figure className="sstack__item" ref={seen} style={{ '--i': index }}>
+      {/* Four across the column on desktop, two on a phone — about a quarter
+          and a half of the content measure. */}
+      <Image
+        className="sstack__img"
+        src={workSrc(clip.id)}
+        alt={clip.alt}
+        fill
+        sizes="(max-width: 899px) 45vw, 23vw"
+        loading="lazy"
+      />
+    </figure>
+  );
+}
+
 export default function ScaleStack({ items = DEFAULT, children }) {
   const ref = useScrollProgress({ mode: 'self' });
 
@@ -61,25 +99,9 @@ export default function ScaleStack({ items = DEFAULT, children }) {
 
         <div className="sstack">
           <div className="sstack__strip">
-            {items.map((id, i) => {
-              const clip = byId(id);
-              return (
-                // --i is the frame's place in the queue. The CSS turns it into
-                // this frame's slice of the scroll track.
-                <figure className="sstack__item" key={id} style={{ '--i': i }}>
-                  {/* Four across the column on desktop, two on a phone —
-                      about a quarter and a half of the content measure. */}
-                  <Image
-                    className="sstack__img"
-                    src={workSrc(clip.id)}
-                    alt={clip.alt}
-                    fill
-                    sizes="(max-width: 899px) 45vw, 23vw"
-                    loading="lazy"
-                  />
-                </figure>
-              );
-            })}
+            {items.map((id, i) => (
+              <Frame id={id} index={i} key={id} />
+            ))}
           </div>
         </div>
       </div>

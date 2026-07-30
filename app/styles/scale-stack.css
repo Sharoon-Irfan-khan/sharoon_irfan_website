@@ -187,6 +187,40 @@
     transform: none;
     will-change: auto;
   }
+
+  /*
+    The travel comes off the picture and goes onto the frame.
+
+    Losing the pinned track meant losing the motion with it — four photographs
+    that were simply present. They rise and fade in instead, on the same short
+    curve the rest of the site uses, keyed off `is-in` from the observer on
+    each frame.
+
+    The stagger reuses --i, so they still arrive one at a time and still in
+    order: the desktop row builds left to right across four columns, and this
+    builds through the two-by-two in the same reading direction. Same idea,
+    a tenth of the scroll.
+  */
+  .sstack__item {
+    opacity: 0;
+    /* 3rem, not the 1.75rem this started at. On a phone the frames are about
+       160px wide and the rise has to be legible against that, not against a
+       desktop column — at the smaller distance it read as the picture simply
+       being there, which is the complaint it was meant to answer. */
+    transform: translate3d(0, 3rem, 0);
+    transition:
+      opacity 620ms var(--ease-out),
+      transform 860ms var(--ease-line);
+    /* 120ms apart rather than 90: four frames at the shorter interval arrive
+       close enough together to read as one block appearing. */
+    transition-delay: calc(var(--i, 0) * 120ms);
+    will-change: transform, opacity;
+  }
+  .sstack__item.is-in {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -200,6 +234,14 @@
   }
   .sstack__img {
     transform: none;
+    will-change: auto;
+  }
+  /* Including the phone rise — this block has to win over the narrow one
+     above, which it does by coming after it. */
+  .sstack__item {
+    opacity: 1;
+    transform: none;
+    transition: none;
     will-change: auto;
   }
 }

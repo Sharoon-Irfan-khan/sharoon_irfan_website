@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Reveal from './Reveal';
 import { site } from '@/lib/site';
 
@@ -13,10 +14,41 @@ export default function Footer() {
               Sharoon <em>Irfan</em>
             </p>
             <p className="muted" style={{ marginTop: '1.25rem', maxWidth: '32ch' }}>
-              {site.role}. {site.location}.
+              {site.practice}. {site.location}.
             </p>
             {site.credentials && (
               <p className="muted footer__credentials">{site.credentials}</p>
+            )}
+
+            {/* Renders only when there is artwork to render. Each badge links
+                to its own verification page where the programme provides one,
+                because a badge nobody can check is worth less than one they
+                can. */}
+            {site.badges?.length > 0 && (
+              <ul className="footer__badges">
+                {site.badges.map((b) => {
+                  const mark = (
+                    <Image
+                      src={b.src}
+                      alt={b.alt}
+                      width={b.width}
+                      height={b.height}
+                      unoptimized
+                    />
+                  );
+                  return (
+                    <li key={b.src}>
+                      {b.href ? (
+                        <a href={b.href} target="_blank" rel="noreferrer">
+                          {mark}
+                        </a>
+                      ) : (
+                        mark
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
             )}
           </Reveal>
 
