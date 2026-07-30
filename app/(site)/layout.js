@@ -1,5 +1,7 @@
 import { Cormorant_Garamond, Jost, Poppins } from 'next/font/google';
-import './globals.css';
+// One level up: globals.css stays at app/ because both route groups sit
+// beside it, and only this one wants it.
+import '../globals.css';
 
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
