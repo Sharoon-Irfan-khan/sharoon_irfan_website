@@ -124,10 +124,14 @@
 .wordmark em {
   font-style: italic;
 }
+/* The gap floor came down from 1.5rem when the sixth item arrived. "Thought
+   Room" is nearly twice the width of the label it replaced, and between 901px
+   — where these links appear at all — and about 1080px the row had no slack
+   left to give. */
 .nav__links {
   display: flex;
   align-items: center;
-  gap: clamp(1.5rem, 2.6vw, 2.75rem);
+  gap: clamp(1.1rem, 2.6vw, 2.75rem);
 }
 
 .nav__link {
