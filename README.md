@@ -136,31 +136,97 @@ on one page cost roughly one clip's bandwidth on arrival.
 
 ## The contact form
 
-The form posts to `/api/contact`, which sends the enquiry by email via
-[Resend](https://resend.com).
+The form posts to `/api/contact`, which emails the enquiry to `info@sharoon.ae`
+over SMTP — using that mailbox's own credentials, so there is no third-party
+mail service to sign up for or keep alive.
 
-**Until you set this up, the form tells visitors to email `hello@sharoon.ae`
+**Until you set this up, the form tells visitors to email `info@sharoon.ae`
 directly** — it does not silently swallow messages.
 
 To turn on delivery:
 
-1. Create a Resend account and verify the `sharoon.ae` domain.
-2. Copy `.env.example` to `.env.local` and fill in:
+It currently sends through the Gmail account `sharoonirfan.ae@gmail.com`. Every
+value but the password is already in `.env.local`; only the password is missing,
+because a password is not something that belongs in a repository or in anyone
+else's hands.
 
-```
-RESEND_API_KEY=re_xxxxxxxx
-CONTACT_TO=hello@sharoon.ae
-CONTACT_FROM=Sharoon Irfan Website <website@sharoon.ae>
-```
-
-3. Restart the dev server, or add the same variables in your Vercel project
+1. Turn on **2-Step Verification** on that Google account. Google will not offer
+   app passwords without it: <https://myaccount.google.com/security>
+2. Generate an **app password** at <https://myaccount.google.com/apppasswords> —
+   name it something like "sharoon.ae website". Google shows a 16-character
+   value once.
+3. Paste it into `SMTP_PASS` in `.env.local`. Spaces in it are fine.
+4. Restart the dev server, then add the same six variables to the Vercel project
    settings for production.
 
-`CONTACT_FROM` must be an address on a domain verified in Resend. Leave it unset to
-use Resend's sandbox sender while testing.
+```
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=465
+SMTP_USER=sharoonirfan.ae@gmail.com
+SMTP_PASS=································   # the app password
+CONTACT_TO=sharoonirfan.ae@gmail.com
+CONTACT_FROM=
+```
 
-The endpoint validates name, email and message, and drops bot submissions via a
-hidden honeypot field.
+The normal Gmail login password will **not** work here — Google stopped
+accepting those from third-party apps in 2022. If authentication fails, that is
+almost always why.
+
+Other providers, if this ever moves off Gmail:
+
+| Provider | Host | Port |
+| --- | --- | --- |
+| Google / Gmail | `smtp.gmail.com` | 465 |
+| Microsoft 365 | `smtp.office365.com` | 587 |
+| Zoho Mail | `smtp.zoho.com` | 465 |
+| cPanel / shared hosting | `mail.sharoon.ae` | 465 |
+
+### Sending and receiving are two different mailboxes
+
+This trips people up, so it is worth being explicit. The mailbox that **sends**
+and the mailbox that **reads** are unrelated settings:
+
+| Variable | Role | Must you have the password? |
+| --- | --- | --- |
+| `SMTP_USER` / `SMTP_PASS` | the account that hands the mail to the server | **Yes** |
+| `CONTACT_TO` | where the enquiry is delivered | No — any address at all |
+| `CONTACT_FROM` | the `From:` header | Leave blank |
+
+That is why a Gmail account can carry the form for a domain it has nothing to do
+with: it is only the postman. `CONTACT_TO` takes a comma-separated list, so the
+day `info@sharoon.ae` becomes available, add it and enquiries land in both:
+
+```
+SMTP_USER=sharoonirfan.ae@gmail.com
+CONTACT_TO=sharoonirfan.ae@gmail.com, info@sharoon.ae
+```
+
+No code change and no redeploy of anything but the environment variable.
+
+Leave `CONTACT_FROM` blank and it defaults to `SMTP_USER`, which is the value
+guaranteed to work. A mailbox may only send **as itself** unless the provider has
+been told otherwise, and setting up a "send as" alias on Google Workspace or
+Microsoft 365 requires access to the address being claimed — the thing you do not
+have. Point `CONTACT_FROM` at `info@sharoon.ae` while authenticating as
+`sharoon@sharoon.ae` and the provider will simply refuse the send.
+
+### Two things that catch people out
+
+`SMTP_PASS` is **not** the mailbox's normal login password if the account has
+two-factor authentication. Google and Microsoft both reject that outright and
+require an app-specific password generated in the account's security settings.
+
+Port 465 is implicit TLS and 587 is STARTTLS. The route derives the right mode
+from the port, so set the port your provider documents and leave the rest alone —
+a mismatch here is the usual reason an otherwise correct setup just hangs.
+
+The `From` address is deliberately never the visitor's: sending as them would
+fail SPF and DMARC and land the enquiry in spam. Their address goes in
+`Reply-To`, so pressing reply still writes back to them.
+
+The endpoint validates name, email and message, strips newlines out of anything
+that reaches a mail header, and drops bot submissions via a hidden honeypot
+field.
 
 ---
 
@@ -173,8 +239,9 @@ npx vercel          # preview
 npx vercel --prod   # production
 ```
 
-Set `RESEND_API_KEY`, `CONTACT_TO` and `CONTACT_FROM` in the Vercel project's
-environment variables, then point the `sharoon.ae` domain at the project.
+Set `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `CONTACT_TO` and
+`CONTACT_FROM` in the Vercel project's environment variables, then point the
+`sharoon.ae` domain at the project.
 
 Before going live, change `site.url` in `lib/site.js` if the final domain differs —
 it drives the sitemap, robots.txt and social share metadata.

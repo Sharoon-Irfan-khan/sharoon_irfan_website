@@ -77,7 +77,7 @@ export default function SystemDiagram({
 
   return (
     <section
-      className="band surface-ivory sysd"
+      className="band band--seam surface-champagne sysd"
       data-chapter="The system"
       data-tone="light"
     >

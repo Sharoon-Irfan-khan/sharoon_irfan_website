@@ -11,7 +11,6 @@ import {
   formatDate,
   readMinutes,
 } from '@/lib/thoughtRoom';
-import { site } from '@/lib/site';
 
 /**
  * One piece.
@@ -38,7 +37,9 @@ export const dynamicParams = true;
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const post = await sanityFetch(POST_QUERY, { slug });
-  if (!post) return { title: `Not found — ${site.name}` };
+  // The layout's template appends the site name; naming it here as well gave
+  // "Not found — Sharoon Irfan — Sharoon Irfan".
+  if (!post) return { title: 'Not found' };
 
   const img = urlFor(post.coverImage);
 

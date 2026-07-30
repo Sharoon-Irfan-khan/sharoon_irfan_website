@@ -2,7 +2,11 @@ import Link from 'next/link';
 import Reveal, { DrawRule } from './Reveal';
 
 /** Arrow-bearing primary action. */
-export function Action({ href = '#contact', children, variant = '', ...rest }) {
+/* The default is rooted at "/" for the same reason the nav's anchors are: a
+   bare "#contact" resolves against whatever page the reader is on, and the one
+   place this component is used without an explicit href is the 404, where
+   there is no contact section to find. */
+export function Action({ href = '/#contact', children, variant = '', ...rest }) {
   return (
     <Link href={href} className={`btn ${variant}`} {...rest}>
       {children}

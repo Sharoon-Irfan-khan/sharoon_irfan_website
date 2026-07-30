@@ -190,6 +190,36 @@ select {
   background: var(--rule-light);
 }
 
+/* ---------- Section seam ----------
+
+   The three light surfaces are within about 4% of each other — champagne
+   #ede9e3, ivory #f8f7f3, linen #e3dbd3 — which is the right spread for a page
+   that never wants a hard edge, and the wrong one for telling the reader a
+   section has ended. Review flagged exactly that: the hero's call-to-action and
+   "The problem" ran into each other with nothing between them. They were both
+   champagne, so there was not even a tonal step to read.
+
+   Two things fix it and both are needed. The bands now alternate, so no two
+   adjacent light sections share a surface (see page.js), and every band that
+   follows another carries a hairline at its own top edge.
+
+   The rule is full bleed rather than inset to the shell. Inset, it reads as a
+   line belonging to the content underneath it — the ledger and the symptoms
+   are already ruled that way and this would have been mistaken for one more of
+   them. Edge to edge, it reads as the seam between two sheets of paper, which
+   is what it is.
+
+   A border rather than a pseudo-element: `.about` sets `isolation` and
+   `overflow: clip` for its background photograph, and a ::before would be
+   caught by them. */
+.band--seam {
+  border-top: 1px solid var(--rule-dark);
+}
+.band--seam.on-dark,
+.on-dark .band--seam {
+  border-top-color: var(--rule-light);
+}
+
 /* ---------- Reveal engine ----------
    One motion vocabulary for the whole site: a short rise + fade
    on a slow ease-out. Scattered effects read as noise; this reads

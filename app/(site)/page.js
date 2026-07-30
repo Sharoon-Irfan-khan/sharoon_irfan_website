@@ -7,6 +7,7 @@ import ServiceList from '@/components/ServiceList';
 import ScaleStack from '@/components/ScaleStack';
 import ProofFigure from '@/components/ProofFigure';
 import ContactForm from '@/components/ContactForm';
+import { SectionHead } from '@/components/Sections';
 import { about, contact, problem, results, services, system } from '@/lib/content';
 import { site } from '@/lib/site';
 import Image from 'next/image';
@@ -46,7 +47,7 @@ export default function Page() {
            underneath it. The stage still pins and the row still assembles one
            frame at a time; it just no longer carries the words. */}
       <section
-        className="band surface-champagne"
+        className="band band--seam surface-ivory"
         data-chapter={problem.chapter}
         data-tone="light"
       >
@@ -80,13 +81,25 @@ export default function Page() {
         <SystemDiagram eyebrow={system.eyebrow} title={system.title} />
       </div>
 
-      {/* ---------- The services ---------- */}
+      {/* ---------- The services ----------
+           It had no heading. The eyebrow and the title were written in
+           content.js and never rendered — the section opened straight onto a
+           four-across grid of photographs, so the first thing under the system
+           diagram was an unlabelled moodboard and a "01". Review asked where
+           the heading was; there wasn't one.
+
+           SectionHead rather than the eyebrow/title pair the other bands set
+           inline: this one is a name and a line, which is the split header's
+           whole job. */}
       <section
-        className="band surface-champagne"
+        className="band band--seam surface-ivory"
         id="services"
         data-chapter={services.chapter}
         data-tone="light"
       >
+        <div className="shell svcs__head">
+          <SectionHead eyebrow={services.eyebrow} title={services.title} />
+        </div>
         <ServiceList items={services.items} />
       </section>
 

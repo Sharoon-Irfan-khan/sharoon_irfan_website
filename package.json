@@ -16,9 +16,9 @@
     "lenis": "^1.1.18",
     "next": "16.0.10",
     "next-sanity": "^13.2.3",
+    "nodemailer": "^9.0.3",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "resend": "^4.4.1",
     "sanity": "^6.7.0",
     "styled-components": "^6.4.4"
   }

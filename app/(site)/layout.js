@@ -1,4 +1,3 @@
-import { Cormorant_Garamond, Jost, Poppins } from 'next/font/google';
 // One level up: globals.css stays at app/ because both route groups sit
 // beside it, and only this one wants it.
 import '../globals.css';
@@ -10,40 +9,9 @@ import Grain from '@/components/Grain';
 import Intro from '@/components/Intro';
 import SmoothScroll from '@/components/SmoothScroll';
 import { site } from '@/lib/site';
-
-/* Type system — The Seasons · Glacial Indifference · Poppins
-   ---------------------------------------------------------
-   Poppins is on Google Fonts and loads exactly as specified. The other two are
-   declared in app/styles/brand-fonts.css against /public/fonts and take over
-   automatically once the licensed files are dropped in. Until then these two
-   free faces stand in, chosen to hold the same shape and weight on the page:
-
-     Cormorant Garamond — for The Seasons. High-contrast, delicate hairlines,
-     generous ascenders. The closest free serif to The Seasons' airy elegance.
-
-     Jost — for Glacial Indifference. Both are Futura-line geometric sans faces,
-     so the body copy keeps the same even, quiet colour. */
-
-const display = Cormorant_Garamond({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600'],
-  style: ['normal', 'italic'],
-  display: 'swap',
-  variable: '--f-display',
-});
-
-const body = Jost({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--f-body',
-});
-
-const ui = Poppins({
-  subsets: ['latin'],
-  weight: ['300', '400', '500'],
-  display: 'swap',
-  variable: '--f-ui',
-});
+// The three faces moved to lib/fonts.js so the root not-found page can load the
+// same ones — see the note there.
+import { fontVars } from '@/lib/fonts';
 
 export const metadata = {
   metadataBase: new URL(site.url),
@@ -96,10 +64,8 @@ const jsonLd = {
 };
 
 export default function RootLayout({ children }) {
-  // Font variables go on <html> so they resolve at :root, which is where the
-  // --font-* tokens that reference them are declared.
   return (
-    <html lang="en" className={`${display.variable} ${body.variable} ${ui.variable}`}>
+    <html lang="en" className={fontVars}>
       <body>
         <script
           type="application/ld+json"

@@ -23,7 +23,10 @@ import { site } from '@/lib/site';
  */
 
 export const metadata = {
-  title: `The Thought Room — ${site.name}`,
+  // Just the page's own name. The root layout's title template already appends
+  // " — Sharoon Irfan", so spelling it out here produced "The Thought Room —
+  // Sharoon Irfan — Sharoon Irfan" in the tab and in every search result.
+  title: 'The Thought Room',
   description:
     'Articles, case studies and industry signals on marketing systems that connect strategy, performance and revenue.',
   alternates: { canonical: '/thought-room' },

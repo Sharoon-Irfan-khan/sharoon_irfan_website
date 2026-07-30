@@ -1009,11 +1009,15 @@
   gap: 1.25rem 2rem;
   justify-content: space-between;
 }
+/* ink-60, not ink-30. This line sets the reader's expectation of when they
+   will hear back, which is the last thing they read before pressing send — and
+   at 30% it measured about 2:1 against the card, well under the 4.5:1 floor and
+   the faintest text on the page. Same reasoning as the placeholder above. */
 .form__note {
   font-family: var(--font-ui);
   font-size: var(--step-label);
   letter-spacing: 0.08em;
-  color: var(--ink-30);
+  color: var(--ink-60);
 }
 .btn[disabled] {
   opacity: 0.45;

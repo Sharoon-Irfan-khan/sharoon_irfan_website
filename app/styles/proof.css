@@ -6,9 +6,11 @@
 
 .proof {
   position: relative;
-  /* An edge, so this reads as its own section rather than merging with the
-     warm band above it. */
-  border-top: 1px solid var(--rule-dark-soft);
+  /* The edge that used to be declared here — 1px of rule-dark-soft — was the
+     first attempt at the seam problem, applied to one section at half the
+     strength of the site's own hairline. `band--seam` in base.css does it for
+     every band now, and this rule only survived to override it: proof.css
+     loads after base.css, so the weaker line was winning. */
 }
 
 .proof__track {

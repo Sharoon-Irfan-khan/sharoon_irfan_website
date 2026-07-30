@@ -43,7 +43,7 @@ export default function ProofFigure({
 
   return (
     <section
-      className="proof surface-linen"
+      className="proof band--seam surface-linen"
       data-chapter={chapter}
       data-tone="light"
     >

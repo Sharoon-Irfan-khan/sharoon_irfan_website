@@ -110,7 +110,11 @@ export default function Nav() {
                 {item.label}
               </Link>
             ))}
-            <Link href="/contact" className="btn btn--sm nav__cta">
+            {/* "/#contact", not "/contact". There is no contact route — the
+                contact section lives on the homepage — so the site's primary
+                call to action was landing every visitor who pressed it on the
+                404 page. */}
+            <Link href="/#contact" className="btn btn--sm nav__cta">
               Book a call
               <span className="btn__arrow" aria-hidden="true">
                 →

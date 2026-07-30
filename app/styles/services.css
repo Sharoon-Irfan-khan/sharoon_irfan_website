@@ -14,6 +14,15 @@
   margin-top: clamp(3rem, 6vw, 5rem);
 }
 
+/* The section has a heading now, and the .shead inside it already carries the
+   space beneath itself. Left alone the two stacked — up to 72px of head margin
+   on top of 80px of grid margin — and the title floated away from the set it
+   names. The head is its own .shell because the grid is one too; they are
+   siblings, not parent and child. */
+.svcs__head .shead {
+  margin-bottom: 0;
+}
+
 /* Two before four. Four columns on a tablet would put each service in about
    160px, which is narrower than its own name. */
 @media (min-width: 620px) {
