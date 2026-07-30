@@ -1,0 +1,258 @@
+/* ============================================================
+   THE THOUGHT ROOM — index and single piece
+   Same vocabulary as the rest of the site: type on ground,
+   hairline rules, no cards with borders round them.
+   ============================================================ */
+
+.troom__title {
+  margin-top: clamp(1.25rem, 2.5vw, 2rem);
+}
+.troom__standfirst {
+  margin-top: clamp(1.25rem, 2.5vw, 1.75rem);
+  max-width: 52ch;
+  color: var(--ink-72);
+}
+
+/* ---------- Filter ---------- */
+
+/* Buttons rather than links: this changes what is shown, it does not navigate.
+   A reader who lands on a filtered view from a shared URL would expect the
+   back button to undo it, and nothing here writes history. */
+.trfilter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  padding-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  border-bottom: 1px solid var(--rule-dark);
+}
+
+.trfilter__btn {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.55rem 0.95rem;
+  font-family: var(--font-ui);
+  font-size: var(--step-label);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--ink-52);
+  background: transparent;
+  border: 0;
+  box-shadow: inset 0 0 0 1px var(--rule-dark);
+  cursor: pointer;
+  transition:
+    color var(--dur-quick) var(--ease-out),
+    box-shadow var(--dur-quick) var(--ease-out),
+    background var(--dur-quick) var(--ease-out);
+}
+.trfilter__btn:hover {
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--rule-dark-strong, rgba(5, 8, 5, 0.28));
+}
+.trfilter__btn.is-on {
+  color: var(--ivory);
+  background: var(--rich-black);
+  box-shadow: inset 0 0 0 1px var(--rich-black);
+}
+/* The count is information, not emphasis — it stays quiet in both states. */
+.trfilter__n {
+  font-size: 0.9em;
+  opacity: 0.5;
+}
+
+/* ---------- Cards ---------- */
+
+.trlead {
+  display: block;
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+
+.trgrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2.5rem, 4vw, 3.5rem) clamp(1.25rem, 2vw, 2rem);
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+@media (min-width: 620px) {
+  .trgrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1100px) {
+  .trgrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.trc__link {
+  display: grid;
+  gap: clamp(0.9rem, 1.6vw, 1.25rem);
+  color: inherit;
+}
+
+.trc__frame {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 3 / 2;
+  background: var(--black-lift);
+}
+/* A piece with no picture still needs a top edge, or its title floats free of
+   the grid the other cards sit on. */
+.trc__frame--bare {
+  aspect-ratio: auto;
+  height: 1px;
+  background: var(--rule-dark);
+}
+
+.trc__img {
+  object-fit: cover;
+  transition: transform var(--dur-line) var(--ease-out);
+}
+.trc__link:hover .trc__img {
+  transform: scale(1.035);
+}
+
+.trc__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.45rem;
+  color: var(--ink-52);
+}
+.trc__cat {
+  color: var(--ink-72);
+}
+.trc__dot {
+  opacity: 0.45;
+}
+
+.trc__title {
+  font-size: clamp(1.3rem, 1.7vw, 1.6rem);
+  line-height: 1.16;
+  letter-spacing: -0.015em;
+}
+.trc__link:hover .trc__title {
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+}
+
+.trc__excerpt {
+  font-size: var(--step-body);
+  line-height: 1.55;
+  color: var(--ink-72);
+}
+
+/* ---------- The pinned piece ----------
+   Wider frame and larger type, so it reads as the lead rather than as the
+   first of a set. Side by side once there is room for the picture to keep its
+   proportions next to a readable measure. */
+
+.trc--lead .trc__frame {
+  aspect-ratio: 16 / 9;
+}
+.trc--lead .trc__title--lead {
+  font-size: clamp(1.75rem, 3.2vw, 2.9rem);
+}
+.trc--lead .trc__excerpt {
+  font-size: var(--step-lede);
+  max-width: 56ch;
+}
+
+@media (min-width: 900px) {
+  .trc--lead .trc__link {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(2rem, 4vw, 3.5rem);
+  }
+  .trc--lead .trc__frame {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+.trempty {
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  font-size: var(--step-lede);
+  color: var(--ink-52);
+}
+
+/* ---------- A single piece ---------- */
+
+.tpost__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: clamp(1.5rem, 3vw, 2.25rem);
+  color: var(--ink-52);
+}
+.tpost__title {
+  margin-top: clamp(1rem, 2vw, 1.5rem);
+  max-width: 24ch;
+}
+.tpost__standfirst {
+  margin-top: clamp(1.25rem, 2.5vw, 1.75rem);
+  max-width: 56ch;
+  color: var(--ink-72);
+}
+
+.tpost__cover {
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+.tpost__cover img,
+.tpost__figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/*
+  The body is set to a measure, not to the column. Long-form prose across a
+  96rem shell is unreadable however good the typography is — the eye loses the
+  start of the next line. 68ch is the usual comfortable maximum.
+*/
+.tpost__body {
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  max-width: 68ch;
+  font-size: var(--step-lede);
+  line-height: 1.65;
+  color: var(--ink-72);
+}
+.tpost__body > * + * {
+  margin-top: 1.35em;
+}
+.tpost__body h2,
+.tpost__body h3 {
+  font-family: var(--font-display);
+  color: var(--ink);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  margin-top: 2.2em;
+}
+.tpost__body h2 {
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+}
+.tpost__body h3 {
+  font-size: clamp(1.25rem, 1.8vw, 1.5rem);
+}
+.tpost__body blockquote {
+  margin-inline: 0;
+  padding-left: clamp(1rem, 2vw, 1.75rem);
+  border-left: 1px solid var(--rule-dark);
+  font-family: var(--font-display);
+  font-size: 1.1em;
+  color: var(--ink);
+}
+.tpost__body ul,
+.tpost__body ol {
+  padding-left: 1.35em;
+}
+.tpost__body li + li {
+  margin-top: 0.5em;
+}
+.tpost__body strong {
+  color: var(--ink);
+}
+.tpost__figure {
+  margin: 2em 0;
+}
