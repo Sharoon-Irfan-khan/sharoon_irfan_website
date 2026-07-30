@@ -1,5 +1,5 @@
-# sharoon.ae
-
+   # sharoon.ae
+hy 
 Portfolio and consultancy site for **Sharoon Irfan** — founder-led marketing systems, Dubai.
 
 Next.js 16 (App Router) · React 19 · plain CSS · Lenis smooth scrolling.
