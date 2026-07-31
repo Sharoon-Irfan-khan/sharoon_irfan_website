@@ -9,6 +9,8 @@ import {
   SLUGS_QUERY,
   categoryLabel,
   formatDate,
+  idToPath,
+  pathToId,
   readMinutes,
 } from '@/lib/thoughtRoom';
 
@@ -18,13 +20,19 @@ import {
  * The index has to lead somewhere, so this exists even though the brief only
  * described the listing — a card that opens nothing is a card nobody clicks
  * twice.
+ *
+ * Lives under its category since 31 July: /thought-room/articles/my-piece. The
+ * category segment is part of the address rather than decoration, so a piece
+ * reached through the wrong one 404s instead of rendering twice at two URLs.
  */
 
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
-  const slugs = (await sanityFetch(SLUGS_QUERY, {}, [])) ?? [];
-  return slugs.filter(Boolean).map((slug) => ({ slug }));
+  const rows = (await sanityFetch(SLUGS_QUERY, {}, [])) ?? [];
+  return rows
+    .filter((r) => r?.slug && idToPath(r?.category))
+    .map((r) => ({ category: idToPath(r.category), slug: r.slug }));
 }
 
 /*
@@ -35,24 +43,25 @@ export async function generateStaticParams() {
 export const dynamicParams = true;
 
 export async function generateMetadata({ params }) {
-  const { slug } = await params;
+  const { category: path, slug } = await params;
   const post = await sanityFetch(POST_QUERY, { slug });
   // The layout's template appends the site name; naming it here as well gave
   // "Not found — Sharoon Irfan — Sharoon Irfan".
-  if (!post) return { title: 'Not found' };
+  if (!post || post.category !== pathToId(path)) return { title: 'Not found' };
 
   const img = urlFor(post.coverImage);
+  const href = `/thought-room/${path}/${slug}`;
 
   return {
     title: `${post.title} — The Thought Room`,
     description: post.excerpt || undefined,
-    alternates: { canonical: `/thought-room/${slug}` },
+    alternates: { canonical: href },
     openGraph: {
       title: post.title,
       description: post.excerpt || undefined,
       type: 'article',
       publishedTime: post.publishedAt || undefined,
-      url: `/thought-room/${slug}`,
+      url: href,
       images: img
         ? [{ url: img.width(1200).height(630).fit('crop').url() }]
         : undefined,
@@ -98,10 +107,16 @@ const components = {
 };
 
 export default async function ThoughtPage({ params }) {
-  const { slug } = await params;
+  const { category: path, slug } = await params;
+  const id = pathToId(path);
   const post = await sanityFetch(POST_QUERY, { slug });
 
-  if (!post) notFound();
+  /*
+    The category in the URL has to be the piece's own. Without this check every
+    piece would answer at all three addresses, which is three URLs for one page
+    and a "← Case Studies" link on an article.
+  */
+  if (!post || !id || post.category !== id) notFound();
 
   const img = urlFor(post.coverImage);
   const date = formatDate(post.publishedAt);
@@ -113,9 +128,11 @@ export default async function ThoughtPage({ params }) {
       data-tone="light"
     >
       <div className="shell tpost__head">
+        {/* Back to the category, not to the hub: the reader came from a list
+            of these, and that list is where the next one they want is. */}
         <Reveal as="p" className="label">
-          <Link href="/thought-room" className="tlink">
-            ← The Thought Room
+          <Link href={`/thought-room/${path}`} className="tlink">
+            ← {categoryLabel(id)}
           </Link>
         </Reveal>
 

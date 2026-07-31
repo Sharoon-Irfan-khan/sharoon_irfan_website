@@ -14,6 +14,7 @@ import { defineConfig } from 'sanity';
 import { structureTool } from 'sanity/structure';
 import { visionTool } from '@sanity/vision';
 import post from './sanity/schemas/post';
+import category from './sanity/schemas/category';
 
 /*
   Two build systems read this file and they do not agree on env vars.
@@ -46,7 +47,7 @@ export default defineConfig({
   dataset,
 
   schema: {
-    types: [post],
+    types: [post, category],
   },
 
   plugins: [

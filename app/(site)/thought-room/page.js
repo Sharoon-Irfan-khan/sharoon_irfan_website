@@ -1,31 +1,22 @@
 import Reveal from '@/components/Reveal';
-import ThoughtRoomList from '@/components/ThoughtRoomList';
+import CategoryHub from '@/components/CategoryHub';
 import { sanityFetch, urlFor, sanityReady } from '@/lib/sanity';
-import {
-  POSTS_QUERY,
-  categoryLabel,
-  formatDate,
-  readMinutes,
-  splitFeatured,
-} from '@/lib/thoughtRoom';
+import { CATEGORIES_QUERY, buildHub } from '@/lib/thoughtRoom';
 import { site } from '@/lib/site';
 
 /**
- * THE THOUGHT ROOM.
+ * THE THOUGHT ROOM — the hub.
  *
- * The second page. Everything on it is written by the team in Sanity; nothing
- * here is authored in the repository except the heading.
+ * Three doors, one per kind of piece. It used to be a single list with filter
+ * tabs; the tabs are gone, and each category now has a page of its own at
+ * /thought-room/<type>.
  *
- * This is a server component and it stays one. It resolves image URLs, dates
- * and read times into plain strings before handing them to the client
- * component that does the filtering — so the Sanity client, the image URL
- * builder and the GROQ queries never reach the browser.
+ * A server component. Image URLs are resolved here, so the Sanity client and
+ * the URL builder never reach the browser.
  */
 
 export const metadata = {
-  // Just the page's own name. The root layout's title template already appends
-  // " — Sharoon Irfan", so spelling it out here produced "The Thought Room —
-  // Sharoon Irfan — Sharoon Irfan" in the tab and in every search result.
+  // The root layout's title template appends " — Sharoon Irfan".
   title: 'The Thought Room',
   description:
     'Articles, case studies and industry signals on marketing systems that connect strategy, performance and revenue.',
@@ -39,47 +30,28 @@ export const metadata = {
   },
 };
 
-/*
-  Rebuild hourly.
-
-  The team publishes from the Studio, not from a deploy, so the page cannot be
-  built once and forgotten. An hour is the compromise: fresh enough that an
-  editor sees their work the same morning, cheap enough that the site is still
-  static for practically every visitor. A webhook from Sanity would make it
-  instant, and that is the upgrade when publishing gets frequent enough to
-  care.
-*/
 export const revalidate = 3600;
 
-/** Flattens a Sanity document into exactly what a card needs, and nothing more. */
-function toCard(post) {
-  const img = urlFor(post.coverImage);
-
-  return {
-    id: post._id,
-    slug: post.slug,
-    title: post.title,
-    excerpt: post.excerpt || null,
-    category: post.category,
-    categoryLabel: categoryLabel(post.category),
-    date: formatDate(post.publishedAt),
-    readMinutes: readMinutes(post),
-    image: img
-      ? {
-          // 1600 wide is the widest this layout ever asks for — the lead on a
-          // large screen. Requesting the original would ship a print-resolution
-          // file to a card 400px across.
-          url: img.width(1600).quality(78).auto('format').url(),
-          alt: post.coverImage?.alt || '',
-        }
-      : null,
-  };
-}
-
 export default async function ThoughtRoomPage() {
-  const posts = (await sanityFetch(POSTS_QUERY, {}, [])) ?? [];
-  const cards = posts.map(toCard);
-  const { lead, rest } = splitFeatured(cards);
+  const docs = (await sanityFetch(CATEGORIES_QUERY, {}, [])) ?? [];
+
+  /*
+    The cards are built from the three types the code knows about, dressed with
+    whatever the Studio holds. So the hub is complete before anybody has made a
+    single category document — it simply has no pictures yet.
+  */
+  const items = buildHub(docs).map((item) => {
+    const img = urlFor(item.image);
+    return {
+      ...item,
+      image: img
+        ? {
+            url: img.width(1400).quality(78).auto('format').url(),
+            alt: item.image?.alt || '',
+          }
+        : null,
+    };
+  });
 
   return (
     <section
@@ -99,19 +71,12 @@ export default async function ThoughtRoomPage() {
           the numbers showed, and what the market is doing.
         </Reveal>
 
-        {cards.length > 0 ? (
-          <ThoughtRoomList lead={lead} rest={rest} />
+        {sanityReady ? (
+          <CategoryHub items={items} />
         ) : (
-          /*
-            Two different nothings, and they are worth telling apart. An
-            unconfigured project is a setup step; an empty dataset is a page
-            waiting on its first piece. Showing the same message for both sends
-            somebody looking for a bug that is not there.
-          */
           <p className="trempty">
-            {sanityReady
-              ? 'The first pieces are being written. Check back shortly.'
-              : 'Not connected to Sanity yet — set NEXT_PUBLIC_SANITY_PROJECT_ID to bring this page to life.'}
+            Not connected to Sanity yet — set NEXT_PUBLIC_SANITY_PROJECT_ID to
+            bring this page to life.
           </p>
         )}
       </div>
