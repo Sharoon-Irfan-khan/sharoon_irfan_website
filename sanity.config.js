@@ -15,8 +15,28 @@ import { structureTool } from 'sanity/structure';
 import { visionTool } from '@sanity/vision';
 import post from './sanity/schemas/post';
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production';
+/*
+  Two build systems read this file and they do not agree on env vars.
+
+  Next.js exposes anything prefixed NEXT_PUBLIC_ to the browser, which is what
+  the embedded Studio at /studio runs on. `sanity deploy` builds with Vite and
+  exposes only SANITY_STUDIO_, so NEXT_PUBLIC_SANITY_PROJECT_ID is undefined
+  there — the hosted Studio booted with no projectId and died on load with "An
+  error occurred that Sanity Studio was unable to recover from".
+
+  So: check both, then fall back to the literal ids, exactly as sanity.cli.js
+  already does. Neither value is a secret; both ship in the browser bundle on
+  every page load.
+*/
+const projectId =
+  process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ||
+  process.env.SANITY_STUDIO_PROJECT_ID ||
+  '0z2uy7z3';
+
+const dataset =
+  process.env.NEXT_PUBLIC_SANITY_DATASET ||
+  process.env.SANITY_STUDIO_DATASET ||
+  'production';
 
 export default defineConfig({
   name: 'thought-room',

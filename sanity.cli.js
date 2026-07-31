@@ -31,12 +31,14 @@ export default defineCliConfig({
     // warns on the top-level spelling.
     autoUpdates: true,
 
-    // Deliberately unpinned. Two ids have been written here and both stopped
-    // resolving — iscetiulcminmek8mhxpzuyo, which never existed, and
-    // ftrh3u787dikmmsna4der0bp, which a successful deploy minted on 31 July and
-    // which was gone within the hour. The account that deploys has project
-    // access but is not a member of organization o7rThuBC1, and the hosted
-    // Studio lives under that org, so the app does not survive. Pinning an id
-    // here again is worth doing only once that membership is granted.
+    // Pinned so redeploys are not interactive. Two earlier ids died here —
+    // iscetiulcminmek8mhxpzuyo, which never existed, and
+    // ftrh3u787dikmmsna4der0bp, which was minted and then removed the same day.
+    // This one has survived a redeploy, which the others did not.
+    //
+    // If a deploy ever fails at "Checking project info" with "Cannot find app",
+    // the app behind this id is gone: delete the line, deploy to mint a new
+    // one, and put the new id back.
+    appId: 'f7fak9u6yjg2f8iks1zed0qi',
   },
 });
