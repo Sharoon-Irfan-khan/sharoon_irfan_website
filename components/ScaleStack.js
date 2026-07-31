@@ -29,28 +29,23 @@ import { byId, workSrc } from '@/lib/media';
 /*
   The four photographs that appear nowhere else on the site.
 
-  This row is the only place in the build that had no pictures of its own: the
-  hero cycles eleven, the service list carries seven, and every one of the 29
-  July batch is already in the hero. Reusing any of them here put the same
-  photograph on two consecutive screens. These four are the remainder — the
-  ones the rest of the page never claimed.
+  Replaced 31 July. The row used to run on library filler — a moodboard, a
+  fashion spread, a bed, a magazine stack — chosen because they were the four
+  pictures the rest of the page had not already claimed. That is a reason to
+  put something in a frame, not a reason for it to be there: the section above
+  argues that the work is a system, and four editorial flatlays said nothing
+  about it.
 
-  `dark-desk`, `magazine-sofa`, `sculpture` and `white-desk` are also unused,
-  but only because this row is what dropped them; they are the library filler
-  that stood in before the supplied photographs arrived, and they are not
-  coming back.
+  These four carry the argument in order — position, system, work, number. The
+  chess board is the only near-black frame and opens the row on it; the puzzle
+  is the only one carrying a word; the desk is the work itself; the figures
+  close on what it is for.
 
-  Ordered so the row does not build as four variations of the same picture:
-  the moodboard is the only one with strong colour, the spread and the bed are
-  both soft greys but one is printed matter and one is a person, and the stack
-  closes on the coolest note.
+  `moodboard-floor`, `fashion-spread`, `reading-bed` and `kinfolk-stack` stay
+  registered in the library but are now unused, as are `dark-desk`,
+  `magazine-sofa`, `sculpture` and `white-desk` for the same reason.
 */
-const DEFAULT = [
-  'moodboard-floor',
-  'fashion-spread',
-  'reading-bed',
-  'kinfolk-stack',
-];
+const DEFAULT = ['strategy-chess', 'crm-puzzle', 'build-desk', 'numbers-table'];
 
 /*
   One frame.
