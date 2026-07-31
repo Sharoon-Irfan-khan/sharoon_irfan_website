@@ -25,12 +25,18 @@ export default defineCliConfig({
     dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   },
   studioHost: 'sharoon-thought-room',
-  autoUpdates: true,
 
-  // Written down so redeploys are not interactive. Without it the CLI asks
-  // which application this is every single time, which is fine by hand and
-  // fatal in anything automated.
   deployment: {
-    appId: 'iscetiulcminmek8mhxpzuyo',
+    // Moved here 31 July: the CLI now reads autoUpdates off `deployment` and
+    // warns on the top-level spelling.
+    autoUpdates: true,
+
+    // Deliberately unpinned. Two ids have been written here and both stopped
+    // resolving — iscetiulcminmek8mhxpzuyo, which never existed, and
+    // ftrh3u787dikmmsna4der0bp, which a successful deploy minted on 31 July and
+    // which was gone within the hour. The account that deploys has project
+    // access but is not a member of organization o7rThuBC1, and the hosted
+    // Studio lives under that org, so the app does not survive. Pinning an id
+    // here again is worth doing only once that membership is granted.
   },
 });
