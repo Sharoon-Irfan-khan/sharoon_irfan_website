@@ -40,10 +40,14 @@
   color: inherit;
 }
 
+/* 4:5 rather than the reference's landscape. Every photograph supplied for
+   these cards is portrait — 0.56 to 0.67 — and a 3:2 frame cropped them to a
+   band across the middle. This is the same ratio the services grid uses, so
+   the two rows of pictures on the site agree with each other. */
 .thub__frame {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 4 / 5;
   background: var(--ink-08, rgba(5, 8, 5, 0.06));
 }
 

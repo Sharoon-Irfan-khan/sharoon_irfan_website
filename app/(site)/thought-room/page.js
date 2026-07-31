@@ -44,12 +44,14 @@ export default async function ThoughtRoomPage() {
     const img = urlFor(item.image);
     return {
       ...item,
+      // The Studio's picture if there is one, the repo's if there is not. The
+      // card is never empty, and an editor who uploads one takes over.
       image: img
         ? {
             url: img.width(1400).quality(78).auto('format').url(),
             alt: item.image?.alt || '',
           }
-        : null,
+        : { url: item.fallback, alt: item.fallbackAlt },
     };
   });
 
