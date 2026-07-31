@@ -42,7 +42,7 @@ export default function ContactForm() {
           state: 'error',
           message:
             payload.error ||
-            `Something went wrong on the way. Email ${site.email} and it will reach me directly.`,
+            `Something went wrong on the way. ${site.fallbackContact} and it will reach me directly.`,
         });
         return;
       }
@@ -55,7 +55,7 @@ export default function ContactForm() {
     } catch {
       setStatus({
         state: 'error',
-        message: `The message didn't send. Email ${site.email} and it will reach me directly.`,
+        message: `The message didn't send. ${site.fallbackContact} and it will reach me directly.`,
       });
     }
   }

@@ -116,7 +116,7 @@ export async function POST(request) {
     });
     return Response.json(
       {
-        error: `Email delivery is not configured on this site yet. Send your message to ${site.email} and it will reach me directly.`,
+        error: `Email delivery is not configured on this site yet. ${site.fallbackContact} and it will reach me directly.`,
       },
       { status: 503 }
     );
@@ -204,7 +204,7 @@ export async function POST(request) {
     // over quota — none of it is theirs to solve.
     console.error('[contact] SMTP send failed:', err);
     return Response.json(
-      { error: `The message did not send. Email ${site.email} and it will reach me directly.` },
+      { error: `The message did not send. ${site.fallbackContact} and it will reach me directly.` },
       { status: 502 }
     );
   }
