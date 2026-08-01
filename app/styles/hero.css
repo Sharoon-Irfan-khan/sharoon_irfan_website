@@ -80,14 +80,22 @@
   unchanged.
 
   If this ever needs to be bigger, the name has to break onto two lines.
+
+  It is set ~26% under that maximum (10.5rem / 11vw) on purpose: at the largest
+  that fits, the name ran wall to wall and read as a banner rather than a
+  headline. The freed width goes into word-spacing — the two words nearly
+  touched at the display face's default space — which widens the set line to
+  7.733 + 0.24 = 7.973em, hence the larger divisor in the narrow-end term. That
+  term has to keep describing the real width or the name clips on a phone.
 */
 .hero__name {
   margin: 0;
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(1.5rem, min(11vw, calc((100vw - 4.25rem) / 7.733)), 10.5rem);
+  font-size: clamp(1.5rem, min(8.1vw, calc((100vw - 4.25rem) / 8.05)), 7.7rem);
   line-height: 0.86;
   letter-spacing: -0.02em;
+  word-spacing: 0.24em;
   text-transform: uppercase;
   text-wrap: nowrap;
   color: var(--ink);

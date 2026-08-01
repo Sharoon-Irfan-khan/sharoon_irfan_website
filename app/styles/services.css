@@ -1,6 +1,8 @@
 /* ============================================================
    SERVICES
-   Seven cards, four to a row. Was seven full-width rows with the
+   Six cards, three to a row — two full rows, no orphan. Was four to a row,
+   which left the second row three wide and ragged, and before that seven
+   full-width rows with the
    image and copy alternating; see the note in ServiceList.js.
    ============================================================ */
 
@@ -23,8 +25,8 @@
   margin-bottom: 0;
 }
 
-/* Two before four. Four columns on a tablet would put each service in about
-   160px, which is narrower than its own name. */
+/* Two before three. Three columns on a tablet would put each service in about
+   215px, which is narrower than its own name. */
 @media (min-width: 620px) {
   .svcs {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -32,7 +34,7 @@
 }
 @media (min-width: 1100px) {
   .svcs {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 

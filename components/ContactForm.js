@@ -13,7 +13,6 @@ const SERVICES = [
   'Websites & Landing Pages',
   'CRM & Attribution',
   'Brand Positioning',
-  'Developer Experience',
   'The full funnel',
 ];
 

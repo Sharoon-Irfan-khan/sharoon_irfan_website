@@ -9,16 +9,17 @@ import { slugify } from '@/lib/site';
 /**
  * THE SERVICES.
  *
- * Seven of them, four to a row, each a card of one photograph and two lines.
+ * Six of them, three to a row, each a card of one photograph and two lines.
  *
  * They were seven full-width rows with the image and copy alternating side to
  * side. At one service per screen that is seven screens to read a list, and
  * the alternation — which works over three or four rows — had become a
  * metronome by the seventh. A grid states the same thing as a set, which is
- * what it is: seven things of equal weight, not a sequence.
+ * what it is: things of equal weight, not a sequence.
  *
- * Four columns, so the last row carries the remaining three and the row above
- * stays full. One image per service was the brief and still is: a moodboard
+ * Three columns and six cards, so both rows are full and the set closes on a
+ * square rather than trailing an orphan. One image per service was the brief
+ * and still is: a moodboard
  * against strategy, swatches against positioning, printed matter against
  * content. Each picture is doing a job.
  *
@@ -32,7 +33,9 @@ function Service({ service, index }) {
 
   // Cards arrive across the row rather than all at once. Keyed to the column,
   // not the index, so every row starts its sweep from the left edge again.
-  const step = (index % 4) * 70;
+  // Three, matching the grid — at four this fell out of step on the second row
+  // and the sweep restarted mid-row.
+  const step = (index % 3) * 70;
 
   return (
     <article className="svc" id={slugify(service.name)}>
@@ -41,7 +44,7 @@ function Service({ service, index }) {
           <div className="svc__frame" ref={outer}>
             <div className="svc__inner" ref={inner}>
               {/* Matches the grid: one card wide below 620px, two to 1099,
-                  four above it. The parallax box it fills is inset -10% top
+                  three above it. The parallax box it fills is inset -10% top
                   and bottom, so the image is taller than the frame — `fill`
                   keeps that behaviour rather than the file's own ratio. */}
               <Image
@@ -49,7 +52,7 @@ function Service({ service, index }) {
                 src={workSrc(clip.id)}
                 alt={clip.alt}
                 fill
-                sizes="(max-width: 619px) 88vw, (max-width: 1099px) 44vw, 23vw"
+                sizes="(max-width: 619px) 88vw, (max-width: 1099px) 44vw, 31vw"
                 loading="lazy"
               />
             </div>

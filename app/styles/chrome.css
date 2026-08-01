@@ -489,101 +489,102 @@
 
 /* ---------- Footer ---------- */
 
+/*
+  One centred column, narrow, with each row a fixed step under the one above.
+  It was a two-column grid with a rule and a spread copyright line; this is the
+  same content stacked, which is what a footer with six short things in it
+  wants. Nothing here is wide enough to need a column of its own.
+
+  The rows are spaced by margin rather than a flex gap because they are not
+  equal weight: the wordmark wants air under it, the small print does not.
+*/
 .footer {
   background: var(--rich-black);
   color: var(--paper);
-  padding-block: clamp(3.5rem, 6vw, 5.5rem) 2rem;
+  padding-block: clamp(4rem, 7vw, 6.5rem) clamp(2.5rem, 4vw, 3.5rem);
 }
-.footer__grid {
-  display: grid;
-  gap: clamp(2.5rem, 5vw, 4rem);
-  grid-template-columns: 1fr;
-  padding-bottom: clamp(3rem, 6vw, 4.5rem);
-}
-@media (min-width: 780px) {
-  /* Two columns since the Pages list came out: the mark takes the free space
-     and the contact column sizes to its content against the right edge. A
-     leftover 1fr track would have parked it in the middle of the footer. */
-  .footer__grid {
-    grid-template-columns: 1fr auto;
-  }
+.footer__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 .footer__mark {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-size: clamp(1.9rem, 4.2vw, 2.9rem);
   line-height: 1;
   letter-spacing: -0.02em;
+  margin: 0;
 }
 .footer__mark em {
   font-style: italic;
   color: var(--sand);
 }
-/* The credential line. Tucked under the role rather than given a heading of
-   its own — it is a footnote to who he is, not a third column of the footer,
-   and setting it any louder would make a training record compete with the
-   contact details. */
-.footer__credentials {
-  margin-top: 0.6rem;
-  max-width: 32ch;
-  font-size: var(--step-small);
+/* Two lines under the wordmark, set differently so the three read as a
+   hierarchy rather than one paragraph broken into pieces: the role in the
+   display italic that echoes the wordmark above it, the city as a label,
+   quietest of the three. */
+.footer__role {
+  margin: clamp(0.7rem, 1.3vw, 1rem) 0 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--step-display-s);
+  line-height: 1.1;
+  color: var(--sand);
+}
+.footer__place {
+  margin: clamp(0.85rem, 1.5vw, 1.15rem) 0 0;
+  font-family: var(--font-ui);
+  font-size: var(--step-label);
+  text-transform: uppercase;
+  letter-spacing: var(--track-label);
+  color: var(--paper-46);
 }
 
-/* Certification badges. Held back to ~34px and 70% opacity, lifting to full on
-   hover: these are somebody else's marks on his page, and at full strength two
-   corporate logos out-shout the name above them. Both programmes permit
-   scaling; neither permits recolouring, which is why nothing here touches the
-   artwork itself. */
-.footer__badges {
-  list-style: none;
-  margin: 1.4rem 0 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 1.25rem;
-}
-.footer__badges img {
-  display: block;
-  width: auto;
-  height: clamp(28px, 4.5vw, 34px);
-  opacity: 0.7;
-  transition: opacity var(--dur-quick) var(--ease-out);
-}
-.footer__badges a:hover img {
-  opacity: 1;
-}
-.footer__col h3 {
+/* "Certified & Trained In" — a label for the marks beneath it, set like every
+   other label on the site rather than as running text, so it reads as the
+   heading of that row and not as a fourth line of the address above it. */
+.footer__credentials {
+  margin: clamp(2.25rem, 3.6vw, 3rem) 0 0;
   font-family: var(--font-ui);
   font-size: var(--step-label);
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: var(--track-label);
   color: var(--sand);
-  margin-bottom: 1.25rem;
 }
-.footer__col ul {
+
+/* Certification badges. Held back to ~29px and 70% opacity, lifting to full on
+   hover: these are somebody else's marks on his page, and at full strength two
+   corporate logos out-shout the name above them. Both programmes permit
+   scaling; neither permits recolouring, which is why nothing here touches the
+   artwork itself. */
+.footer__badges {
   list-style: none;
+  margin: 1.1rem 0 0;
   padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 0.7rem;
-}
-.footer__col a,
-.footer__col li {
-  color: var(--paper-70);
-  font-size: var(--step-small);
-  transition: color var(--dur-quick) var(--ease-out);
-}
-.footer__col a:hover {
-  color: var(--ivory);
-}
-.footer__base {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem 2rem;
-  justify-content: space-between;
-  padding-top: 1.75rem;
-  border-top: 1px solid var(--rule-light-soft);
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+}
+.footer__badges img {
+  display: block;
+  width: auto;
+  height: clamp(24px, 3.8vw, 29px);
+  opacity: 0.7;
+  transition: opacity var(--dur-quick) var(--ease-out);
+}
+.footer__badges a:hover img {
+  opacity: 1;
+}
+
+/* No rule above it any more. The stack is centred and the gaps already say
+   where one thing ends and the next begins; a full-width line across a centred
+   column reads as a box drawn round nothing. */
+.footer__base {
+  margin: clamp(2rem, 3.2vw, 2.75rem) 0 0;
   font-family: var(--font-ui);
   font-size: var(--step-label);
   letter-spacing: 0.08em;
