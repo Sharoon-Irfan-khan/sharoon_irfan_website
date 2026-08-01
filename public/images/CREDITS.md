@@ -43,6 +43,14 @@ other image on this list.
 report, a client meeting. The supplied set is desks and printed matter, which
 supports the copy but does not evidence it.
 
+## Replaced
+
+`crm-attribution.jpg` — 1 August 2026. The supplied jigsaw graphic was 235x146,
+roughly a sixth of the 4:5 card frame, and visibly upscaled. Replaced with a CRM
+contact record (Pexels 7709273, free licence, no attribution required),
+downsampled from 2240x2800 to 1120x1400 at quality 88. Alt text in `lib/media.js`
+updated with it.
+
 ## What was removed
 
 The previous Dubai landscape set — eight stock skyline and desert photographs
