@@ -36,11 +36,27 @@ export const metadata = {
     siteName: site.name,
     title: `${site.name} — ${site.tagline}`,
     description: site.description,
+    // Without this a shared link is two lines of grey text and nothing else,
+    // which is how it arrived in WhatsApp. The card is the hero recomposed at
+    // 1200x630 — see tools/make-og.mjs, which builds it and which has to be
+    // re-run by hand if the hero's wording or photographs change.
+    //
+    // 1200x630 is the size every scraper wants; declaring it here means they
+    // can lay the preview out before the file has finished downloading.
+    images: [
+      {
+        url: '/og.jpg',
+        width: 1200,
+        height: 630,
+        alt: `${site.name} — ${site.role}`,
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: `${site.name} — ${site.tagline}`,
     description: site.description,
+    images: ['/og.jpg'],
   },
   robots: { index: true, follow: true },
 };
