@@ -13,6 +13,20 @@ import { site } from '@/lib/site';
 // same ones — see the note there.
 import { fontVars } from '@/lib/fonts';
 
+/*
+  The share card, with a version tag on the end.
+
+  WhatsApp, LinkedIn and Slack cache a preview against the image URL for weeks,
+  and they key on the whole URL including the query. Re-running tools/make-og.mjs
+  overwrites public/og.jpg in place, so without this every link already sitting
+  in someone's chat — and every new one, until the scraper's cache expires —
+  keeps showing the card that was there before.
+
+  Bump it whenever the card is regenerated. The query is inert: Next serves the
+  static file and ignores it.
+*/
+const OG_IMAGE = '/og.jpg?v=2';
+
 export const metadata = {
   metadataBase: new URL(site.url),
   title: {
@@ -45,7 +59,7 @@ export const metadata = {
     // can lay the preview out before the file has finished downloading.
     images: [
       {
-        url: '/og.jpg',
+        url: OG_IMAGE,
         width: 1200,
         height: 630,
         alt: `${site.name} — ${site.role}`,
@@ -56,7 +70,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: `${site.name} — ${site.tagline}`,
     description: site.description,
-    images: ['/og.jpg'],
+    images: [OG_IMAGE],
   },
   robots: { index: true, follow: true },
 };

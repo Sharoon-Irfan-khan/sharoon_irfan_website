@@ -59,8 +59,24 @@ const FONTS = [
   },
 ];
 
-// The lead photograph of each hero frame, left to right as they appear there.
-const PHOTOS = ['home-branded', 'coffee-magazine', 'editorial-spread'];
+/*
+  The three photographs of the card, left to right.
+
+  These are picked by hand rather than taken as "the lead frame of each hero
+  column", which is what they were. The hero cycles a dozen pictures and the
+  first of each column is an accident of that list; the card is seen once, in a
+  thumbnail, by someone who has never been to the site — so it gets the three
+  that carry the brand.
+
+  home-branded leads because it is the only photograph in the library with the
+  sharoon.ae mark in it. home-stack is the one dark frame, and sitting in the
+  middle of a champagne card it stops the band reading as one beige smear.
+  magazine-hands puts a person in the picture, which none of the flatlays do.
+
+  All three are in the hero's frames A and B, so the card and the phone's first
+  screen show the same photographs.
+*/
+const PHOTOS = ['home-branded', 'home-stack', 'magazine-hands'];
 
 const exists = (p) =>
   access(p).then(

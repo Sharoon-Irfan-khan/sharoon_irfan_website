@@ -96,7 +96,18 @@ export default function Nav() {
         className={`nav ${solid && !open ? 'is-solid' : ''} ${open ? 'is-over-menu' : ''}`}
       >
         <div className="nav__inner">
-          <Link href="/" className="wordmark" aria-label={`${site.name} — home`}>
+          {/* The wordmark closes the sheet too. It sits in the header, which
+              stays above the open menu, so on a phone it is the one link a
+              reader can see and press while the menu is up — and pressing it
+              left them on the homepage with the sheet still covering it and
+              the body still locked, because tapping "/" while already on "/"
+              is a no-op Next.js does not re-render for. */}
+          <Link
+            href="/"
+            className="wordmark"
+            aria-label={`${site.name} — home`}
+            onClick={closeMenu}
+          >
             Sharoon <em>Irfan</em>
           </Link>
 
