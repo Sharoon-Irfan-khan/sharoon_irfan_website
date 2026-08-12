@@ -6,7 +6,7 @@
  * nothing in `app/` or `components/` imports it.
  *
  * It does NOT define what the categories are. `slug` is a join key that must
- * match one of the `category` values on a post — article, case-study, signal,
+ * match one of the `category` values on a post — article, case-study, insight,
  * which are listed in CATEGORIES in lib/thoughtRoom.js. A document whose slug
  * matches nothing is simply a card that leads to an empty page.
  *
@@ -32,7 +32,7 @@ const category = {
       title: 'Which type this card is for',
       type: 'slug',
       description:
-        'Must be exactly article, case-study or signal — this is what ties the card to the pieces filed under it. Getting it wrong gives you a card that opens an empty page.',
+        'Must be exactly article, case-study or insight — this is what ties the card to the pieces filed under it. Getting it wrong gives you a card that opens an empty page.',
       options: {
         source: 'title',
         maxLength: 40,
@@ -43,7 +43,7 @@ const category = {
       },
       validation: (Rule) =>
         Rule.required().custom((value) => {
-          const allowed = ['article', 'case-study', 'signal'];
+          const allowed = ['article', 'case-study', 'insight'];
           if (!value?.current) return 'Required.';
           return allowed.includes(value.current)
             ? true

@@ -1,7 +1,8 @@
 import Reveal from '@/components/Reveal';
 import CategoryHub from '@/components/CategoryHub';
-import { sanityFetch, urlFor, sanityReady } from '@/lib/sanity';
+import { sanityFetch, urlFor } from '@/lib/sanity';
 import { CATEGORIES_QUERY, buildHub } from '@/lib/thoughtRoom';
+import { localPostCounts } from '@/lib/localPosts';
 import { site } from '@/lib/site';
 
 /**
@@ -19,12 +20,12 @@ export const metadata = {
   // The root layout's title template appends " — Sharoon Irfan".
   title: 'The Thought Room',
   description:
-    'Articles, case studies and industry signals on marketing systems that connect strategy, performance and revenue.',
+    'Articles, case studies and insights on marketing systems that connect strategy, performance and revenue.',
   alternates: { canonical: '/thought-room' },
   openGraph: {
     title: `The Thought Room — ${site.name}`,
     description:
-      'Articles, case studies and industry signals on marketing systems.',
+      'Articles, case studies and insights on marketing systems.',
     url: '/thought-room',
     type: 'website',
   },
@@ -40,7 +41,7 @@ export default async function ThoughtRoomPage() {
     whatever the Studio holds. So the hub is complete before anybody has made a
     single category document — it simply has no pictures yet.
   */
-  const items = buildHub(docs).map((item) => {
+  const items = buildHub(docs, localPostCounts()).map((item) => {
     const img = urlFor(item.image);
     return {
       ...item,
@@ -73,14 +74,7 @@ export default async function ThoughtRoomPage() {
           the numbers showed, and what the market is doing.
         </Reveal>
 
-        {sanityReady ? (
-          <CategoryHub items={items} />
-        ) : (
-          <p className="trempty">
-            Not connected to Sanity yet — set NEXT_PUBLIC_SANITY_PROJECT_ID to
-            bring this page to life.
-          </p>
-        )}
+        <CategoryHub items={items} />
       </div>
     </section>
   );

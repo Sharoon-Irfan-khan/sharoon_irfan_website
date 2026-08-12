@@ -47,7 +47,7 @@ const post = {
         list: [
           { title: 'Article — original thinking', value: 'article' },
           { title: 'Case Study — results with context', value: 'case-study' },
-          { title: 'Industry Signal — reading the market', value: 'signal' },
+          { title: 'Insight — reading the market', value: 'insight' },
         ],
         layout: 'radio',
       },

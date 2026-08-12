@@ -9,9 +9,11 @@ import {
   categoryLabel,
   categoryNote,
   formatDate,
+  mergePosts,
   pathToId,
   readMinutes,
 } from '@/lib/thoughtRoom';
+import { getLocalPostsByCategory } from '@/lib/localPosts';
 import { site } from '@/lib/site';
 
 /**
@@ -63,11 +65,14 @@ export default async function CategoryPage({ params }) {
   const id = pathToId(path);
   if (!id) notFound();
 
-  const posts =
+  const sanityPosts =
     (await sanityFetch(POSTS_IN_CATEGORY_QUERY, { category: id }, [])) ?? [];
+  const posts = mergePosts(sanityPosts, getLocalPostsByCategory(id));
 
   const cards = posts.map((post) => {
-    const img = urlFor(post.coverImage);
+    // A repo-local piece carries its cover as a plain public/ path already;
+    // a Sanity one carries an image reference that still needs resolving.
+    const img = post.coverImage?.isLocal ? null : urlFor(post.coverImage);
     return {
       id: post._id,
       href: `/thought-room/${path}/${post.slug}`,
@@ -76,12 +81,14 @@ export default async function CategoryPage({ params }) {
       categoryLabel: categoryLabel(post.category),
       date: formatDate(post.publishedAt),
       readMinutes: readMinutes(post),
-      image: img
-        ? {
-            url: img.width(1600).quality(78).auto('format').url(),
-            alt: post.coverImage?.alt || '',
-          }
-        : null,
+      image: post.coverImage?.isLocal
+        ? { url: post.coverImage.src, alt: post.coverImage.alt || '' }
+        : img
+          ? {
+              url: img.width(1600).quality(78).auto('format').url(),
+              alt: post.coverImage?.alt || '',
+            }
+          : null,
     };
   });
 

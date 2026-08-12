@@ -33,7 +33,7 @@ function Card({ post, lead = false }) {
             />
           </div>
         ) : (
-          // No picture is a legitimate state — a signal is often three
+          // No picture is a legitimate state — an insight is often three
           // paragraphs and no art. The rule keeps the card's top edge.
           <div className="trc__frame trc__frame--bare" aria-hidden="true" />
         )}
