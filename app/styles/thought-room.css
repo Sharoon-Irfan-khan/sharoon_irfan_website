@@ -308,3 +308,133 @@
 .tpost__figure {
   margin: 2em 0;
 }
+
+/* ---------- Movements ----------
+   "The Art of Self-Mastery" is written in unbroken passages marked "—"
+   rather than titled sections — see lib/localPosts.js's `divider()`. This is
+   the same idea as .draw-rule held to a short, centred mark instead of a
+   full-width line: a breath, not a section break. */
+.tpost__divider {
+  display: flex;
+  justify-content: center;
+  margin: clamp(2.75rem, 5.5vw, 4rem) 0 !important;
+}
+.tpost__divider::before {
+  content: '';
+  width: 2.5rem;
+  height: 1px;
+  background: var(--rule-dark);
+}
+
+/* ---------- Pull quotes ----------
+   Oversized and set in the display face, distinct from the small left-rule
+   `blockquote` the case studies use. Each one echoes a line the body already
+   carries in full a moment earlier — see components.types.pullquote in
+   [slug]/page.js — so it adds emphasis without ever standing in for the
+   sentence it is pulled from. */
+.tpost__pull {
+  margin: clamp(2.75rem, 5.5vw, 4.25rem) 0 !important;
+  max-width: 24ch;
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 2.8vw, 2.35rem);
+  line-height: 1.22;
+  letter-spacing: -0.014em;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+/* ---------- Closing lines ----------
+   The essay's last two lines, set larger and held apart from the paragraph
+   rhythm above them — see `richBlock('closingLine', …)`. */
+.tpost__closing {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.1vw, 1.75rem);
+  line-height: 1.32;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+}
+.tpost__closing + .tpost__closing {
+  margin-top: 0.35em !important;
+}
+
+/* ---------- The cinematic variant ----------
+   One piece asked for a register of its own: a dark, held opening — eyebrow,
+   headline, standfirst, byline, then a full-bleed still — before the reading
+   surface turns to the same champagne band every other piece opens on
+   directly. Scoped entirely under .tpost--cinematic so every other post on
+   the site renders exactly as it did before this existed. */
+
+.tpost--cinematic .tpost__hero {
+  padding-bottom: 0;
+  overflow: clip;
+}
+
+.tpost--cinematic .tpost__head .label:first-child {
+  color: var(--paper-46);
+}
+
+.tpost__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  color: var(--sand);
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+}
+.tpost__eyebrow::before {
+  content: '';
+  width: clamp(1.75rem, 4vw, 3.5rem);
+  height: 1px;
+  background: var(--sand);
+}
+
+.tpost--cinematic .tpost__title {
+  margin-top: clamp(1rem, 2vw, 1.5rem);
+  max-width: 17ch;
+  color: var(--paper);
+}
+
+.tpost--cinematic .tpost__standfirst {
+  margin-top: clamp(1.25rem, 2.5vw, 1.75rem);
+  max-width: 46ch;
+  color: var(--paper-70);
+}
+
+.tpost__byline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+  color: var(--paper-46);
+}
+
+.tpost__cover--cinematic {
+  position: relative;
+  margin-top: clamp(3rem, 6vw, 5.5rem);
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  max-height: 82vh;
+  overflow: hidden;
+}
+@media (min-width: 700px) {
+  .tpost__cover--cinematic {
+    aspect-ratio: 16 / 10;
+  }
+}
+@media (min-width: 1100px) {
+  .tpost__cover--cinematic {
+    aspect-ratio: 21 / 9;
+  }
+}
+.tpost__cover-img {
+  object-fit: cover;
+}
+
+/* The reading band picks up where the hero leaves off — same shell, same
+   measure, same rhythm as every other piece's .tpost__body, just arriving
+   after a dark opening instead of directly under the title. */
+.tpost__reading {
+  padding-top: clamp(3.5rem, 7vw, 6rem);
+}
+.tpost__body--cinematic {
+  margin-top: 0;
+}

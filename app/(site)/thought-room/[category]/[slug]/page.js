@@ -58,9 +58,14 @@ export async function generateMetadata({ params }) {
   // "Not found — Sharoon Irfan — Sharoon Irfan".
   if (!post || post.category !== pathToId(path)) return { title: 'Not found' };
 
-  const ogImageUrl = post.coverImage?.isLocal
-    ? `${site.url}${post.coverImage.src}`
-    : urlFor(post.coverImage)?.width(1200).height(630).fit('crop').url();
+  // A repo-local piece can carry a pre-built 1200x630 crop of its own — see
+  // tools/make-self-mastery-hero.mjs — rather than handing the scraper the
+  // wide master and a pair of dimension tags that do not match it.
+  const ogImageUrl = post.ogImage
+    ? `${site.url}${post.ogImage}`
+    : post.coverImage?.isLocal
+      ? `${site.url}${post.coverImage.src}`
+      : urlFor(post.coverImage)?.width(1200).height(630).fit('crop').url();
   const href = `/thought-room/${path}/${slug}`;
   const description = post.metaDescription || post.excerpt || undefined;
 
@@ -113,6 +118,14 @@ const components = {
         </figure>
       );
     },
+    // A breath between the essay's movements, not a heading — see
+    // lib/localPosts.js's `divider()`. Empty and aria-hidden: it carries no
+    // content, only a short centred rule drawn in CSS.
+    break: () => <div className="tpost__divider" aria-hidden="true" />,
+    // An oversized editorial pull quote — see `pull()`. It echoes a line the
+    // body already carries in full a moment earlier, the way a magazine pulls
+    // a sentence out for a reader skimming the page; it never replaces it.
+    pullquote: ({ value }) => <p className="tpost__pull">{value?.text}</p>,
   },
   marks: {
     link: ({ value, children }) => {
@@ -128,6 +141,11 @@ const components = {
         </a>
       );
     },
+  },
+  block: {
+    // The essay's last two lines, set larger and held apart — see
+    // `richBlock('closingLine', …)` in lib/localPosts.js.
+    closingLine: ({ children }) => <p className="tpost__closing">{children}</p>,
   },
 };
 
@@ -186,64 +204,136 @@ export default async function ThoughtPage({ params }) {
     mainEntityOfPage: { '@type': 'WebPage', '@id': href },
   };
 
+  // "The Art of Self-Mastery" carries `heroVariant: 'cinematic'` in
+  // lib/localPosts.js — a dark, held opening rather than the champagne band
+  // every other piece opens on, because this one piece is not about the work.
+  // Everything below the flag is additive: without it, this renders exactly
+  // as it did before the flag existed.
+  const cinematic = post.heroVariant === 'cinematic';
+  const body = Array.isArray(post.body) && post.body.length > 0 && (
+    <PortableText value={post.body} components={components} />
+  );
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <article
-        className="band surface-champagne tpost"
-        data-chapter="The Thought Room"
-        data-tone="light"
-      >
-        <div className="shell tpost__head">
-          {/* Back to the category, not to the hub: the reader came from a list
-              of these, and that list is where the next one they want is. */}
-          <Reveal as="p" className="label">
-            <Link href={`/thought-room/${path}`} className="tlink">
-              ← {categoryLabel(id)}
-            </Link>
-          </Reveal>
+      {cinematic ? (
+        <article className="tpost tpost--cinematic">
+          <div
+            className="band surface-black on-dark tpost__hero"
+            data-chapter="The Thought Room"
+            data-tone="dark"
+          >
+            <div className="shell tpost__head">
+              {/* Back to the category, not to the hub: the reader came from a
+                  list of these, and that list is where the next one they want
+                  is. */}
+              <Reveal as="p" className="label">
+                <Link href={`/thought-room/${path}`} className="tlink">
+                  ← {categoryLabel(id)}
+                </Link>
+              </Reveal>
 
-          <Reveal as="p" className="label tpost__meta" delay={60}>
-            <span>{categoryLabel(post.category)}</span>
-            {date && <span className="trc__dot">·</span>}
-            {date && <span>{date}</span>}
-            <span className="trc__dot">·</span>
-            <span>{readMinutes(post)} min read</span>
-          </Reveal>
+              <Reveal as="p" className="label tpost__eyebrow" delay={60}>
+                {categoryLabel(post.category)}
+              </Reveal>
 
-          <Reveal as="h1" className="display display--l tpost__title" delay={110}>
-            {post.title}
-          </Reveal>
+              <Reveal as="h1" className="display display--l tpost__title" delay={130}>
+                {post.title}
+              </Reveal>
 
-          {post.excerpt && (
-            <Reveal as="p" className="lede tpost__standfirst" delay={180}>
-              {post.excerpt}
+              {post.excerpt && (
+                <Reveal as="p" className="lede tpost__standfirst" delay={200}>
+                  {post.excerpt}
+                </Reveal>
+              )}
+
+              <Reveal as="p" className="label tpost__byline" delay={260}>
+                <span>{site.name}</span>
+                {date && <span className="trc__dot">·</span>}
+                {date && <span>{date}</span>}
+                <span className="trc__dot">·</span>
+                <span>{readMinutes(post)} min read</span>
+              </Reveal>
+            </div>
+
+            {cover && (
+              <Reveal className="tpost__cover--cinematic" delay={340}>
+                <Image
+                  className="tpost__cover-img"
+                  src={cover.src}
+                  alt={cover.alt}
+                  fill
+                  sizes="100vw"
+                  priority
+                />
+              </Reveal>
+            )}
+          </div>
+
+          {body && (
+            <div
+              className="band surface-champagne band--seam tpost__reading"
+              data-chapter="The Thought Room"
+              data-tone="light"
+            >
+              <div className="shell tpost__body tpost__body--cinematic">{body}</div>
+            </div>
+          )}
+        </article>
+      ) : (
+        <article
+          className="band surface-champagne tpost"
+          data-chapter="The Thought Room"
+          data-tone="light"
+        >
+          <div className="shell tpost__head">
+            {/* Back to the category, not to the hub: the reader came from a list
+                of these, and that list is where the next one they want is. */}
+            <Reveal as="p" className="label">
+              <Link href={`/thought-room/${path}`} className="tlink">
+                ← {categoryLabel(id)}
+              </Link>
+            </Reveal>
+
+            <Reveal as="p" className="label tpost__meta" delay={60}>
+              <span>{categoryLabel(post.category)}</span>
+              {date && <span className="trc__dot">·</span>}
+              {date && <span>{date}</span>}
+              <span className="trc__dot">·</span>
+              <span>{readMinutes(post)} min read</span>
+            </Reveal>
+
+            <Reveal as="h1" className="display display--l tpost__title" delay={110}>
+              {post.title}
+            </Reveal>
+
+            {post.excerpt && (
+              <Reveal as="p" className="lede tpost__standfirst" delay={180}>
+                {post.excerpt}
+              </Reveal>
+            )}
+          </div>
+
+          {cover && (
+            <Reveal className="shell tpost__cover" delay={220}>
+              <Image
+                src={cover.src}
+                alt={cover.alt}
+                width={cover.width}
+                height={cover.height}
+                sizes="(max-width: 899px) 92vw, 72rem"
+                priority
+              />
             </Reveal>
           )}
-        </div>
 
-        {cover && (
-          <Reveal className="shell tpost__cover" delay={220}>
-            <Image
-              src={cover.src}
-              alt={cover.alt}
-              width={cover.width}
-              height={cover.height}
-              sizes="(max-width: 899px) 92vw, 72rem"
-              priority
-            />
-          </Reveal>
-        )}
-
-        {Array.isArray(post.body) && post.body.length > 0 && (
-          <div className="shell tpost__body">
-            <PortableText value={post.body} components={components} />
-          </div>
-        )}
-      </article>
+          {body && <div className="shell tpost__body">{body}</div>}
+        </article>
+      )}
     </>
   );
 }
