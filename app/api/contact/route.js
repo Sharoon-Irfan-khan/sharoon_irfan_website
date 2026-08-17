@@ -4,13 +4,16 @@ import { site } from '@/lib/site';
 /**
  * THE ENQUIRY ENDPOINT.
  *
- * Delivers over SMTP, straight to the inbox that already exists on the domain
- * — info@sharoon.ae. It used to go through Resend's HTTP API, which meant a
- * third-party account, a domain verification and a key to keep alive before the
- * form could send anything at all. None of that was ever completed, so every
- * enquiry since launch has hit the "not configured" branch and been told to go
- * and write an email instead. SMTP needs nothing but the mailbox's own
- * credentials.
+ * Delivers over SMTP to whichever inbox `site.email` (lib/site.js) or the
+ * CONTACT_TO env var names — currently info@shario.ae, not a mailbox on this
+ * domain. It used to go through Resend's HTTP API, which meant a third-party
+ * account, a domain verification and a key to keep alive before the form
+ * could send anything at all. None of that was ever completed, so every
+ * enquiry since launch has hit the "not configured" branch and been told to
+ * go and write an email instead. SMTP needs nothing but the mailbox's own
+ * credentials — SMTP_HOST/SMTP_USER/SMTP_PASS, none of which are set in this
+ * project's Vercel environment as of this writing, so that branch is still
+ * the one every submission hits until those are added.
  *
  * Node runtime, because SMTP is a raw TCP connection — it cannot run on an edge
  * runtime, and no amount of configuration will change that.

@@ -47,6 +47,18 @@ export default async function sitemap() {
       changeFrequency: 'weekly',
       priority: 0.8,
     },
+    {
+      url: `${site.url}/work`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${site.url}/about`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
     ...pieces.map((p) => ({
       // The piece lives at /thought-room/<category>/<slug>, not one level up.
       url: `${site.url}/thought-room/${idToPath(p.category)}/${p.slug}`,
